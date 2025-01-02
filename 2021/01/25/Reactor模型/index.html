@@ -181,22 +181,22 @@
       
           
           
-            <h3 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h3><p><img src="https://cdn.jsdelivr.net/gh/fuxyzz/cdn/images/bio-handler.png" alt></p>
+            <h3 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h3><p><img src="https://cdn.jsdelivr.net/gh/fuxyzz/cdn/images/bio-handler.png"></p>
 <p>传统BIO方式的网络连接处理：客户端发起请求，服务器accept一个请求，经过读取，解码，计算，编码，发送等过程，完成一次请求的处理。这个过程中，accept如果阻塞了，会导致后面的请求也被阻塞。</p>
 <p>为了解决BIO引起的IO阻塞问题，提出了NIO。NIO的主要工作方式是无论IO有没有准备就绪，都会直接返回结果，不阻塞，具体由操作系统底层实现的select、poll、epoll完成。基于NIO，我们可以实现高性能的网络处理，一种有效的模型就是Reactor。</p>
 <p>Reactor应用于网络高性能框架中，Redis，Netty中都有它的身影。</p>
-<h3 id="Reactor模型中的相关组件"><a href="#Reactor模型中的相关组件" class="headerlink" title="Reactor模型中的相关组件"></a>Reactor模型中的相关组件</h3><p><img src="https://cdn.jsdelivr.net/gh/fuxyzz/cdn/images/event-in-awt.png" alt></p>
+<h3 id="Reactor模型中的相关组件"><a href="#Reactor模型中的相关组件" class="headerlink" title="Reactor模型中的相关组件"></a>Reactor模型中的相关组件</h3><p><img src="https://cdn.jsdelivr.net/gh/fuxyzz/cdn/images/event-in-awt.png"></p>
 <p>了解AWT，写过桌面端或者客户端（Java的GUI，Android等）的同学会很熟悉这张图，基于事件响应的模型。用户发生click动作，产生相应的事件，事件会传播给对应注册了监听事件的组件进行处理，运用了观察者模式。Reactor与这种模式是很类似的。</p>
 <p>Reactor：负责响应IO事件，转发事件到相应的handler。类似AWT线程。</p>
 <p>handler：类似图中的button调用addActionListener方法进行监听注册，将handler与事件绑定，等待事件就绪后进行处理。我们可以当他是一个Worker。</p>
-<h3 id="单Reactor单Handler下的Reactor模型"><a href="#单Reactor单Handler下的Reactor模型" class="headerlink" title="单Reactor单Handler下的Reactor模型"></a>单Reactor单Handler下的Reactor模型</h3><p><img src="https://cdn.jsdelivr.net/gh/fuxyzz/cdn/images/single-thread-reactor.png" alt></p>
+<h3 id="单Reactor单Handler下的Reactor模型"><a href="#单Reactor单Handler下的Reactor模型" class="headerlink" title="单Reactor单Handler下的Reactor模型"></a>单Reactor单Handler下的Reactor模型</h3><p><img src="https://cdn.jsdelivr.net/gh/fuxyzz/cdn/images/single-thread-reactor.png"></p>
 <p>如图所示，其中的acceptor是Reactor中注册了accept的IO事件，用于处理建立连接的。相当于一个Reactor线程处理连接，一个Hanlder线程处理读，解码，计算，解码，发送。</p>
-<h3 id="单Reactor多Handler模型"><a href="#单Reactor多Handler模型" class="headerlink" title="单Reactor多Handler模型"></a>单Reactor多Handler模型</h3><p><img src="https://cdn.jsdelivr.net/gh/fuxyzz/cdn/images/multi-thread-worker.png" alt></p>
+<h3 id="单Reactor多Handler模型"><a href="#单Reactor多Handler模型" class="headerlink" title="单Reactor多Handler模型"></a>单Reactor多Handler模型</h3><p><img src="https://cdn.jsdelivr.net/gh/fuxyzz/cdn/images/multi-thread-worker.png"></p>
 <p>如图所示，是一个多Handler的模型，用线程池管理Handler线程。同时，Hanlder也不再负责有关读写的操作，即不负责处理IO读写，只做解码，计算，编码的操作。read和send交给Reactor做。</p>
-<h3 id="多Reactor多Handler模型"><a href="#多Reactor多Handler模型" class="headerlink" title="多Reactor多Handler模型"></a>多Reactor多Handler模型</h3><p><img src="https://cdn.jsdelivr.net/gh/fuxyzz/cdn/images/multi-thread-reactor.png" alt></p>
+<h3 id="多Reactor多Handler模型"><a href="#多Reactor多Handler模型" class="headerlink" title="多Reactor多Handler模型"></a>多Reactor多Handler模型</h3><p><img src="https://cdn.jsdelivr.net/gh/fuxyzz/cdn/images/multi-thread-reactor.png"></p>
 <p>如图所示，有一个主Reactor，接受请求后将读写的处理交由子Reactor操作，这样就提高了对CPU的利用率。</p>
-<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><p><a href="http://gee.cs.oswego.edu/dl/cpjslides/nio.pdf" target="_blank" rel="noopener">Doug Lea的有关nio的文章</a></p>
-<p><a href="https://cdn.jsdelivr.net/gh/fuxyzz/cdn/files/nio.pdf" target="_blank" rel="noopener">备用</a></p>
+<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><p><a href="http://gee.cs.oswego.edu/dl/cpjslides/nio.pdf">Doug Lea的有关nio的文章</a></p>
+<p><a href="https://cdn.jsdelivr.net/gh/fuxyzz/cdn/files/nio.pdf">备用</a></p>
 
           
       
@@ -460,11 +460,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">HTTP/2 HTTP/1.1 HTTP/3.0</a>
+                <a href="javascript:void(0)" class="js-tag color3">Go</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Go</a>
+                <a href="javascript:void(0)" class="js-tag color5">HTTP/2 HTTP/1.1 HTTP/3.0</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -480,10 +480,6 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Latex 文件转换 docx</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">lumen</a>
               </li>
              
@@ -493,6 +489,10 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">thrift</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Latex 文件转换 docx</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -509,6 +509,30 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Linux</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">反射</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">reflection</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">底层</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">变量</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">引用</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">优化</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -536,15 +560,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">反射</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">reflection</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">底层</a>
+                <a href="javascript:void(0)" class="js-tag color3">Reactor</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -560,23 +576,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">变量</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">引用</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">优化</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">跳跃表</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Reactor</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -585,6 +585,34 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">性能优化</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">阿里云</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">sts</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">推荐系统</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">NLP</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">CF-IDF</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">canal</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">ES</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -624,11 +652,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">canal</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">ES</a>
+                <a href="javascript:void(0)" class="js-tag color4">线段树</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -636,7 +660,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">线段树</a>
+                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -653,66 +677,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">world</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">阿里云</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">sts</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">推荐系统</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">NLP</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">CF-IDF</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">acm</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">树</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">字典树</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">前缀树</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">二进制</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">位运算</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">macro</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">model</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">数据库</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -748,6 +712,46 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">macro</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">model</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">数据库</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">acm</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">树</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">字典树</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">前缀树</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">二进制</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">位运算</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">底层分析</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">事务</a>
               </li>
              
@@ -757,10 +761,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Python</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">底层分析</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -780,15 +780,15 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">ACID</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">sysbench</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">压力测试</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">ACID</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -800,6 +800,14 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">UUID</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">MySQL</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">架构</a>
               </li>
              
@@ -808,11 +816,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">UUID</a>
+                <a href="javascript:void(0)" class="js-tag color5">日志服务</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">MySQL</a>
+                <a href="javascript:void(0)" class="js-tag color4">SLS</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -852,14 +860,6 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">日志服务</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">SLS</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">大数据</a>
               </li>
              
@@ -884,6 +884,10 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">熔断</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">容器</a>
               </li>
              
@@ -893,10 +897,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">基本计算器</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">熔断</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -960,7 +960,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">边框识别 答题卡 试卷 考试</a>
+                <a href="javascript:void(0)" class="js-tag color5">机器学习</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -980,11 +980,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">缓存</a>
+                <a href="javascript:void(0)" class="js-tag color5">边框识别 答题卡 试卷 考试</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">机器学习</a>
+                <a href="javascript:void(0)" class="js-tag color3">缓存</a>
               </li>
              
               <li class="article-tag-list-item">

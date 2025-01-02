@@ -9,12 +9,12 @@
   <link rel="dns-prefetch" href="https://bex.meishakeji.com">
   <title>关于数据库重连相关解决方案一二 | Meisha Bex</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="常驻内存的PHP程序mysql报错　mysql has gone away背景在lumen&#x2F;laravel项目中使用hprose rpc，当长时间不请求rpc接口，再重新请求会报错 “mysql has gone away”，目前我们使用的orm有两种 一个是pairs orm，一个是eloquent orm,两个orm对于重连的表示有所区别，pairs orm经过我们自己修改后支持了重连，elo">
+  <meta name="description" content="常驻内存的PHP程序mysql报错　mysql has gone away背景在lumen&#x2F;laravel项目中使用hprose rpc，当长时间不请求rpc接口，再重新请求会报错 “mysql has gone away”，目前我们使用的orm有两种 一个是pairs orm，一个是eloquent orm,两个orm对于重连的表示有所区别，pairs orm经过我们自己修改后支持了重">
 <meta property="og:type" content="article">
 <meta property="og:title" content="关于数据库重连相关解决方案一二">
 <meta property="og:url" content="https://bex.meishakeji.com/2020/06/09/%E5%85%B3%E4%BA%8E%E6%95%B0%E6%8D%AE%E5%BA%93%E9%87%8D%E8%BF%9E%E7%9B%B8%E5%85%B3%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88%E4%B8%80%E4%BA%8C/index.html">
 <meta property="og:site_name" content="Meisha Bex">
-<meta property="og:description" content="常驻内存的PHP程序mysql报错　mysql has gone away背景在lumen&#x2F;laravel项目中使用hprose rpc，当长时间不请求rpc接口，再重新请求会报错 “mysql has gone away”，目前我们使用的orm有两种 一个是pairs orm，一个是eloquent orm,两个orm对于重连的表示有所区别，pairs orm经过我们自己修改后支持了重连，elo">
+<meta property="og:description" content="常驻内存的PHP程序mysql报错　mysql has gone away背景在lumen&#x2F;laravel项目中使用hprose rpc，当长时间不请求rpc接口，再重新请求会报错 “mysql has gone away”，目前我们使用的orm有两种 一个是pairs orm，一个是eloquent orm,两个orm对于重连的表示有所区别，pairs orm经过我们自己修改后支持了重">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2020-06-09T11:37:38.000Z">
 <meta property="article:modified_time" content="2024-12-31T14:59:26.384Z">
@@ -178,7 +178,7 @@
       
           
           
-            <h2 id="常驻内存的PHP程序mysql报错-mysql-has-gone-away"><a href="#常驻内存的PHP程序mysql报错-mysql-has-gone-away" class="headerlink" title="常驻内存的PHP程序mysql报错　mysql has gone away"></a>常驻内存的PHP程序mysql报错　mysql has gone away</h2><h3 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h3><p>在lumen/laravel项目中使用hprose rpc，当长时间不请求rpc接口，再重新请求会报错 “mysql has gone away”，目前我们使用的orm有两种 一个是pairs orm，一个是eloquent orm,两个orm对于重连的表示有所区别，pairs orm经过我们自己修改后支持了重连，eloquent orm查看源码后表明是支持重连的，但是依然看到 “mysql has gone away”报错，会导致没有正确返回结果。</p>
+            <h2 id="常驻内存的PHP程序mysql报错-mysql-has-gone-away"><a href="#常驻内存的PHP程序mysql报错-mysql-has-gone-away" class="headerlink" title="常驻内存的PHP程序mysql报错　mysql has gone away"></a>常驻内存的PHP程序mysql报错　mysql has gone away</h2><h3 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h3><p>在lumen&#x2F;laravel项目中使用hprose rpc，当长时间不请求rpc接口，再重新请求会报错 “mysql has gone away”，目前我们使用的orm有两种 一个是pairs orm，一个是eloquent orm,两个orm对于重连的表示有所区别，pairs orm经过我们自己修改后支持了重连，eloquent orm查看源码后表明是支持重连的，但是依然看到 “mysql has gone away”报错，会导致没有正确返回结果。</p>
 <h3 id="分析原因"><a href="#分析原因" class="headerlink" title="分析原因"></a>分析原因</h3><p>在cli环境下，PHP程序需要长时间运行，客户端与MySQL服务器之间的TCP连接是不稳定的。<br>不稳定的原因有以下可能：</p>
 <ol>
 <li>MySQL-Server会在一定时间内自动切断连接</li>
@@ -189,10 +189,13 @@
 </ol>
 <p>这时PHP程序中的MySQL连接就失效了。如果仍然执行mysql_query，就会报一个“MySQL server has gone away”的错误。程序处理不到就直接遇到致命错误并退出了。所以PHP程序中需要断线重连。</p>
 <h3 id="如果有不支持重连，解决方案如下"><a href="#如果有不支持重连，解决方案如下" class="headerlink" title="如果有不支持重连，解决方案如下"></a>如果有不支持重连，解决方案如下</h3><h4 id="mysql-ping"><a href="#mysql-ping" class="headerlink" title="mysql_ping"></a>mysql_ping</h4><p>有很多人提出了mysql_ping的方案，每次mysql_query进行连接检测或者定时连接检测。这个方案不是最好的。原因是:<br>mysql_ping需要主动侦测连接，带来了额外的消耗<br>定时执行mysql_ping不能解决问题，如刚刚执行过mysql_ping检测之后，连接就关闭了;</p>
-<h4 id="捕获错误码，进行断线重连"><a href="#捕获错误码，进行断线重连" class="headerlink" title="捕获错误码，进行断线重连"></a>捕获错误码，进行断线重连</h4><p>它的原理是：mysql_query执行后检测返回值<br>如果mysql_query返回失败，检测错误码发现为2006/2013（这2个错误表示连接失败），再执行一次mysql_connect<br>执行mysql_connect后，重新执行mysql_query<br>如果mysql_query返回成功，那么连接是有效的，这是一次正常的调用<br>众多知名的PHP常驻进程框架均采用第二种方案<br>例如：<br>swoole_framework中<a href="https://github.com/swoole/framework/blob/master/libs/Swoole/Database/MySQL.php" target="_blank" rel="noopener">query方法</a><br>workerman中数据库连接类<a href="https://github.com/walkor/mysql/blob/master/src/Connection.php" target="_blank" rel="noopener">execute方法</a><br>很明显第二种方式是高可靠低消耗的方案，推荐大家在常驻环境里使用</p>
+<h4 id="捕获错误码，进行断线重连"><a href="#捕获错误码，进行断线重连" class="headerlink" title="捕获错误码，进行断线重连"></a>捕获错误码，进行断线重连</h4><p>它的原理是：mysql_query执行后检测返回值<br>如果mysql_query返回失败，检测错误码发现为2006&#x2F;2013（这2个错误表示连接失败），再执行一次mysql_connect<br>执行mysql_connect后，重新执行mysql_query<br>如果mysql_query返回成功，那么连接是有效的，这是一次正常的调用<br>众多知名的PHP常驻进程框架均采用第二种方案<br>例如：<br>swoole_framework中<a href="https://github.com/swoole/framework/blob/master/libs/Swoole/Database/MySQL.php">query方法</a><br>workerman中数据库连接类<a href="https://github.com/walkor/mysql/blob/master/src/Connection.php">execute方法</a><br>很明显第二种方式是高可靠低消耗的方案，推荐大家在常驻环境里使用</p>
 <h3 id="使用的hprose-2-0的包"><a href="#使用的hprose-2-0的包" class="headerlink" title="使用的hprose 2.0的包"></a>使用的hprose 2.0的包</h3><p>里面是自己做的错误捕获，已经被上层捕获的错误也会被hprose获取，所以自己下载下来并修改 <code>src/Hprose/Service.php</code>这个文件的下面的方法</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"> <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">errorHandler</span><span class="params">($errno, $errstr, $errfile, $errline)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">self</span>::$trackError) &#123;</span><br><span class="line">            <span class="keyword">if</span> (error_reporting() !== <span class="number">0</span> &amp;&amp; $errstr != <span class="string">'PDO::prepare(): MySQL server has gone away'</span>) &#123;</span><br><span class="line">                <span class="keyword">self</span>::$lastError = <span class="keyword">new</span> ErrorException($errstr, <span class="number">0</span>, $errno, $errfile, $errline);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (<span class="keyword">self</span>::$lastErrorHandler)&#123;</span><br><span class="line">            call_user_func(<span class="keyword">self</span>::$lastErrorHandler, $errno, $errstr, $errfile, $errline);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"><span class="comment">//这个函数增加了</span></span><br><span class="line"><span class="comment">//&amp;&amp; $errstr != 'PDO::prepare(): MySQL server has gone away' 这段代码，处理当mysql的错误被传递到这里的时候。</span></span><br></pre></td></tr></table></figure>
-<p>pairs orm修改<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//在idiorm.php增加下面方法</span></span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">     * Reconnect DB</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="function"><span class="keyword">function</span> <span class="title">reconnect_db</span><span class="params">($connection_name)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">self</span>::close_db($connection_name);</span><br><span class="line">        <span class="keyword">self</span>::connect_db($connection_name);</span><br><span class="line">    &#125;</span><br><span class="line"><span class="comment">//修改下面方法</span></span><br><span class="line">    <span class="keyword">protected</span> <span class="keyword">static</span> <span class="function"><span class="keyword">function</span> <span class="title">_execute</span><span class="params">($query, $parameters = array<span class="params">()</span>, $connection_name = self::DEFAULT_CONNECTION, $retryTimes = <span class="number">0</span>)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            $statement = <span class="keyword">self</span>::get_db($connection_name);</span><br><span class="line">            $statement = $statement-&gt;prepare($query);</span><br><span class="line">            <span class="keyword">self</span>::$_last_statement = $statement;</span><br><span class="line">            $time = microtime(<span class="keyword">true</span>);</span><br><span class="line"></span><br><span class="line">            <span class="keyword">foreach</span> ($parameters <span class="keyword">as</span> $key =&gt; &amp;$param) &#123;</span><br><span class="line">                <span class="keyword">if</span> (is_null($param)) &#123;</span><br><span class="line">                    $type = PDO::PARAM_NULL;</span><br><span class="line">                &#125; <span class="keyword">elseif</span> (is_bool($param)) &#123;</span><br><span class="line">                    $type = PDO::PARAM_BOOL;</span><br><span class="line">                &#125; <span class="keyword">elseif</span> (is_int($param)) &#123;</span><br><span class="line">                    $type = PDO::PARAM_INT;</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    $type = PDO::PARAM_STR;</span><br><span class="line">                &#125;</span><br><span class="line">                $statement-&gt;bindParam(is_int($key) ? ++$key : $key, $param, $type);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            $q = $statement-&gt;execute();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (PDOException $e) &#123;</span><br><span class="line">            <span class="comment">/*</span></span><br><span class="line"><span class="comment">             * When execute return false, it need to check errorCode, if mysql has gone away reconnect.</span></span><br><span class="line"><span class="comment">             */</span></span><br><span class="line">            $err_code = $statement-&gt;errorInfo()[<span class="number">1</span>] ?? <span class="number">0</span>;</span><br><span class="line">            $err_msg = $statement-&gt;errorInfo()[<span class="number">2</span>] ?? <span class="string">''</span>;</span><br><span class="line"></span><br><span class="line">            $driver_name = <span class="keyword">self</span>::get_db($connection_name)-&gt;getAttribute(PDO::ATTR_DRIVER_NAME);</span><br><span class="line"></span><br><span class="line">            \Log::info(<span class="string">'jidiorm error:'</span>, [<span class="string">'code'</span> =&gt; $err_code, <span class="string">'message'</span> =&gt; $err_msg, <span class="string">'driverName'</span> =&gt; $driver_name]);</span><br><span class="line">            <span class="keyword">if</span> (($err_code == <span class="number">2006</span> || $err_code == <span class="number">2013</span>) &amp;&amp; $retryTimes == <span class="number">0</span> &amp;&amp; $driver_name == <span class="string">'mysql'</span>) &#123;</span><br><span class="line">                <span class="keyword">self</span>::reconnect_db($connection_name);</span><br><span class="line">                <span class="keyword">self</span>::_execute($query, $parameters, $connection_name, <span class="number">1</span>);</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="keyword">throw</span> $e;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">self</span>::_log_query($query, $parameters, $connection_name, (microtime(<span class="keyword">true</span>) - $time));</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> $q;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"> <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">errorHandler</span>(<span class="params"><span class="variable">$errno</span>, <span class="variable">$errstr</span>, <span class="variable">$errfile</span>, <span class="variable">$errline</span></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="built_in">self</span>::<span class="variable">$trackError</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (<span class="title function_ invoke__">error_reporting</span>() !== <span class="number">0</span> &amp;&amp; <span class="variable">$errstr</span> != <span class="string">&#x27;PDO::prepare(): MySQL server has gone away&#x27;</span>) &#123;</span><br><span class="line">                <span class="built_in">self</span>::<span class="variable">$lastError</span> = <span class="keyword">new</span> <span class="built_in">ErrorException</span>(<span class="variable">$errstr</span>, <span class="number">0</span>, <span class="variable">$errno</span>, <span class="variable">$errfile</span>, <span class="variable">$errline</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (<span class="built_in">self</span>::<span class="variable">$lastErrorHandler</span>)&#123;</span><br><span class="line">            <span class="title function_ invoke__">call_user_func</span>(<span class="built_in">self</span>::<span class="variable">$lastErrorHandler</span>, <span class="variable">$errno</span>, <span class="variable">$errstr</span>, <span class="variable">$errfile</span>, <span class="variable">$errline</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"><span class="comment">//这个函数增加了</span></span><br><span class="line"><span class="comment">//&amp;&amp; $errstr != &#x27;PDO::prepare(): MySQL server has gone away&#x27; 这段代码，处理当mysql的错误被传递到这里的时候。</span></span><br></pre></td></tr></table></figure>
+
+<p>pairs orm修改</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//在idiorm.php增加下面方法</span></span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">     * Reconnect DB</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">static</span> <span class="function"><span class="keyword">function</span> <span class="title">reconnect_db</span>(<span class="params"><span class="variable">$connection_name</span></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="built_in">self</span>::<span class="title function_ invoke__">close_db</span>(<span class="variable">$connection_name</span>);</span><br><span class="line">        <span class="built_in">self</span>::<span class="title function_ invoke__">connect_db</span>(<span class="variable">$connection_name</span>);</span><br><span class="line">    &#125;</span><br><span class="line"><span class="comment">//修改下面方法</span></span><br><span class="line">    <span class="keyword">protected</span> <span class="built_in">static</span> <span class="function"><span class="keyword">function</span> <span class="title">_execute</span>(<span class="params"><span class="variable">$query</span>, <span class="variable">$parameters</span> = <span class="keyword">array</span>(<span class="params"></span>), <span class="variable">$connection_name</span> = <span class="built_in">self</span>::<span class="variable constant_">DEFAULT_CONNECTION</span>, <span class="variable">$retryTimes</span> = <span class="number">0</span></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="variable">$statement</span> = <span class="built_in">self</span>::<span class="title function_ invoke__">get_db</span>(<span class="variable">$connection_name</span>);</span><br><span class="line">            <span class="variable">$statement</span> = <span class="variable">$statement</span>-&gt;<span class="title function_ invoke__">prepare</span>(<span class="variable">$query</span>);</span><br><span class="line">            <span class="built_in">self</span>::<span class="variable">$_last_statement</span> = <span class="variable">$statement</span>;</span><br><span class="line">            <span class="variable">$time</span> = <span class="title function_ invoke__">microtime</span>(<span class="literal">true</span>);</span><br><span class="line"></span><br><span class="line">            <span class="keyword">foreach</span> (<span class="variable">$parameters</span> <span class="keyword">as</span> <span class="variable">$key</span> =&gt; &amp;<span class="variable">$param</span>) &#123;</span><br><span class="line">                <span class="keyword">if</span> (<span class="title function_ invoke__">is_null</span>(<span class="variable">$param</span>)) &#123;</span><br><span class="line">                    <span class="variable">$type</span> = PDO::<span class="variable constant_">PARAM_NULL</span>;</span><br><span class="line">                &#125; <span class="keyword">elseif</span> (<span class="title function_ invoke__">is_bool</span>(<span class="variable">$param</span>)) &#123;</span><br><span class="line">                    <span class="variable">$type</span> = PDO::<span class="variable constant_">PARAM_BOOL</span>;</span><br><span class="line">                &#125; <span class="keyword">elseif</span> (<span class="title function_ invoke__">is_int</span>(<span class="variable">$param</span>)) &#123;</span><br><span class="line">                    <span class="variable">$type</span> = PDO::<span class="variable constant_">PARAM_INT</span>;</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    <span class="variable">$type</span> = PDO::<span class="variable constant_">PARAM_STR</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="variable">$statement</span>-&gt;<span class="title function_ invoke__">bindParam</span>(<span class="title function_ invoke__">is_int</span>(<span class="variable">$key</span>) ? ++<span class="variable">$key</span> : <span class="variable">$key</span>, <span class="variable">$param</span>, <span class="variable">$type</span>);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="variable">$q</span> = <span class="variable">$statement</span>-&gt;<span class="title function_ invoke__">execute</span>();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (PDOException <span class="variable">$e</span>) &#123;</span><br><span class="line">            <span class="comment">/*</span></span><br><span class="line"><span class="comment">             * When execute return false, it need to check errorCode, if mysql has gone away reconnect.</span></span><br><span class="line"><span class="comment">             */</span></span><br><span class="line">            <span class="variable">$err_code</span> = <span class="variable">$statement</span>-&gt;<span class="title function_ invoke__">errorInfo</span>()[<span class="number">1</span>] ?? <span class="number">0</span>;</span><br><span class="line">            <span class="variable">$err_msg</span> = <span class="variable">$statement</span>-&gt;<span class="title function_ invoke__">errorInfo</span>()[<span class="number">2</span>] ?? <span class="string">&#x27;&#x27;</span>;</span><br><span class="line"></span><br><span class="line">            <span class="variable">$driver_name</span> = <span class="built_in">self</span>::<span class="title function_ invoke__">get_db</span>(<span class="variable">$connection_name</span>)-&gt;<span class="title function_ invoke__">getAttribute</span>(PDO::<span class="variable constant_">ATTR_DRIVER_NAME</span>);</span><br><span class="line"></span><br><span class="line">            <span class="title class_">\Log</span>::<span class="title function_ invoke__">info</span>(<span class="string">&#x27;jidiorm error:&#x27;</span>, [<span class="string">&#x27;code&#x27;</span> =&gt; <span class="variable">$err_code</span>, <span class="string">&#x27;message&#x27;</span> =&gt; <span class="variable">$err_msg</span>, <span class="string">&#x27;driverName&#x27;</span> =&gt; <span class="variable">$driver_name</span>]);</span><br><span class="line">            <span class="keyword">if</span> ((<span class="variable">$err_code</span> == <span class="number">2006</span> || <span class="variable">$err_code</span> == <span class="number">2013</span>) &amp;&amp; <span class="variable">$retryTimes</span> == <span class="number">0</span> &amp;&amp; <span class="variable">$driver_name</span> == <span class="string">&#x27;mysql&#x27;</span>) &#123;</span><br><span class="line">                <span class="built_in">self</span>::<span class="title function_ invoke__">reconnect_db</span>(<span class="variable">$connection_name</span>);</span><br><span class="line">                <span class="built_in">self</span>::<span class="title function_ invoke__">_execute</span>(<span class="variable">$query</span>, <span class="variable">$parameters</span>, <span class="variable">$connection_name</span>, <span class="number">1</span>);</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="keyword">throw</span> <span class="variable">$e</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="built_in">self</span>::<span class="title function_ invoke__">_log_query</span>(<span class="variable">$query</span>, <span class="variable">$parameters</span>, <span class="variable">$connection_name</span>, (<span class="title function_ invoke__">microtime</span>(<span class="literal">true</span>) - <span class="variable">$time</span>));</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="variable">$q</span>;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
 
           
       
@@ -477,11 +480,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">HTTP/2 HTTP/1.1 HTTP/3.0</a>
+                <a href="javascript:void(0)" class="js-tag color3">Go</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Go</a>
+                <a href="javascript:void(0)" class="js-tag color5">HTTP/2 HTTP/1.1 HTTP/3.0</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -497,10 +500,6 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Latex 文件转换 docx</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">lumen</a>
               </li>
              
@@ -510,6 +509,10 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">thrift</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Latex 文件转换 docx</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -526,6 +529,30 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Linux</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">反射</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">reflection</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">底层</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">变量</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">引用</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">优化</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -553,15 +580,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">反射</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">reflection</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">底层</a>
+                <a href="javascript:void(0)" class="js-tag color3">Reactor</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -577,23 +596,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">变量</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">引用</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">优化</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">跳跃表</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Reactor</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -602,6 +605,34 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">性能优化</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">阿里云</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">sts</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">推荐系统</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">NLP</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">CF-IDF</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">canal</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">ES</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -641,11 +672,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">canal</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">ES</a>
+                <a href="javascript:void(0)" class="js-tag color4">线段树</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -653,7 +680,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">线段树</a>
+                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -670,66 +697,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">world</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">阿里云</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">sts</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">推荐系统</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">NLP</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">CF-IDF</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">acm</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">树</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">字典树</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">前缀树</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">二进制</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">位运算</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">macro</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">model</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">数据库</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -765,6 +732,46 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">macro</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">model</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">数据库</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">acm</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">树</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">字典树</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">前缀树</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">二进制</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">位运算</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">底层分析</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">事务</a>
               </li>
              
@@ -774,10 +781,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Python</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">底层分析</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -797,15 +800,15 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">ACID</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">sysbench</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">压力测试</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">ACID</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -817,6 +820,14 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">UUID</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">MySQL</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">架构</a>
               </li>
              
@@ -825,11 +836,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">UUID</a>
+                <a href="javascript:void(0)" class="js-tag color5">日志服务</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">MySQL</a>
+                <a href="javascript:void(0)" class="js-tag color4">SLS</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -869,14 +880,6 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">日志服务</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">SLS</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">大数据</a>
               </li>
              
@@ -901,6 +904,10 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">熔断</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">容器</a>
               </li>
              
@@ -910,10 +917,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">基本计算器</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">熔断</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -977,7 +980,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">边框识别 答题卡 试卷 考试</a>
+                <a href="javascript:void(0)" class="js-tag color5">机器学习</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -997,11 +1000,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">缓存</a>
+                <a href="javascript:void(0)" class="js-tag color5">边框识别 答题卡 试卷 考试</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">机器学习</a>
+                <a href="javascript:void(0)" class="js-tag color3">缓存</a>
               </li>
              
               <li class="article-tag-list-item">

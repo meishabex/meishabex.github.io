@@ -9,12 +9,12 @@
   <link rel="dns-prefetch" href="https://bex.meishakeji.com">
   <title>Lumen中间件原理 | Meisha Bex</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="1.中间件 类型lumen 中的中间件份为两种  全局中间件 123$app-&gt;middleware([    App\Http\Middleware\ExampleMiddleware::class]);  路由中间件  123$app-&gt;routeMiddleware([    &#39;auth&#39;&#x3D;&gt; App\Http\Middleware\Authenticate::class]">
+  <meta name="description" content="1.中间件 类型lumen 中的中间件份为两种  全局中间件123$app-&gt;middleware([    App\Http\Middleware\ExampleMiddleware::class]); 路由中间件 123$app-&gt;routeMiddleware([    &#x27;auth&#x27;&#x3D;&gt; App\Http\Middleware\Authenticate:">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Lumen中间件原理">
 <meta property="og:url" content="https://bex.meishakeji.com/2020/05/16/Lumen%E4%B8%AD%E9%97%B4%E4%BB%B6%E5%8E%9F%E7%90%86/index.html">
 <meta property="og:site_name" content="Meisha Bex">
-<meta property="og:description" content="1.中间件 类型lumen 中的中间件份为两种  全局中间件 123$app-&gt;middleware([    App\Http\Middleware\ExampleMiddleware::class]);  路由中间件  123$app-&gt;routeMiddleware([    &#39;auth&#39;&#x3D;&gt; App\Http\Middleware\Authenticate::class]">
+<meta property="og:description" content="1.中间件 类型lumen 中的中间件份为两种  全局中间件123$app-&gt;middleware([    App\Http\Middleware\ExampleMiddleware::class]); 路由中间件 123$app-&gt;routeMiddleware([    &#x27;auth&#x27;&#x3D;&gt; App\Http\Middleware\Authenticate:">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2020-05-16T06:37:38.000Z">
 <meta property="article:modified_time" content="2024-12-31T14:59:26.351Z">
@@ -179,34 +179,27 @@
           
             <h3 id="1-中间件-类型"><a href="#1-中间件-类型" class="headerlink" title="1.中间件 类型"></a>1.中间件 类型</h3><p>lumen 中的中间件份为两种</p>
 <ol>
-<li><p>全局中间件</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$app-&gt;middleware([</span><br><span class="line">    App\Http\Middleware\ExampleMiddleware::class</span><br><span class="line">]);</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>路由中间件 </p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$app-&gt;routeMiddleware([</span><br><span class="line">    <span class="string">'auth'</span>=&gt; App\Http\Middleware\Authenticate::class</span><br><span class="line">]);</span><br></pre></td></tr></table></figure>
-</li>
+<li>全局中间件<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$app</span>-&gt;<span class="title function_ invoke__">middleware</span>([</span><br><span class="line">    <span class="title class_">App\Http\Middleware\ExampleMiddleware</span>::<span class="variable language_">class</span></span><br><span class="line">]);</span><br></pre></td></tr></table></figure></li>
+<li>路由中间件 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$app</span>-&gt;<span class="title function_ invoke__">routeMiddleware</span>([</span><br><span class="line">    <span class="string">&#x27;auth&#x27;</span>=&gt; <span class="title class_">App\Http\Middleware\Authenticate</span>::<span class="variable language_">class</span></span><br><span class="line">]);</span><br></pre></td></tr></table></figure></li>
 </ol>
 <h3 id="2-请求过程"><a href="#2-请求过程" class="headerlink" title="2.请求过程"></a>2.请求过程</h3><ol>
-<li><p>请求都从入口文件进去 (public/index.php)</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$app = <span class="keyword">require</span> <span class="keyword">__DIR__</span>.<span class="string">'/../bootstrap/app.php'</span>;</span><br><span class="line">$app-&gt;run();</span><br></pre></td></tr></table></figure>
+<li><p>请求都从入口文件进去 (public&#x2F;index.php)</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$app</span> = <span class="keyword">require</span> <span class="keyword">__DIR__</span>.<span class="string">&#x27;/../bootstrap/app.php&#x27;</span>;</span><br><span class="line"><span class="variable">$app</span>-&gt;<span class="title function_ invoke__">run</span>();</span><br></pre></td></tr></table></figure></li>
+<li><p>run方法是 vendor&#x2F;laravel&#x2F;lumen-framework&#x2F;src&#x2F;Application.php这个类中使用到的trait，trait为Concerns\RoutesRequests</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Application</span> <span class="keyword">extends</span> <span class="title">Container</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">use</span> <span class="title">Concerns</span>\<span class="title">RoutesRequests</span>,</span><br><span class="line">        <span class="title">Concerns</span>\<span class="title">RegistersExceptionHandlers</span>;</span><br><span class="line">        </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">run</span>(<span class="params"><span class="variable">$request</span> = <span class="literal">null</span></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="variable">$response</span> = <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">dispatch</span>(<span class="variable">$request</span>); <span class="comment">// 处理请求 (中间件 等)</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (<span class="variable">$response</span> <span class="keyword">instanceof</span> SymfonyResponse) &#123;</span><br><span class="line">            <span class="variable">$response</span>-&gt;<span class="title function_ invoke__">send</span>(); <span class="comment">// 返回 http 请求结果</span></span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">echo</span> (<span class="keyword">string</span>) <span class="variable">$response</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 处理 middleware 中的 terminate() --&gt;终止中间件 (有时候中间件可能需要在 HTTP 响应发送到浏览器之后做一些工作)</span></span><br><span class="line">        <span class="keyword">if</span> (<span class="title function_ invoke__">count</span>(<span class="variable">$this</span>-&gt;middleware) &gt; <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">callTerminableMiddleware</span>(<span class="variable">$response</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在bootstrap&#x2F;app.php中我们进行了中间件的注册，这里的注册就是将中间件写入到Application类引用的trait RoutesRequests的两个属性当中</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">trait</span> <span class="title">RoutesRequests</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">protected</span> <span class="variable">$middleware</span> = [];</span><br><span class="line">    <span class="keyword">protected</span> <span class="variable">$routeMiddleware</span> = [];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
-<li><p>run方法是 vendor/laravel/lumen-framework/src/Application.php这个类中使用到的trait，trait为Concerns\RoutesRequests</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Application</span> <span class="keyword">extends</span> <span class="title">Container</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">use</span> <span class="title">Concerns</span>\<span class="title">RoutesRequests</span>,</span><br><span class="line">        <span class="title">Concerns</span>\<span class="title">RegistersExceptionHandlers</span>;</span><br><span class="line">        </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">run</span><span class="params">($request = null)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        $response = <span class="keyword">$this</span>-&gt;dispatch($request); <span class="comment">// 处理请求 (中间件 等)</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> ($response <span class="keyword">instanceof</span> SymfonyResponse) &#123;</span><br><span class="line">            $response-&gt;send(); <span class="comment">// 返回 http 请求结果</span></span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">echo</span> (string) $response;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 处理 middleware 中的 terminate() --&gt;终止中间件 (有时候中间件可能需要在 HTTP 响应发送到浏览器之后做一些工作)</span></span><br><span class="line">        <span class="keyword">if</span> (count(<span class="keyword">$this</span>-&gt;middleware) &gt; <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">$this</span>-&gt;callTerminableMiddleware($response);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-<p>在bootstrap/app.php中我们进行了中间件的注册，这里的注册就是将中间件写入到Application类引用的trait RoutesRequests的两个属性当中<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">trait</span> RoutesRequests</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">protected</span> $middleware = [];</span><br><span class="line">    <span class="keyword">protected</span> $routeMiddleware = [];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<ol start="3">
-<li><p>\$this-&gt;dispatch(\$request)</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">trait</span> RoutesRequests</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">dispatch</span><span class="params">($request = null)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="comment">// 初始化 $request</span></span><br><span class="line">        <span class="keyword">list</span>($method, $pathInfo) = <span class="keyword">$this</span>-&gt;parseIncomingRequest($request);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">// pipeline 处理 全局 中间件 </span></span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;sendThroughPipeline(<span class="keyword">$this</span>-&gt;middleware, <span class="function"><span class="keyword">function</span> <span class="params">()</span> <span class="title">use</span> <span class="params">($method, $pathInfo)</span> </span>&#123; </span><br><span class="line">                <span class="keyword">if</span> (<span class="keyword">isset</span>(<span class="keyword">$this</span>-&gt;router-&gt;getRoutes()[$method.$pathInfo])) &#123;</span><br><span class="line">                            <span class="comment">// handleFoundRoute() 处理  route中间件 </span></span><br><span class="line">                    <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;handleFoundRoute([<span class="keyword">true</span>, <span class="keyword">$this</span>-&gt;router-&gt;getRoutes()[$method.$pathInfo][<span class="string">'action'</span>], []]);</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="comment">// 处理 没有 路由到的 请求404</span></span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;handleDispatcherResponse(</span><br><span class="line">                    <span class="keyword">$this</span>-&gt;createDispatcher()-&gt;dispatch($method, $pathInfo)</span><br><span class="line">                );</span><br><span class="line">            &#125;);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (<span class="keyword">Exception</span> $e) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;prepareResponse(<span class="keyword">$this</span>-&gt;sendExceptionToHandler($e));</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Throwable $e) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;prepareResponse(<span class="keyword">$this</span>-&gt;sendExceptionToHandler($e));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
+<li><p>$this-&gt;dispatch($request)</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">trait</span> <span class="title">RoutesRequests</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">dispatch</span>(<span class="params"><span class="variable">$request</span> = <span class="literal">null</span></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="comment">// 初始化 $request</span></span><br><span class="line">        <span class="keyword">list</span>(<span class="variable">$method</span>, <span class="variable">$pathInfo</span>) = <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">parseIncomingRequest</span>(<span class="variable">$request</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">// pipeline 处理 全局 中间件 </span></span><br><span class="line">            <span class="keyword">return</span> <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">sendThroughPipeline</span>(<span class="variable">$this</span>-&gt;middleware, function () <span class="keyword">use</span> ($<span class="title">method</span>, $<span class="title">pathInfo</span>) &#123; </span><br><span class="line">                <span class="title">if</span> (<span class="title">isset</span>($<span class="title">this</span>-&gt;<span class="title">router</span>-&gt;<span class="title">getRoutes</span>()[$<span class="title">method</span>.$<span class="title">pathInfo</span>])) &#123;</span><br><span class="line">                            // <span class="title">handleFoundRoute</span>() 处理  <span class="title">route</span>中间件 </span><br><span class="line">                    <span class="title">return</span> $<span class="title">this</span>-&gt;<span class="title">handleFoundRoute</span>([<span class="title">true</span>, $<span class="title">this</span>-&gt;<span class="title">router</span>-&gt;<span class="title">getRoutes</span>()[$<span class="title">method</span>.$<span class="title">pathInfo</span>][&#x27;<span class="title">action</span>&#x27;], []]);</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="comment">// 处理 没有 路由到的 请求404</span></span><br><span class="line">                <span class="keyword">return</span> <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">handleDispatcherResponse</span>(</span><br><span class="line">                    <span class="variable">$this</span>-&gt;<span class="title function_ invoke__">createDispatcher</span>()-&gt;<span class="title function_ invoke__">dispatch</span>(<span class="variable">$method</span>, <span class="variable">$pathInfo</span>)</span><br><span class="line">                );</span><br><span class="line">            &#125;);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (<span class="built_in">Exception</span> <span class="variable">$e</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">prepareResponse</span>(<span class="variable">$this</span>-&gt;<span class="title function_ invoke__">sendExceptionToHandler</span>(<span class="variable">$e</span>));</span><br><span class="line">        &#125; <span class="keyword">catch</span> (<span class="built_in">Throwable</span> <span class="variable">$e</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">prepareResponse</span>(<span class="variable">$this</span>-&gt;<span class="title function_ invoke__">sendExceptionToHandler</span>(<span class="variable">$e</span>));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
 <li><p>$this-&gt;sendThroughPipeline,这里用到了Pipeline，是是实现中间件的关键所在</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">trait RoutesRequests</span><br><span class="line">&#123;</span><br><span class="line">    protected function sendThroughPipeline(array $middleware, Closure $then)</span><br><span class="line">    &#123;</span><br><span class="line">        if (count($middleware) &gt; 0 &amp;&amp; ! $this-&gt;shouldSkipMiddleware()) &#123;</span><br><span class="line">            // pipeline 实现中间件</span><br><span class="line">            return (new Pipeline($this))</span><br><span class="line">                -&gt;send($this-&gt;make(&apos;request&apos;)) // 设置通过管道的对象</span><br><span class="line">                -&gt;through($middleware) //设置管道 即定义的中间件</span><br><span class="line">                -&gt;then($then); //让管道对象通过中间件，也就是执行闭包 $then为初始化的闭包函数</span><br><span class="line">        &#125;</span><br><span class="line">        return $then();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">trait RoutesRequests</span><br><span class="line">&#123;</span><br><span class="line">    protected function sendThroughPipeline(array $middleware, Closure $then)</span><br><span class="line">    &#123;</span><br><span class="line">        if (count($middleware) &gt; 0 &amp;&amp; ! $this-&gt;shouldSkipMiddleware()) &#123;</span><br><span class="line">            // pipeline 实现中间件</span><br><span class="line">            return (new Pipeline($this))</span><br><span class="line">                -&gt;send($this-&gt;make(&#x27;request&#x27;)) // 设置通过管道的对象</span><br><span class="line">                -&gt;through($middleware) //设置管道 即定义的中间件</span><br><span class="line">                -&gt;then($then); //让管道对象通过中间件，也就是执行闭包 $then为初始化的闭包函数</span><br><span class="line">        &#125;</span><br><span class="line">        return $then();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;    </span><br></pre></td></tr></table></figure></li>
 </ol>
-<h3 id="3-Pipeline原理实现"><a href="#3-Pipeline原理实现" class="headerlink" title="3.Pipeline原理实现"></a>3.Pipeline原理实现</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Pipeline</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">then</span><span class="params">(Closure $destination)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        $pipeline = array_reduce(</span><br><span class="line">            array_reverse(<span class="keyword">$this</span>-&gt;pipes), <span class="keyword">$this</span>-&gt;carry(), <span class="keyword">$this</span>-&gt;prepareDestination($destination)</span><br><span class="line">        );</span><br><span class="line">        ;</span><br><span class="line">        <span class="keyword">return</span> $pipeline(<span class="keyword">$this</span>-&gt;passable);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">protected</span> <span class="function"><span class="keyword">function</span> <span class="title">prepareDestination</span><span class="params">(Closure $destination)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> <span class="params">($passable)</span> <span class="title">use</span> <span class="params">($destination)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> $destination($passable);</span><br><span class="line">        &#125;;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">protected</span> <span class="function"><span class="keyword">function</span> <span class="title">carry</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> <span class="params">($stack, $pipe)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> <span class="params">($passable)</span> <span class="title">use</span> <span class="params">($stack, $pipe)</span> </span>&#123;</span><br><span class="line">                <span class="keyword">if</span> (is_callable($pipe)) &#123;</span><br><span class="line">                    <span class="keyword">return</span> $pipe($passable, $stack);</span><br><span class="line">                &#125; <span class="keyword">elseif</span> (! is_object($pipe)) &#123;</span><br><span class="line">                    <span class="keyword">list</span>($name, $parameters) = <span class="keyword">$this</span>-&gt;parsePipeString($pipe);</span><br><span class="line">                    $pipe = <span class="keyword">$this</span>-&gt;getContainer()-&gt;make($name);</span><br><span class="line">                    $parameters = array_merge([$passable, $stack], $parameters);</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    $parameters = [$passable, $stack];</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">return</span> method_exists($pipe, <span class="keyword">$this</span>-&gt;method)</span><br><span class="line">                                ? $pipe-&gt;&#123;<span class="keyword">$this</span>-&gt;method&#125;(...$parameters)</span><br><span class="line">                                : $pipe(...$parameters);</span><br><span class="line">            &#125;;</span><br><span class="line">        &#125;;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>这里使用到了array_reduce来迭代数组，最后返回的是一个闭包函数调用栈，然后通过 \$pipeline(\$this-&gt;passable)执行这个闭包函数栈。我们看到array_reduce方法的第一个参数，将中间件进行了array_reverse数组反转，这样的话最后一个中间件是最早进入匿名函数调用栈，因此在执行过程它才会是最后一个被执行。整个实现其实使用到了一个设计模式叫做装饰器模式。</p>
-<p>这里我写了一个简单的pipeline使用例子<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">$add = <span class="function"><span class="keyword">function</span> <span class="params">($result, $closure)</span> </span>&#123;</span><br><span class="line">            $result = $result + <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">return</span> $closure($result);</span><br><span class="line">        &#125;;</span><br><span class="line">$multi = <span class="function"><span class="keyword">function</span> <span class="params">($result, $closure)</span> </span>&#123;</span><br><span class="line">            $result = $result * <span class="number">10</span>;</span><br><span class="line">            <span class="keyword">return</span> $closure($result);</span><br><span class="line">        &#125;;</span><br><span class="line">        $pipes = [$add, $multi];</span><br><span class="line">$then = <span class="function"><span class="keyword">function</span> <span class="params">($passable)</span> </span>&#123; <span class="comment">//$then为array_reduce的初始化参数，也就是说$then这个匿名函数是第一个进入函数调用栈的</span></span><br><span class="line">            <span class="keyword">return</span> $passable;</span><br><span class="line">        &#125;;</span><br><span class="line">$passable = <span class="number">10</span>;</span><br><span class="line">$result = (<span class="keyword">new</span> Pipeline())-&gt;send($passable)-&gt;through($pipes)-&gt;then($then);</span><br></pre></td></tr></table></figure></p>
-<p>上面代码中我们可以看到，我定义了一个将对象+1的匿名函数和一个将对象乘10的匿名，对象定义为数字10依次通过两个函数，最后得到结果 （10+1）*10 =110 返回。</p>
+<h3 id="3-Pipeline原理实现"><a href="#3-Pipeline原理实现" class="headerlink" title="3.Pipeline原理实现"></a>3.Pipeline原理实现</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Pipeline</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">then</span>(<span class="params"><span class="built_in">Closure</span> <span class="variable">$destination</span></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="variable">$pipeline</span> = <span class="title function_ invoke__">array_reduce</span>(</span><br><span class="line">            <span class="title function_ invoke__">array_reverse</span>(<span class="variable">$this</span>-&gt;pipes), <span class="variable">$this</span>-&gt;<span class="title function_ invoke__">carry</span>(), <span class="variable">$this</span>-&gt;<span class="title function_ invoke__">prepareDestination</span>(<span class="variable">$destination</span>)</span><br><span class="line">        );</span><br><span class="line">        ;</span><br><span class="line">        <span class="keyword">return</span> <span class="variable">$pipeline</span>(<span class="variable language_">$this</span>-&gt;passable);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">protected</span> <span class="function"><span class="keyword">function</span> <span class="title">prepareDestination</span>(<span class="params"><span class="built_in">Closure</span> <span class="variable">$destination</span></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> (<span class="params"><span class="variable">$passable</span></span>) <span class="keyword">use</span> (<span class="params"><span class="variable">$destination</span></span>) </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="variable">$destination</span>(<span class="variable">$passable</span>);</span><br><span class="line">        &#125;;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">protected</span> <span class="function"><span class="keyword">function</span> <span class="title">carry</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> (<span class="params"><span class="variable">$stack</span>, <span class="variable">$pipe</span></span>) </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> (<span class="params"><span class="variable">$passable</span></span>) <span class="keyword">use</span> (<span class="params"><span class="variable">$stack</span>, <span class="variable">$pipe</span></span>) </span>&#123;</span><br><span class="line">                <span class="keyword">if</span> (<span class="title function_ invoke__">is_callable</span>(<span class="variable">$pipe</span>)) &#123;</span><br><span class="line">                    <span class="keyword">return</span> <span class="variable">$pipe</span>(<span class="variable">$passable</span>, <span class="variable">$stack</span>);</span><br><span class="line">                &#125; <span class="keyword">elseif</span> (! <span class="title function_ invoke__">is_object</span>(<span class="variable">$pipe</span>)) &#123;</span><br><span class="line">                    <span class="keyword">list</span>(<span class="variable">$name</span>, <span class="variable">$parameters</span>) = <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">parsePipeString</span>(<span class="variable">$pipe</span>);</span><br><span class="line">                    <span class="variable">$pipe</span> = <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">getContainer</span>()-&gt;<span class="title function_ invoke__">make</span>(<span class="variable">$name</span>);</span><br><span class="line">                    <span class="variable">$parameters</span> = <span class="title function_ invoke__">array_merge</span>([<span class="variable">$passable</span>, <span class="variable">$stack</span>], <span class="variable">$parameters</span>);</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    <span class="variable">$parameters</span> = [<span class="variable">$passable</span>, <span class="variable">$stack</span>];</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">return</span> <span class="title function_ invoke__">method_exists</span>(<span class="variable">$pipe</span>, <span class="variable">$this</span>-&gt;method)</span><br><span class="line">                                ? <span class="variable">$pipe</span>-&gt;&#123;<span class="variable language_">$this</span>-&gt;method&#125;(...<span class="variable">$parameters</span>)</span><br><span class="line">                                : <span class="variable">$pipe</span>(...<span class="variable">$parameters</span>);</span><br><span class="line">            &#125;;</span><br><span class="line">        &#125;;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里使用到了array_reduce来迭代数组，最后返回的是一个闭包函数调用栈，然后通过 $pipeline($this-&gt;passable)执行这个闭包函数栈。我们看到array_reduce方法的第一个参数，将中间件进行了array_reverse数组反转，这样的话最后一个中间件是最早进入匿名函数调用栈，因此在执行过程它才会是最后一个被执行。整个实现其实使用到了一个设计模式叫做装饰器模式。</p>
+<p>这里我写了一个简单的pipeline使用例子</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$add</span> = <span class="function"><span class="keyword">function</span> (<span class="params"><span class="variable">$result</span>, <span class="variable">$closure</span></span>) </span>&#123;</span><br><span class="line">            <span class="variable">$result</span> = <span class="variable">$result</span> + <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">return</span> <span class="variable">$closure</span>(<span class="variable">$result</span>);</span><br><span class="line">        &#125;;</span><br><span class="line"><span class="variable">$multi</span> = <span class="function"><span class="keyword">function</span> (<span class="params"><span class="variable">$result</span>, <span class="variable">$closure</span></span>) </span>&#123;</span><br><span class="line">            <span class="variable">$result</span> = <span class="variable">$result</span> * <span class="number">10</span>;</span><br><span class="line">            <span class="keyword">return</span> <span class="variable">$closure</span>(<span class="variable">$result</span>);</span><br><span class="line">        &#125;;</span><br><span class="line">        <span class="variable">$pipes</span> = [<span class="variable">$add</span>, <span class="variable">$multi</span>];</span><br><span class="line"><span class="variable">$then</span> = <span class="function"><span class="keyword">function</span> (<span class="params"><span class="variable">$passable</span></span>) </span>&#123; <span class="comment">//$then为array_reduce的初始化参数，也就是说$then这个匿名函数是第一个进入函数调用栈的</span></span><br><span class="line">            <span class="keyword">return</span> <span class="variable">$passable</span>;</span><br><span class="line">        &#125;;</span><br><span class="line"><span class="variable">$passable</span> = <span class="number">10</span>;</span><br><span class="line"><span class="variable">$result</span> = (<span class="keyword">new</span> <span class="title class_">Pipeline</span>())-&gt;<span class="title function_ invoke__">send</span>(<span class="variable">$passable</span>)-&gt;<span class="title function_ invoke__">through</span>(<span class="variable">$pipes</span>)-&gt;<span class="title function_ invoke__">then</span>(<span class="variable">$then</span>);</span><br></pre></td></tr></table></figure>
+<p>上面代码中我们可以看到，我定义了一个将对象+1的匿名函数和一个将对象乘10的匿名，对象定义为数字10依次通过两个函数，最后得到结果 （10+1）*10 &#x3D;110 返回。</p>
 <h3 id="4-tips"><a href="#4-tips" class="headerlink" title="4.tips"></a>4.tips</h3><h4 id="array-reduce解释"><a href="#array-reduce解释" class="headerlink" title="array_reduce解释"></a>array_reduce解释</h4><p>array_reduce它是专门用来迭代数组的。该函数最多接收三个参数。</p>
 <p>第一个参数接收数组</p>
 <p>第二个参数函数名，也可以是匿名函数，函数有两个参数，分别代表$result和$item</p>
@@ -491,11 +484,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">HTTP/2 HTTP/1.1 HTTP/3.0</a>
+                <a href="javascript:void(0)" class="js-tag color3">Go</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Go</a>
+                <a href="javascript:void(0)" class="js-tag color5">HTTP/2 HTTP/1.1 HTTP/3.0</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -511,10 +504,6 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Latex 文件转换 docx</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">lumen</a>
               </li>
              
@@ -524,6 +513,10 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">thrift</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Latex 文件转换 docx</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -540,6 +533,30 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Linux</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">反射</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">reflection</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">底层</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">变量</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">引用</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">优化</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -567,15 +584,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">反射</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">reflection</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">底层</a>
+                <a href="javascript:void(0)" class="js-tag color3">Reactor</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -591,23 +600,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">变量</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">引用</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">优化</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">跳跃表</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Reactor</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -616,6 +609,34 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">性能优化</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">阿里云</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">sts</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">推荐系统</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">NLP</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">CF-IDF</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">canal</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">ES</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -655,11 +676,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">canal</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">ES</a>
+                <a href="javascript:void(0)" class="js-tag color4">线段树</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -667,7 +684,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">线段树</a>
+                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -684,66 +701,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">world</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">阿里云</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">sts</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">推荐系统</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">NLP</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">CF-IDF</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">acm</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">树</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">字典树</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">前缀树</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">二进制</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">位运算</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">macro</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">model</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">数据库</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -779,6 +736,46 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">macro</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">model</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">数据库</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">acm</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">树</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">字典树</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">前缀树</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">二进制</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">位运算</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">底层分析</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">事务</a>
               </li>
              
@@ -788,10 +785,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Python</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">底层分析</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -811,15 +804,15 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">ACID</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">sysbench</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">压力测试</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">ACID</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -831,6 +824,14 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">UUID</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">MySQL</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">架构</a>
               </li>
              
@@ -839,11 +840,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">UUID</a>
+                <a href="javascript:void(0)" class="js-tag color5">日志服务</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">MySQL</a>
+                <a href="javascript:void(0)" class="js-tag color4">SLS</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -883,14 +884,6 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">日志服务</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">SLS</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">大数据</a>
               </li>
              
@@ -915,6 +908,10 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">熔断</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">容器</a>
               </li>
              
@@ -924,10 +921,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">基本计算器</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">熔断</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -991,7 +984,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">边框识别 答题卡 试卷 考试</a>
+                <a href="javascript:void(0)" class="js-tag color5">机器学习</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1011,11 +1004,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">缓存</a>
+                <a href="javascript:void(0)" class="js-tag color5">边框识别 答题卡 试卷 考试</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">机器学习</a>
+                <a href="javascript:void(0)" class="js-tag color3">缓存</a>
               </li>
              
               <li class="article-tag-list-item">

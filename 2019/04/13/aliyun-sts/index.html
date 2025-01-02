@@ -184,16 +184,16 @@
 <li>阿里云 STS（Security Token Service）是阿里云提供的一种临时访问权限管理服务。</li>
 <li>通过 STS 服务，您所授权的身份主体（RAM 用户、RAM 用户组或 RAM 角色）可以获取一个自定义时效和访问权限的临时访问令牌。STS令牌持有者可以通过以下方式访问阿里云资源：<ul>
 <li>通过编程方式访问被授权的阿里云服务 API。</li>
-<li>登录阿里云控制台操作被授权的云资源。<br>*RAM (Resource Access Management) 是阿里云为客户提供的用户身份管理与资源访问控制服务。</li>
+<li>登录阿里云控制台操作被授权的云资源。<br> *RAM (Resource Access Management) 是阿里云为客户提供的用户身份管理与资源访问控制服务。</li>
 </ul>
 </li>
 </ol>
 <h3 id="为什么要使用RAM和STS"><a href="#为什么要使用RAM和STS" class="headerlink" title="为什么要使用RAM和STS"></a>为什么要使用RAM和STS</h3><ol>
 <li>RAM和STS需要解决的一个核心问题是如何在不暴露主账号的AccessKey的情况下安全的授权别人访问。因为一旦主账号的AccessKey暴露出去的话会带来极大的安全风险，别人可以随意操作该账号下所有的资源，盗取重要信息等。</li>
 <li>RAM提供一种长期有效的权限控制机制，通过分出不同权限的子账号，将不同的权限分给不同的用户，这样一旦子账号泄露也不会造成全局的信息泄露。但是，由于子账号在一般情况下是长期有效的，因此，子账号的AccessKey也是不能泄露的。</li>
-<li>相对于RAM提供的长效控制机制，STS提供的是一种临时访问授权。通过STS可以返回临时的AccessKey和Token，这些信息可以直接发给临时用户用来访问OSS/VOD服务等。一般来说，从STS获取的权限会受到更加严格的限制，并且拥有时间限制，因此这些信息泄露之后对于系统的影响也很小。</li>
+<li>相对于RAM提供的长效控制机制，STS提供的是一种临时访问授权。通过STS可以返回临时的AccessKey和Token，这些信息可以直接发给临时用户用来访问OSS&#x2F;VOD服务等。一般来说，从STS获取的权限会受到更加严格的限制，并且拥有时间限制，因此这些信息泄露之后对于系统的影响也很小。</li>
 </ol>
-<h3 id="STS-访问点"><a href="#STS-访问点" class="headerlink" title="STS 访问点"></a>STS 访问点</h3><p>用于 API 访问的 STS 接入点：<a href="https://sts.aliyuncs.com。" target="_blank" rel="noopener">https://sts.aliyuncs.com。</a></p>
+<h3 id="STS-访问点"><a href="#STS-访问点" class="headerlink" title="STS 访问点"></a>STS 访问点</h3><p>用于 API 访问的 STS 接入点：<a href="https://sts.aliyuncs.com./">https://sts.aliyuncs.com。</a></p>
 <h3 id="STS-术语表"><a href="#STS-术语表" class="headerlink" title="STS 术语表"></a>STS 术语表</h3><table>
 <thead>
 <tr>
@@ -201,8 +201,7 @@
 <th>说明</th>
 </tr>
 </thead>
-<tbody>
-<tr>
+<tbody><tr>
 <td>RAM Role</td>
 <td>一种虚拟的RAM用户。</td>
 </tr>
@@ -218,8 +217,7 @@
 <td>Assume Role</td>
 <td>扮演角色是实体用户获取角色身份的安全令牌的方法。一个实体用户通过调用 AssumeRole 的 API 可以获得角色的安全令牌，使用安全令牌可以访问云服务 API。</td>
 </tr>
-</tbody>
-</table>
+</tbody></table>
 <h3 id="STS鉴权模式"><a href="#STS鉴权模式" class="headerlink" title="STS鉴权模式"></a>STS鉴权模式</h3><p>OSS可以通过阿里云STS (Security Token Service) 进行临时授权访问。阿里云STS是为云计算用户提供临时访问令牌的Web服务。通过STS，您可以为第三方应用或子用户（即用户身份由您自己管理的用户）颁发一个自定义时效和权限的访问凭证。<br>STS鉴权模式具有以下优势：</p>
 <ul>
 <li>无需透露您的长期密钥（AccessKey）给第三方应用，只需生成一个访问令牌并将令牌交给第三方应用。您可以自定义这个令牌的访问权限及有效期限。</li>
@@ -227,26 +225,20 @@
 </ul>
 <p>以APP应用为例，交互流程如图所示(来自阿里云官方文档)：<br><img src="http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/22518/155409028013692_zh-CN.png" alt="image"></p>
 <p>以上（来自阿里云文档）只是为让大家先对STS有初步的了解，以及应用场景，下面进入正题</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">--------------------------------分割线-----------------------------</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">--------------------------------分割线-----------------------------</span><br></pre></td></tr></table></figure>
+
 <h3 id="如何通过STS获取安全令牌呢？"><a href="#如何通过STS获取安全令牌呢？" class="headerlink" title="如何通过STS获取安全令牌呢？"></a>如何通过STS获取安全令牌呢？</h3><ol>
-<li><p>先上代码</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">STS</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">protected</span> $url = <span class="string">'https://sts.aliyuncs.com'</span>;</span><br><span class="line">    <span class="keyword">protected</span> $accessKeySecret = <span class="string">'1234567890qwertyuioasdfghj'</span>;</span><br><span class="line">    <span class="keyword">protected</span> $accessKeyId = <span class="string">'LT11234567898'</span>;</span><br><span class="line">    <span class="keyword">protected</span> $roleArn = <span class="string">'acs:ram::$accountID:role/$roleName'</span>;<span class="comment">//指定角色的 ARN ，角色策略权限</span></span><br><span class="line">    <span class="keyword">protected</span> $roleSessionName = <span class="string">'client1'</span>;<span class="comment">//用户自定义参数。此参数用来区分不同的 token，可用于用户级别的访问审计。格式：^[a-zA-Z0-9\.@\-_]+$</span></span><br><span class="line">    <span class="keyword">protected</span> $durationSeconds = <span class="string">'1800'</span>;<span class="comment">//指定的过期时间</span></span><br><span class="line">    <span class="keyword">protected</span> $type = <span class="string">'xxx'</span>;<span class="comment">//方便调用时获取不同的权限</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">($type)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;type = $type;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;setRoleArn();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">sts</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        $action = <span class="string">'AssumeRole'</span>;<span class="comment">//通过扮演角色接口获取令牌</span></span><br><span class="line">        date_default_timezone_set(<span class="string">'UTC'</span>);</span><br><span class="line">        $param = <span class="keyword">array</span>(</span><br><span class="line">            <span class="string">'Format'</span>           =&gt; <span class="string">'JSON'</span>,</span><br><span class="line">            <span class="string">'Version'</span>          =&gt; <span class="string">'2015-04-01'</span>,</span><br><span class="line">            <span class="string">'AccessKeyId'</span>      =&gt; <span class="keyword">$this</span>-&gt;accessKeyId,</span><br><span class="line">            <span class="string">'SignatureMethod'</span>  =&gt; <span class="string">'HMAC-SHA1'</span>,</span><br><span class="line">            <span class="string">'SignatureVersion'</span> =&gt; <span class="string">'1.0'</span>,</span><br><span class="line">            <span class="string">'SignatureNonce'</span>   =&gt; <span class="keyword">$this</span>-&gt;getRandChar(<span class="number">8</span>),</span><br><span class="line">            <span class="string">'Action'</span>           =&gt; $action,</span><br><span class="line">            <span class="string">'RoleArn'</span>          =&gt; <span class="keyword">$this</span>-&gt;roleArn,</span><br><span class="line">            <span class="string">'RoleSessionName'</span>  =&gt; <span class="keyword">$this</span>-&gt;roleSessionName,</span><br><span class="line">            <span class="string">'DurationSeconds'</span>  =&gt; <span class="keyword">$this</span>-&gt;durationSeconds,</span><br><span class="line">            <span class="string">'Timestamp'</span>        =&gt; date(<span class="string">'Y-m-d'</span>) . <span class="string">'T'</span> . date(<span class="string">'H:i:s'</span>) . <span class="string">'Z'</span></span><br><span class="line">            <span class="comment">//'Policy'=&gt;'' //此参数可以限制生成的 STS token 的权限，若不指定则返回的 token 拥有指定角色的所有权限。</span></span><br><span class="line">        );</span><br><span class="line">        $param[<span class="string">'Signature'</span>] = <span class="keyword">$this</span>-&gt;computeSignature($param, <span class="string">'POST'</span>);</span><br><span class="line">        $res = CurlHandle::httpPost(<span class="keyword">$this</span>-&gt;url, $param);<span class="comment">//curl post请求</span></span><br><span class="line">        <span class="keyword">if</span> ($res) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">self</span>::_render($res);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> [];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="function"><span class="keyword">function</span> <span class="title">_render</span><span class="params">($res)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        $res = json_decode($res, <span class="keyword">true</span>);</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">empty</span>($res[<span class="string">'Credentials'</span>])) &#123;</span><br><span class="line">            <span class="keyword">return</span> [];</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> [</span><br><span class="line">                <span class="string">'accessKeySecret'</span> =&gt; $res[<span class="string">'Credentials'</span>][<span class="string">'AccessKeySecret'</span>] ?? <span class="string">''</span>,</span><br><span class="line">                <span class="string">'accessKeyId'</span>     =&gt; $res[<span class="string">'Credentials'</span>][<span class="string">'AccessKeyId'</span>] ?? <span class="string">''</span>,</span><br><span class="line">                <span class="string">'expiration'</span>      =&gt; $res[<span class="string">'Credentials'</span>][<span class="string">'Expiration'</span>] ?? <span class="string">''</span>,</span><br><span class="line">                <span class="string">'securityToken'</span>   =&gt; $res[<span class="string">'Credentials'</span>][<span class="string">'SecurityToken'</span>] ?? <span class="string">''</span>,</span><br><span class="line">            ];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">protected</span> <span class="function"><span class="keyword">function</span> <span class="title">computeSignature</span><span class="params">($parameters, $setMethod)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        ksort($parameters);</span><br><span class="line">        $canonicalizedQueryString = <span class="string">''</span>;</span><br><span class="line">        <span class="keyword">foreach</span> ($parameters <span class="keyword">as</span> $key =&gt; $value) &#123;</span><br><span class="line">            $canonicalizedQueryString .= <span class="string">'&amp;'</span> . <span class="keyword">$this</span>-&gt;percentEncode($key) . <span class="string">'='</span> . <span class="keyword">$this</span>-&gt;percentEncode($value);</span><br><span class="line">        &#125;</span><br><span class="line">        $stringToSign = $setMethod . <span class="string">'&amp;%2F&amp;'</span> . <span class="keyword">$this</span>-&gt;percentencode(substr($canonicalizedQueryString, <span class="number">1</span>));</span><br><span class="line">        $signature = <span class="keyword">$this</span>-&gt;getSignature($stringToSign, <span class="keyword">$this</span>-&gt;accessKeySecret . <span class="string">'&amp;'</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> $signature;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">getSignature</span><span class="params">($source, $accessSecret)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> base64_encode(hash_hmac(<span class="string">'sha1'</span>, $source, $accessSecret, <span class="keyword">true</span>));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">protected</span> <span class="function"><span class="keyword">function</span> <span class="title">percentEncode</span><span class="params">($str)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        $res = urlencode($str);</span><br><span class="line">        $res = preg_replace(<span class="string">'/\+/'</span>, <span class="string">'%20'</span>, $res);</span><br><span class="line">        $res = preg_replace(<span class="string">'/\*/'</span>, <span class="string">'%2A'</span>, $res);</span><br><span class="line">        $res = preg_replace(<span class="string">'/%7E/'</span>, <span class="string">'~'</span>, $res);</span><br><span class="line">        <span class="keyword">return</span> $res;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">getRandChar</span><span class="params">($length)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        $str = <span class="keyword">null</span>;</span><br><span class="line">        $strPol = <span class="string">"ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz"</span>;</span><br><span class="line">        $max = strlen($strPol) - <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> ($i = <span class="number">0</span>; $i &lt; $length; $i++) &#123;</span><br><span class="line">            $str .= $strPol[rand(<span class="number">0</span>, $max)];<span class="comment">//rand($min,$max)生成介于min和max两个数之间的一个随机整数</span></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> $str;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">protected</span> <span class="function"><span class="keyword">function</span> <span class="title">setRoleArn</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">$this</span>-&gt;type == <span class="string">'123'</span>) &#123;<span class="comment">//根据入参使用不同的策略，当然这里还可以有其他写法兼容更多的策略的情况</span></span><br><span class="line">            <span class="keyword">$this</span>-&gt;roleArn = <span class="string">'acs:ram::123456789098:role/=$roleName'</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>返回结果</p>
-<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"Credentials"</span>: &#123;</span><br><span class="line">        <span class="attr">"AccessKeyId"</span>: <span class="string">"STS.xxxxxxxxxxxxx****"</span>,<span class="comment">//访问密钥标识</span></span><br><span class="line">        <span class="attr">"AccessKeySecret"</span>: <span class="string">"xxxxxxxxxx****"</span>,<span class="comment">//访问密钥</span></span><br><span class="line">        <span class="attr">"Expiration"</span>: <span class="string">"2019-04-09T11:52:19Z"</span>,<span class="comment">//失效时间</span></span><br><span class="line">        <span class="attr">"SecurityToken"</span>: <span class="string">"********"</span><span class="comment">//安全令牌</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">"AssumedRoleUser"</span>: &#123;</span><br><span class="line">        <span class="attr">"arn"</span>: <span class="string">"acs:sts::123456765456****:assumed-role/AdminRole/client"</span>,</span><br><span class="line">        <span class="attr">"AssumedRoleUserId"</span>:<span class="string">"1234567121****:alice"</span></span><br><span class="line">        &#125;,</span><br><span class="line">    <span class="attr">"RequestId"</span>: <span class="string">"xxxxxxxxxxxxxxxx"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
+<li>先上代码<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">STS</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">protected</span> <span class="variable">$url</span> = <span class="string">&#x27;https://sts.aliyuncs.com&#x27;</span>;</span><br><span class="line">    <span class="keyword">protected</span> <span class="variable">$accessKeySecret</span> = <span class="string">&#x27;1234567890qwertyuioasdfghj&#x27;</span>;</span><br><span class="line">    <span class="keyword">protected</span> <span class="variable">$accessKeyId</span> = <span class="string">&#x27;LT11234567898&#x27;</span>;</span><br><span class="line">    <span class="keyword">protected</span> <span class="variable">$roleArn</span> = <span class="string">&#x27;acs:ram::$accountID:role/$roleName&#x27;</span>;<span class="comment">//指定角色的 ARN ，角色策略权限</span></span><br><span class="line">    <span class="keyword">protected</span> <span class="variable">$roleSessionName</span> = <span class="string">&#x27;client1&#x27;</span>;<span class="comment">//用户自定义参数。此参数用来区分不同的 token，可用于用户级别的访问审计。格式：^[a-zA-Z0-9\.@\-_]+$</span></span><br><span class="line">    <span class="keyword">protected</span> <span class="variable">$durationSeconds</span> = <span class="string">&#x27;1800&#x27;</span>;<span class="comment">//指定的过期时间</span></span><br><span class="line">    <span class="keyword">protected</span> <span class="variable">$type</span> = <span class="string">&#x27;xxx&#x27;</span>;<span class="comment">//方便调用时获取不同的权限</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span>(<span class="params"><span class="variable">$type</span></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;type = <span class="variable">$type</span>;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">setRoleArn</span>();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">sts</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="variable">$action</span> = <span class="string">&#x27;AssumeRole&#x27;</span>;<span class="comment">//通过扮演角色接口获取令牌</span></span><br><span class="line">        <span class="title function_ invoke__">date_default_timezone_set</span>(<span class="string">&#x27;UTC&#x27;</span>);</span><br><span class="line">        <span class="variable">$param</span> = <span class="keyword">array</span>(</span><br><span class="line">            <span class="string">&#x27;Format&#x27;</span>           =&gt; <span class="string">&#x27;JSON&#x27;</span>,</span><br><span class="line">            <span class="string">&#x27;Version&#x27;</span>          =&gt; <span class="string">&#x27;2015-04-01&#x27;</span>,</span><br><span class="line">            <span class="string">&#x27;AccessKeyId&#x27;</span>      =&gt; <span class="variable language_">$this</span>-&gt;accessKeyId,</span><br><span class="line">            <span class="string">&#x27;SignatureMethod&#x27;</span>  =&gt; <span class="string">&#x27;HMAC-SHA1&#x27;</span>,</span><br><span class="line">            <span class="string">&#x27;SignatureVersion&#x27;</span> =&gt; <span class="string">&#x27;1.0&#x27;</span>,</span><br><span class="line">            <span class="string">&#x27;SignatureNonce&#x27;</span>   =&gt; <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">getRandChar</span>(<span class="number">8</span>),</span><br><span class="line">            <span class="string">&#x27;Action&#x27;</span>           =&gt; <span class="variable">$action</span>,</span><br><span class="line">            <span class="string">&#x27;RoleArn&#x27;</span>          =&gt; <span class="variable language_">$this</span>-&gt;roleArn,</span><br><span class="line">            <span class="string">&#x27;RoleSessionName&#x27;</span>  =&gt; <span class="variable language_">$this</span>-&gt;roleSessionName,</span><br><span class="line">            <span class="string">&#x27;DurationSeconds&#x27;</span>  =&gt; <span class="variable language_">$this</span>-&gt;durationSeconds,</span><br><span class="line">            <span class="string">&#x27;Timestamp&#x27;</span>        =&gt; <span class="title function_ invoke__">date</span>(<span class="string">&#x27;Y-m-d&#x27;</span>) . <span class="string">&#x27;T&#x27;</span> . <span class="title function_ invoke__">date</span>(<span class="string">&#x27;H:i:s&#x27;</span>) . <span class="string">&#x27;Z&#x27;</span></span><br><span class="line">            <span class="comment">//&#x27;Policy&#x27;=&gt;&#x27;&#x27; //此参数可以限制生成的 STS token 的权限，若不指定则返回的 token 拥有指定角色的所有权限。</span></span><br><span class="line">        );</span><br><span class="line">        <span class="variable">$param</span>[<span class="string">&#x27;Signature&#x27;</span>] = <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">computeSignature</span>(<span class="variable">$param</span>, <span class="string">&#x27;POST&#x27;</span>);</span><br><span class="line">        <span class="variable">$res</span> = <span class="title class_">CurlHandle</span>::<span class="title function_ invoke__">httpPost</span>(<span class="variable">$this</span>-&gt;url, <span class="variable">$param</span>);<span class="comment">//curl post请求</span></span><br><span class="line">        <span class="keyword">if</span> (<span class="variable">$res</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="built_in">self</span>::<span class="title function_ invoke__">_render</span>(<span class="variable">$res</span>);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> [];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="built_in">static</span> <span class="function"><span class="keyword">function</span> <span class="title">_render</span>(<span class="params"><span class="variable">$res</span></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="variable">$res</span> = <span class="title function_ invoke__">json_decode</span>(<span class="variable">$res</span>, <span class="literal">true</span>);</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">empty</span>(<span class="variable">$res</span>[<span class="string">&#x27;Credentials&#x27;</span>])) &#123;</span><br><span class="line">            <span class="keyword">return</span> [];</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> [</span><br><span class="line">                <span class="string">&#x27;accessKeySecret&#x27;</span> =&gt; <span class="variable">$res</span>[<span class="string">&#x27;Credentials&#x27;</span>][<span class="string">&#x27;AccessKeySecret&#x27;</span>] ?? <span class="string">&#x27;&#x27;</span>,</span><br><span class="line">                <span class="string">&#x27;accessKeyId&#x27;</span>     =&gt; <span class="variable">$res</span>[<span class="string">&#x27;Credentials&#x27;</span>][<span class="string">&#x27;AccessKeyId&#x27;</span>] ?? <span class="string">&#x27;&#x27;</span>,</span><br><span class="line">                <span class="string">&#x27;expiration&#x27;</span>      =&gt; <span class="variable">$res</span>[<span class="string">&#x27;Credentials&#x27;</span>][<span class="string">&#x27;Expiration&#x27;</span>] ?? <span class="string">&#x27;&#x27;</span>,</span><br><span class="line">                <span class="string">&#x27;securityToken&#x27;</span>   =&gt; <span class="variable">$res</span>[<span class="string">&#x27;Credentials&#x27;</span>][<span class="string">&#x27;SecurityToken&#x27;</span>] ?? <span class="string">&#x27;&#x27;</span>,</span><br><span class="line">            ];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">protected</span> <span class="function"><span class="keyword">function</span> <span class="title">computeSignature</span>(<span class="params"><span class="variable">$parameters</span>, <span class="variable">$setMethod</span></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="title function_ invoke__">ksort</span>(<span class="variable">$parameters</span>);</span><br><span class="line">        <span class="variable">$canonicalizedQueryString</span> = <span class="string">&#x27;&#x27;</span>;</span><br><span class="line">        <span class="keyword">foreach</span> (<span class="variable">$parameters</span> <span class="keyword">as</span> <span class="variable">$key</span> =&gt; <span class="variable">$value</span>) &#123;</span><br><span class="line">            <span class="variable">$canonicalizedQueryString</span> .= <span class="string">&#x27;&amp;&#x27;</span> . <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">percentEncode</span>(<span class="variable">$key</span>) . <span class="string">&#x27;=&#x27;</span> . <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">percentEncode</span>(<span class="variable">$value</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="variable">$stringToSign</span> = <span class="variable">$setMethod</span> . <span class="string">&#x27;&amp;%2F&amp;&#x27;</span> . <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">percentencode</span>(<span class="title function_ invoke__">substr</span>(<span class="variable">$canonicalizedQueryString</span>, <span class="number">1</span>));</span><br><span class="line">        <span class="variable">$signature</span> = <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">getSignature</span>(<span class="variable">$stringToSign</span>, <span class="variable">$this</span>-&gt;accessKeySecret . <span class="string">&#x27;&amp;&#x27;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="variable">$signature</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">getSignature</span>(<span class="params"><span class="variable">$source</span>, <span class="variable">$accessSecret</span></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="title function_ invoke__">base64_encode</span>(<span class="title function_ invoke__">hash_hmac</span>(<span class="string">&#x27;sha1&#x27;</span>, <span class="variable">$source</span>, <span class="variable">$accessSecret</span>, <span class="literal">true</span>));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">protected</span> <span class="function"><span class="keyword">function</span> <span class="title">percentEncode</span>(<span class="params"><span class="variable">$str</span></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="variable">$res</span> = <span class="title function_ invoke__">urlencode</span>(<span class="variable">$str</span>);</span><br><span class="line">        <span class="variable">$res</span> = <span class="title function_ invoke__">preg_replace</span>(<span class="string">&#x27;/\+/&#x27;</span>, <span class="string">&#x27;%20&#x27;</span>, <span class="variable">$res</span>);</span><br><span class="line">        <span class="variable">$res</span> = <span class="title function_ invoke__">preg_replace</span>(<span class="string">&#x27;/\*/&#x27;</span>, <span class="string">&#x27;%2A&#x27;</span>, <span class="variable">$res</span>);</span><br><span class="line">        <span class="variable">$res</span> = <span class="title function_ invoke__">preg_replace</span>(<span class="string">&#x27;/%7E/&#x27;</span>, <span class="string">&#x27;~&#x27;</span>, <span class="variable">$res</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="variable">$res</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">getRandChar</span>(<span class="params"><span class="variable">$length</span></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="variable">$str</span> = <span class="literal">null</span>;</span><br><span class="line">        <span class="variable">$strPol</span> = <span class="string">&quot;ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz&quot;</span>;</span><br><span class="line">        <span class="variable">$max</span> = <span class="title function_ invoke__">strlen</span>(<span class="variable">$strPol</span>) - <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="variable">$i</span> = <span class="number">0</span>; <span class="variable">$i</span> &lt; <span class="variable">$length</span>; <span class="variable">$i</span>++) &#123;</span><br><span class="line">            <span class="variable">$str</span> .= <span class="variable">$strPol</span>[<span class="title function_ invoke__">rand</span>(<span class="number">0</span>, <span class="variable">$max</span>)];<span class="comment">//rand($min,$max)生成介于min和max两个数之间的一个随机整数</span></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="variable">$str</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">protected</span> <span class="function"><span class="keyword">function</span> <span class="title">setRoleArn</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="variable language_">$this</span>-&gt;type == <span class="string">&#x27;123&#x27;</span>) &#123;<span class="comment">//根据入参使用不同的策略，当然这里还可以有其他写法兼容更多的策略的情况</span></span><br><span class="line">            <span class="variable language_">$this</span>-&gt;roleArn = <span class="string">&#x27;acs:ram::123456789098:role/=$roleName&#x27;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li>返回结果<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;Credentials&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;AccessKeyId&quot;</span><span class="punctuation">:</span> <span class="string">&quot;STS.xxxxxxxxxxxxx****&quot;</span><span class="punctuation">,</span><span class="comment">//访问密钥标识</span></span><br><span class="line">        <span class="attr">&quot;AccessKeySecret&quot;</span><span class="punctuation">:</span> <span class="string">&quot;xxxxxxxxxx****&quot;</span><span class="punctuation">,</span><span class="comment">//访问密钥</span></span><br><span class="line">        <span class="attr">&quot;Expiration&quot;</span><span class="punctuation">:</span> <span class="string">&quot;2019-04-09T11:52:19Z&quot;</span><span class="punctuation">,</span><span class="comment">//失效时间</span></span><br><span class="line">        <span class="attr">&quot;SecurityToken&quot;</span><span class="punctuation">:</span> <span class="string">&quot;********&quot;</span><span class="comment">//安全令牌</span></span><br><span class="line">    <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;AssumedRoleUser&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;arn&quot;</span><span class="punctuation">:</span> <span class="string">&quot;acs:sts::123456765456****:assumed-role/AdminRole/client&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;AssumedRoleUserId&quot;</span><span class="punctuation">:</span><span class="string">&quot;1234567121****:alice&quot;</span></span><br><span class="line">        <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;RequestId&quot;</span><span class="punctuation">:</span> <span class="string">&quot;xxxxxxxxxxxxxxxx&quot;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure></li>
 </ol>
 <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;相信大家看完前面的解析、代码及返回结果后大概对怎么使用STS鉴权模式有一定了解；返回结果中对于客户端APP来讲需要用的有AccessKeyId、AccessKeySecret、Expiration、SecurityToken，客户端拿到这四个参数后将其传给阿里云ossSDK,vodSDK等便可以正常使用oss上传服务或者短视频vod服务了。</p>
 <h3 id="使用STS鉴权具体步骤"><a href="#使用STS鉴权具体步骤" class="headerlink" title="使用STS鉴权具体步骤"></a>使用STS鉴权具体步骤</h3><ol>
 <li>在阿里云后台开通一个RAM子账号</li>
 <li>新建角色（表示某种操作权限），授权相应的策略</li>
-<li><p>通过调用STS的AssumeRole接口，传递RAM子账号的AccessKeyId、AccessKeySecret以及指定角色的 ARN ，角色策略权限 roleArn 获取临时授权</p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&quot;AccessKeyId&quot;: &quot;STS.xxxxxxxxxxxxx****&quot;,//访问密钥标识</span><br><span class="line">&quot;AccessKeySecret&quot;: &quot;xxxxxxxxxx****&quot;,//访问密钥</span><br><span class="line">&quot;Expiration&quot;: &quot;2019-04-09T11:52:19Z&quot;,//失效时间</span><br><span class="line">&quot;SecurityToken&quot;: &quot;********&quot;//安全令牌</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>然后…emmm…把想法写成代码逻辑。</p>
-</li>
+<li>通过调用STS的AssumeRole接口，传递RAM子账号的AccessKeyId、AccessKeySecret以及指定角色的 ARN ，角色策略权限 roleArn 获取临时授权 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&quot;AccessKeyId&quot;: &quot;STS.xxxxxxxxxxxxx****&quot;,//访问密钥标识</span><br><span class="line">&quot;AccessKeySecret&quot;: &quot;xxxxxxxxxx****&quot;,//访问密钥</span><br><span class="line">&quot;Expiration&quot;: &quot;2019-04-09T11:52:19Z&quot;,//失效时间</span><br><span class="line">&quot;SecurityToken&quot;: &quot;********&quot;//安全令牌</span><br></pre></td></tr></table></figure></li>
+<li>然后…emmm…把想法写成代码逻辑。</li>
 </ol>
-<p>附:阿里云对RAM和STS具体介绍文档地址：<a href="https://help.aliyun.com/document_detail/31931.html?spm=a2c4g.11186623.2.10.34c51388aBbFjR#concept-nsb-brz-5db" target="_blank" rel="noopener">https://help.aliyun.com/document_detail/31931.html?spm=a2c4g.11186623.2.10.34c51388aBbFjR#concept-nsb-brz-5db</a></p>
+<p>附:阿里云对RAM和STS具体介绍文档地址：<a href="https://help.aliyun.com/document_detail/31931.html?spm=a2c4g.11186623.2.10.34c51388aBbFjR#concept-nsb-brz-5db">https://help.aliyun.com/document_detail/31931.html?spm=a2c4g.11186623.2.10.34c51388aBbFjR#concept-nsb-brz-5db</a></p>
 
           
       
@@ -527,11 +519,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">HTTP/2 HTTP/1.1 HTTP/3.0</a>
+                <a href="javascript:void(0)" class="js-tag color3">Go</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Go</a>
+                <a href="javascript:void(0)" class="js-tag color5">HTTP/2 HTTP/1.1 HTTP/3.0</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -547,10 +539,6 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Latex 文件转换 docx</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">lumen</a>
               </li>
              
@@ -560,6 +548,10 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">thrift</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Latex 文件转换 docx</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -576,6 +568,30 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Linux</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">反射</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">reflection</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">底层</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">变量</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">引用</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">优化</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -603,15 +619,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">反射</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">reflection</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">底层</a>
+                <a href="javascript:void(0)" class="js-tag color3">Reactor</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -627,23 +635,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">变量</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">引用</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">优化</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">跳跃表</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Reactor</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -652,6 +644,34 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">性能优化</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">阿里云</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">sts</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">推荐系统</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">NLP</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">CF-IDF</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">canal</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">ES</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -691,11 +711,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">canal</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">ES</a>
+                <a href="javascript:void(0)" class="js-tag color4">线段树</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -703,7 +719,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">线段树</a>
+                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -720,66 +736,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">world</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">阿里云</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">sts</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">推荐系统</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">NLP</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">CF-IDF</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">acm</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">树</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">字典树</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">前缀树</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">二进制</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">位运算</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">macro</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">model</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">数据库</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -815,6 +771,46 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">macro</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">model</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">数据库</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">acm</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">树</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">字典树</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">前缀树</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">二进制</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">位运算</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">底层分析</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">事务</a>
               </li>
              
@@ -824,10 +820,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Python</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">底层分析</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -847,15 +839,15 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">ACID</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">sysbench</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">压力测试</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">ACID</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -867,6 +859,14 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">UUID</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">MySQL</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">架构</a>
               </li>
              
@@ -875,11 +875,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">UUID</a>
+                <a href="javascript:void(0)" class="js-tag color5">日志服务</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">MySQL</a>
+                <a href="javascript:void(0)" class="js-tag color4">SLS</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -919,14 +919,6 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">日志服务</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">SLS</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">大数据</a>
               </li>
              
@@ -951,6 +943,10 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">熔断</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">容器</a>
               </li>
              
@@ -960,10 +956,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">基本计算器</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">熔断</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1027,7 +1019,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">边框识别 答题卡 试卷 考试</a>
+                <a href="javascript:void(0)" class="js-tag color5">机器学习</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1047,11 +1039,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">缓存</a>
+                <a href="javascript:void(0)" class="js-tag color5">边框识别 答题卡 试卷 考试</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">机器学习</a>
+                <a href="javascript:void(0)" class="js-tag color3">缓存</a>
               </li>
              
               <li class="article-tag-list-item">

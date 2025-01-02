@@ -186,7 +186,8 @@
 <p>比如原图：</p>
 <p><img src="https://tva1.sinaimg.cn/large/0081Kckwgy1gkf9z5u5qvj30u016gb29.jpg" alt="企业微信截图_56112723-6a82-462c-96ad-df832a31f039"></p>
 <p>通过边缘检测处理来识别：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> cv2</span><br><span class="line"><span class="keyword">import</span> imutils</span><br><span class="line"><span class="keyword">from</span> imutils.perspective <span class="keyword">import</span> four_point_transform</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line"><span class="comment"># 读入图片</span></span><br><span class="line">image = cv2.imread(<span class="string">"/Users/xxx/Downloads/56112723-6a82-462c-96ad-df832a31f039.png"</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 转换为灰阶，轻度模糊</span></span><br><span class="line">gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)</span><br><span class="line">blurred = cv2.GaussianBlur(gray, (<span class="number">5</span>, <span class="number">5</span>), <span class="number">0</span>)</span><br><span class="line">edged = imutils.auto_canny(blurred)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 从边缘图中寻找轮廓，然后初始化答题卡对应的轮廓</span></span><br><span class="line">cnts = cv2.findContours(edged.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)</span><br><span class="line">cnts = imutils.grab_contours(cnts)</span><br><span class="line"></span><br><span class="line">docCnt = <span class="literal">None</span></span><br><span class="line"><span class="comment"># 确保至少有一个轮廓被找到</span></span><br><span class="line"><span class="keyword">if</span> len(cnts) &gt; <span class="number">0</span>:</span><br><span class="line">    <span class="comment"># 将轮廓按大小降序排序</span></span><br><span class="line">    cnts = sorted(cnts, key=cv2.contourArea, reverse=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 对排序后的轮廓循环处理</span></span><br><span class="line">    <span class="keyword">for</span> c <span class="keyword">in</span> cnts:</span><br><span class="line">        <span class="comment"># 获取近似的轮廓</span></span><br><span class="line">        peri = cv2.arcLength(c, <span class="literal">True</span>)</span><br><span class="line">        approx = cv2.approxPolyDP(c, <span class="number">0.02</span> * peri, <span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 如果我们的近似轮廓有四个顶点，那么就认为找到了答题卡</span></span><br><span class="line">        <span class="keyword">if</span> len(approx) == <span class="number">4</span>:</span><br><span class="line">            docCnt = approx</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 对原始图像和灰度图都进行四点透视变换</span></span><br><span class="line">paper = four_point_transform(image, docCnt.reshape(<span class="number">4</span>, <span class="number">2</span>))</span><br><span class="line">warped = four_point_transform(gray, docCnt.reshape(<span class="number">4</span>, <span class="number">2</span>))</span><br><span class="line"></span><br><span class="line">plt.figure(<span class="string">'paper'</span>)</span><br><span class="line">plt.imshow(imutils.opencv2matplotlib(paper))</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> cv2</span><br><span class="line"><span class="keyword">import</span> imutils</span><br><span class="line"><span class="keyword">from</span> imutils.perspective <span class="keyword">import</span> four_point_transform</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line"><span class="comment"># 读入图片</span></span><br><span class="line">image = cv2.imread(<span class="string">&quot;/Users/xxx/Downloads/56112723-6a82-462c-96ad-df832a31f039.png&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 转换为灰阶，轻度模糊</span></span><br><span class="line">gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)</span><br><span class="line">blurred = cv2.GaussianBlur(gray, (<span class="number">5</span>, <span class="number">5</span>), <span class="number">0</span>)</span><br><span class="line">edged = imutils.auto_canny(blurred)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 从边缘图中寻找轮廓，然后初始化答题卡对应的轮廓</span></span><br><span class="line">cnts = cv2.findContours(edged.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)</span><br><span class="line">cnts = imutils.grab_contours(cnts)</span><br><span class="line"></span><br><span class="line">docCnt = <span class="literal">None</span></span><br><span class="line"><span class="comment"># 确保至少有一个轮廓被找到</span></span><br><span class="line"><span class="keyword">if</span> <span class="built_in">len</span>(cnts) &gt; <span class="number">0</span>:</span><br><span class="line">    <span class="comment"># 将轮廓按大小降序排序</span></span><br><span class="line">    cnts = <span class="built_in">sorted</span>(cnts, key=cv2.contourArea, reverse=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 对排序后的轮廓循环处理</span></span><br><span class="line">    <span class="keyword">for</span> c <span class="keyword">in</span> cnts:</span><br><span class="line">        <span class="comment"># 获取近似的轮廓</span></span><br><span class="line">        peri = cv2.arcLength(c, <span class="literal">True</span>)</span><br><span class="line">        approx = cv2.approxPolyDP(c, <span class="number">0.02</span> * peri, <span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 如果我们的近似轮廓有四个顶点，那么就认为找到了答题卡</span></span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">len</span>(approx) == <span class="number">4</span>:</span><br><span class="line">            docCnt = approx</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 对原始图像和灰度图都进行四点透视变换</span></span><br><span class="line">paper = four_point_transform(image, docCnt.reshape(<span class="number">4</span>, <span class="number">2</span>))</span><br><span class="line">warped = four_point_transform(gray, docCnt.reshape(<span class="number">4</span>, <span class="number">2</span>))</span><br><span class="line"></span><br><span class="line">plt.figure(<span class="string">&#x27;paper&#x27;</span>)</span><br><span class="line">plt.imshow(imutils.opencv2matplotlib(paper))</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+
 <p>识别结果：</p>
 <p><img src="https://tva1.sinaimg.cn/large/0081Kckwgy1gkfa2qs99sj30zk0twgz1.jpg" alt="image-20201106111122274"></p>
 <p>可见最外层边框被干扰后无法识别，只识别到了里面没被干扰的边框</p>
@@ -200,7 +201,10 @@
 <li><p>对仅剩下直线的图像提取轮廓</p>
 </li>
 </ol>
-<h2 id="实现代码"><a href="#实现代码" class="headerlink" title="实现代码"></a>实现代码</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> cv2</span><br><span class="line"><span class="keyword">import</span> imutils</span><br><span class="line"><span class="keyword">from</span> imutils.perspective <span class="keyword">import</span> four_point_transform</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line"><span class="comment"># 读入图片</span></span><br><span class="line">image = cv2.imread(<span class="string">"/Users/xxx/Downloads/56112723-6a82-462c-96ad-df832a31f039.png"</span>)</span><br><span class="line"></span><br><span class="line">mask = np.zeros(image.shape, dtype=np.uint8)</span><br><span class="line">gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)</span><br><span class="line">blur = cv2.GaussianBlur(gray, (<span class="number">5</span>, <span class="number">5</span>), <span class="number">0</span>)</span><br><span class="line">thresh = cv2.threshold(blur, <span class="number">0</span>, <span class="number">255</span>, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)[<span class="number">1</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 检测水平直线</span></span><br><span class="line">horizontal_kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (<span class="number">50</span>, <span class="number">1</span>))</span><br><span class="line">detect_horizontal = cv2.morphologyEx(thresh, cv2.MORPH_OPEN, horizontal_kernel, iterations=<span class="number">2</span>)</span><br><span class="line">cnts = cv2.findContours(detect_horizontal, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)</span><br><span class="line">cnts = imutils.grab_contours(cnts)</span><br><span class="line"><span class="keyword">for</span> c <span class="keyword">in</span> cnts:</span><br><span class="line">    cv2.drawContours(mask, [c], <span class="number">-1</span>, (<span class="number">255</span>, <span class="number">255</span>, <span class="number">255</span>), <span class="number">3</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 检测垂直直线</span></span><br><span class="line">vertical_kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (<span class="number">1</span>, <span class="number">50</span>))</span><br><span class="line">detect_vertical = cv2.morphologyEx(thresh, cv2.MORPH_OPEN, vertical_kernel, iterations=<span class="number">2</span>)</span><br><span class="line">cnts = cv2.findContours(detect_vertical, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)</span><br><span class="line">cnts = imutils.grab_contours(cnts)</span><br><span class="line"><span class="keyword">for</span> c <span class="keyword">in</span> cnts:</span><br><span class="line">    cv2.drawContours(mask, [c], <span class="number">-1</span>, (<span class="number">255</span>, <span class="number">255</span>, <span class="number">255</span>), <span class="number">3</span>)</span><br><span class="line"></span><br><span class="line">mask = cv2.cvtColor(mask, cv2.COLOR_BGR2GRAY)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 寻找轮廓</span></span><br><span class="line">cnts = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)</span><br><span class="line">cnts = imutils.grab_contours(cnts)</span><br><span class="line"></span><br><span class="line"> = <span class="literal">None</span></span><br><span class="line"><span class="comment"># 确保至少有一个轮廓被找到</span></span><br><span class="line"><span class="keyword">if</span> len(cnts) &gt; <span class="number">0</span>:</span><br><span class="line">    <span class="comment"># 将轮廓按大小降序排序</span></span><br><span class="line">    cnts = sorted(cnts, key=cv2.contourArea, reverse=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 对排序后的轮廓循环处理</span></span><br><span class="line">    <span class="keyword">for</span> c <span class="keyword">in</span> cnts:</span><br><span class="line">        <span class="comment"># 获取近似的轮廓</span></span><br><span class="line">        peri = cv2.arcLength(c, <span class="literal">True</span>)</span><br><span class="line">        approx = cv2.approxPolyDP(c, <span class="number">0.02</span> * peri, <span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 如果我们的近似轮廓有四个顶点，那么就认为找到了答题卡</span></span><br><span class="line">        <span class="keyword">if</span> len(approx) == <span class="number">4</span>:</span><br><span class="line">            doc_cnt = approx</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 对原始图像和灰度图都进行四点透视变换</span></span><br><span class="line">paper = four_point_transform(image, doc_cnt.reshape(<span class="number">4</span>, <span class="number">2</span>))</span><br><span class="line">warped = four_point_transform(gray, doc_cnt.reshape(<span class="number">4</span>, <span class="number">2</span>))</span><br><span class="line"></span><br><span class="line">plt.figure(<span class="string">'paper'</span>)</span><br><span class="line">plt.imshow(imutils.opencv2matplotlib(paper))</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+<h2 id="实现代码"><a href="#实现代码" class="headerlink" title="实现代码"></a>实现代码</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> cv2</span><br><span class="line"><span class="keyword">import</span> imutils</span><br><span class="line"><span class="keyword">from</span> imutils.perspective <span class="keyword">import</span> four_point_transform</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line"><span class="comment"># 读入图片</span></span><br><span class="line">image = cv2.imread(<span class="string">&quot;/Users/xxx/Downloads/56112723-6a82-462c-96ad-df832a31f039.png&quot;</span>)</span><br><span class="line"></span><br><span class="line">mask = np.zeros(image.shape, dtype=np.uint8)</span><br><span class="line">gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)</span><br><span class="line">blur = cv2.GaussianBlur(gray, (<span class="number">5</span>, <span class="number">5</span>), <span class="number">0</span>)</span><br><span class="line">thresh = cv2.threshold(blur, <span class="number">0</span>, <span class="number">255</span>, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)[<span class="number">1</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 检测水平直线</span></span><br><span class="line">horizontal_kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (<span class="number">50</span>, <span class="number">1</span>))</span><br><span class="line">detect_horizontal = cv2.morphologyEx(thresh, cv2.MORPH_OPEN, horizontal_kernel, iterations=<span class="number">2</span>)</span><br><span class="line">cnts = cv2.findContours(detect_horizontal, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)</span><br><span class="line">cnts = imutils.grab_contours(cnts)</span><br><span class="line"><span class="keyword">for</span> c <span class="keyword">in</span> cnts:</span><br><span class="line">    cv2.drawContours(mask, [c], -<span class="number">1</span>, (<span class="number">255</span>, <span class="number">255</span>, <span class="number">255</span>), <span class="number">3</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 检测垂直直线</span></span><br><span class="line">vertical_kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (<span class="number">1</span>, <span class="number">50</span>))</span><br><span class="line">detect_vertical = cv2.morphologyEx(thresh, cv2.MORPH_OPEN, vertical_kernel, iterations=<span class="number">2</span>)</span><br><span class="line">cnts = cv2.findContours(detect_vertical, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)</span><br><span class="line">cnts = imutils.grab_contours(cnts)</span><br><span class="line"><span class="keyword">for</span> c <span class="keyword">in</span> cnts:</span><br><span class="line">    cv2.drawContours(mask, [c], -<span class="number">1</span>, (<span class="number">255</span>, <span class="number">255</span>, <span class="number">255</span>), <span class="number">3</span>)</span><br><span class="line"></span><br><span class="line">mask = cv2.cvtColor(mask, cv2.COLOR_BGR2GRAY)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 寻找轮廓</span></span><br><span class="line">cnts = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)</span><br><span class="line">cnts = imutils.grab_contours(cnts)</span><br><span class="line"></span><br><span class="line"> = <span class="literal">None</span></span><br><span class="line"><span class="comment"># 确保至少有一个轮廓被找到</span></span><br><span class="line"><span class="keyword">if</span> <span class="built_in">len</span>(cnts) &gt; <span class="number">0</span>:</span><br><span class="line">    <span class="comment"># 将轮廓按大小降序排序</span></span><br><span class="line">    cnts = <span class="built_in">sorted</span>(cnts, key=cv2.contourArea, reverse=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 对排序后的轮廓循环处理</span></span><br><span class="line">    <span class="keyword">for</span> c <span class="keyword">in</span> cnts:</span><br><span class="line">        <span class="comment"># 获取近似的轮廓</span></span><br><span class="line">        peri = cv2.arcLength(c, <span class="literal">True</span>)</span><br><span class="line">        approx = cv2.approxPolyDP(c, <span class="number">0.02</span> * peri, <span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 如果我们的近似轮廓有四个顶点，那么就认为找到了答题卡</span></span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">len</span>(approx) == <span class="number">4</span>:</span><br><span class="line">            doc_cnt = approx</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 对原始图像和灰度图都进行四点透视变换</span></span><br><span class="line">paper = four_point_transform(image, doc_cnt.reshape(<span class="number">4</span>, <span class="number">2</span>))</span><br><span class="line">warped = four_point_transform(gray, doc_cnt.reshape(<span class="number">4</span>, <span class="number">2</span>))</span><br><span class="line"></span><br><span class="line">plt.figure(<span class="string">&#x27;paper&#x27;</span>)</span><br><span class="line">plt.imshow(imutils.opencv2matplotlib(paper))</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+
+
+
 <h3 id="thresh"><a href="#thresh" class="headerlink" title="thresh"></a>thresh</h3><p><img src="https://tva1.sinaimg.cn/large/0081Kckwgy1gkfakdbwxcj30ry10k1kx.jpg" alt="image-20201106112818145"></p>
 <h3 id="mask"><a href="#mask" class="headerlink" title="mask"></a>mask</h3><p><img src="https://tva1.sinaimg.cn/large/0081Kckwgy1gkfalb7aw3j30sw10qqdg.jpg" alt="image-20201106112912810"></p>
 <h3 id="paper"><a href="#paper" class="headerlink" title="paper"></a>paper</h3><p><img src="https://tva1.sinaimg.cn/large/0081Kckwgy1gkfajxhekuj30re10we81.jpg" alt="image-20201106112752760"></p>
@@ -487,11 +491,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">HTTP/2 HTTP/1.1 HTTP/3.0</a>
+                <a href="javascript:void(0)" class="js-tag color3">Go</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Go</a>
+                <a href="javascript:void(0)" class="js-tag color5">HTTP/2 HTTP/1.1 HTTP/3.0</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -507,10 +511,6 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Latex 文件转换 docx</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">lumen</a>
               </li>
              
@@ -520,6 +520,10 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">thrift</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Latex 文件转换 docx</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -536,6 +540,30 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Linux</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">反射</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">reflection</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">底层</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">变量</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">引用</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">优化</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -563,15 +591,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">反射</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">reflection</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">底层</a>
+                <a href="javascript:void(0)" class="js-tag color3">Reactor</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -587,23 +607,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">变量</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">引用</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">优化</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">跳跃表</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Reactor</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -612,6 +616,34 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">性能优化</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">阿里云</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">sts</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">推荐系统</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">NLP</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">CF-IDF</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">canal</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">ES</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -651,11 +683,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">canal</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">ES</a>
+                <a href="javascript:void(0)" class="js-tag color4">线段树</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -663,7 +691,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">线段树</a>
+                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -680,66 +708,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">world</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">阿里云</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">sts</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">推荐系统</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">NLP</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">CF-IDF</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">acm</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">树</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">字典树</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">前缀树</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">二进制</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">位运算</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">macro</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">model</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">数据库</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -775,6 +743,46 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">macro</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">model</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">数据库</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">acm</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">树</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">字典树</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">前缀树</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">二进制</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">位运算</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">底层分析</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">事务</a>
               </li>
              
@@ -784,10 +792,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Python</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">底层分析</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -807,15 +811,15 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">ACID</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">sysbench</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">压力测试</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">ACID</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -827,6 +831,14 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">UUID</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">MySQL</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">架构</a>
               </li>
              
@@ -835,11 +847,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">UUID</a>
+                <a href="javascript:void(0)" class="js-tag color5">日志服务</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">MySQL</a>
+                <a href="javascript:void(0)" class="js-tag color4">SLS</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -879,14 +891,6 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">日志服务</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">SLS</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">大数据</a>
               </li>
              
@@ -911,6 +915,10 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">熔断</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">容器</a>
               </li>
              
@@ -920,10 +928,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">基本计算器</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">熔断</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -987,7 +991,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">边框识别 答题卡 试卷 考试</a>
+                <a href="javascript:void(0)" class="js-tag color5">机器学习</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1007,11 +1011,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">缓存</a>
+                <a href="javascript:void(0)" class="js-tag color5">边框识别 答题卡 试卷 考试</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">机器学习</a>
+                <a href="javascript:void(0)" class="js-tag color3">缓存</a>
               </li>
              
               <li class="article-tag-list-item">

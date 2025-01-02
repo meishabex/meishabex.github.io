@@ -199,19 +199,19 @@
 <li>设计总评分关于质量评分和匹配度评分的函数，最终搜索结果按照总评分排序。</li>
 </ol>
 <p>思路很简单，实现也很简单，关键点仅在于<strong>如何设计总评分关于质量评分和匹配度评分的函数</strong>。这个过程与数学建模的思维方式、推荐系统的设计思路以及机器学习的建模中部分过程十分相似，因此，这里以该需求为例，从最基础的线性函数出发，按照提出问题；分解问题；解决问题的基本方式，逐步完善评分函数。从而为大家关于数学在我们项目研发实践中的应用提供借鉴，也期待大家能由此提高大家对数学的敏感度，将数学思维应用于项目研发的各个阶段，从而提高产品研发质量和用户体验。</p>
-<h2 id="数学模型推导与搜索排名实现"><a href="#数学模型推导与搜索排名实现" class="headerlink" title="数学模型推导与搜索排名实现"></a>数学模型推导与搜索排名实现</h2><p>假设，最终用于对搜索结果排序的字段是<strong>总评分 $\boldsymbol{S}$（Score）</strong>，我们主动对数据质量作出的评分是<strong>质量评分 $\boldsymbol{QS}$（Quality Score）</strong>，用户按照筛选项或不同关键字模糊搜索时，由搜索引擎基于某种算法计算的筛选结果关于筛选项产生的评分是<strong>匹配度评分 $\boldsymbol{MS}$（Match Score）</strong>。这时，一种比较简单的提高某个数据搜索排名的方法是关于$MS$和$QS$求和，如 <strong>公式 1</strong> 所示。然后，我们逐步推荐问题，再解决，以此完善这一模型。<br>$$\begin{align}<br>S = F(QS, MS) = QS + MS\ (QS \in N, MS \in R^+, S \in R^+)<br>\end{align}$$</p>
+<h2 id="数学模型推导与搜索排名实现"><a href="#数学模型推导与搜索排名实现" class="headerlink" title="数学模型推导与搜索排名实现"></a>数学模型推导与搜索排名实现</h2><p>假设，最终用于对搜索结果排序的字段是<strong>总评分 $\boldsymbol{S}$（Score）</strong>，我们主动对数据质量作出的评分是<strong>质量评分 $\boldsymbol{QS}$（Quality Score）</strong>，用户按照筛选项或不同关键字模糊搜索时，由搜索引擎基于某种算法计算的筛选结果关于筛选项产生的评分是<strong>匹配度评分 $\boldsymbol{MS}$（Match Score）</strong>。这时，一种比较简单的提高某个数据搜索排名的方法是关于$MS$和$QS$求和，如 <strong>公式 1</strong> 所示。然后，我们逐步推荐问题，再解决，以此完善这一模型。<br>$$\begin{align}<br>S &#x3D; F(QS, MS) &#x3D; QS + MS\ (QS \in N, MS \in R^+, S \in R^+)<br>\end{align}$$</p>
 <p><strong>Q: 实际应用中$\boldsymbol{QS}$ 与 $\boldsymbol{MS}$ 对于总评分的影响权值不一定是相等的</strong></p>
-<p>一种很简单的思路，引入效用函数。如 <strong>公式 2</strong> 所示。其中的权值$w_1$、$w_2$可以是经验估计值，也可以是基于某种统计方法或其它算法求得的值。<br>$$\begin{align}<br>S = F(QS, MS) = w_1QS + w_2MS\  \\<br>(QS \in N,\ MS \in R^+, \ S \in R^+,\ w_1 \in R^+,\ w_2 \in R^+,\ w_1 + w_2 = 1)<br>\end{align}$$</p>
+<p>一种很简单的思路，引入效用函数。如 <strong>公式 2</strong> 所示。其中的权值$w_1$、$w_2$可以是经验估计值，也可以是基于某种统计方法或其它算法求得的值。<br>$$\begin{align}<br>S &#x3D; F(QS, MS) &#x3D; w_1QS + w_2MS\  \\<br>(QS \in N,\ MS \in R^+, \ S \in R^+,\ w_1 \in R^+,\ w_2 \in R^+,\ w_1 + w_2 &#x3D; 1)<br>\end{align}$$</p>
 <p><strong>Q: 可能某一数据与搜索项匹配度不高（$MS$较低），但由于QS较高，导致该数据在搜索结果中过度靠前</strong></p>
 <p>一种思路是<strong>优化 $\boldsymbol{QS}$ 模型</strong>；限制 $QS$ 的取值范围。另一种思路是<strong>修改函数</strong>，令 $MS$ 越高的函数，$QS$ 对 $S$ 的影响越大；$MS$ 越低，则 $QS$ 对 $S$ 的影响越小。在实践中，我们两种思路结合思考显然是更合理的，但这里暂且仅基于第二种思路作描述。</p>
-<p>一种简单的方法是简单将$MS$ 与 $QS$ 求积。<br>$$\begin{align}<br>F(QS, MS) = w_1QS \bullet w_2MS<br>\end{align}$$</p>
+<p>一种简单的方法是简单将$MS$ 与 $QS$ 求积。<br>$$\begin{align}<br>F(QS, MS) &#x3D; w_1QS \bullet w_2MS<br>\end{align}$$</p>
 <blockquote>
 <p>  进行到这一步，其实就差不多了，搜索排名也仅进行到此为止。但在实际应用中，尤其是对于精度敏感、计算数值大的应用，还会存在其他问题，这时需要进一步完善模型，即后文所述部分。后文提及的两个问题，只是希望能为大家在遇到相似问题时，提供更多的解决思路。</p>
 </blockquote>
 <p><strong>Q: MS是实数，存在小数部分，而计算机中的求积运算通常可能存在浮点数精度丢失和误差累积问题，如何减少？</strong></p>
 <p>首先，我们认识到，<strong>浮点数精度丢失问题往往发生在乘除运算中</strong>，由运算中小数有效位丢失导致，而误差累积在积分或累加过程中产生的。</p>
-<p>对于这一问题的解决方式，可以参考目前中文分词中常用的概率计算方法——将区间 $(0, 1)$ 的<strong>乘除运算</strong>，转化为其<strong>对数的加减运算</strong>。整数运算是不存在类似浮点数的精度丢失问题，如果函数<strong>边界合适</strong>，也能<strong>避免溢出问题</strong>。这时，函数如<strong>公式 4</strong> 所示（这里我省去了底数，底数我们可以根据期望的函数图像调整）。<br>$$\begin{align}<br>logF(QS, MS) = log(w_1QS \bullet w_2MS) = log(w_1QS) + log(w_2MS)<br>\end{align}$$</p>
-<p>此时，为了便于计算，可以进一步转化$w_1$、$w_2$。<br>$$\begin{align}<br>\frac{1}{w_1} = w^\backprime_1, \frac{1}{w_2} = w^\backprime_2\ \ (w_1 \in R^+,\ w_2 \in R^+,\ w_1 + w_2 = 1, w^\backprime_1 \in N^+, w^\backprime_2 \in N^+)<br>\end{align}$$<br>使得<br>$$\begin{align}<br>logF(QS, MS) &amp;= log(w_1QS) + log(w_2MS) \\<br>&amp;= log(\frac{QS}{w^\backprime_1}) + log(\frac{MS}{w^\backprime_2}) \\<br>&amp;= log(QS) - log(w^\backprime_1) + log(MS) - log(w^\backprime_2)<br>\end{align}$$</p>
+<p>对于这一问题的解决方式，可以参考目前中文分词中常用的概率计算方法——将区间 $(0, 1)$ 的<strong>乘除运算</strong>，转化为其<strong>对数的加减运算</strong>。整数运算是不存在类似浮点数的精度丢失问题，如果函数<strong>边界合适</strong>，也能<strong>避免溢出问题</strong>。这时，函数如<strong>公式 4</strong> 所示（这里我省去了底数，底数我们可以根据期望的函数图像调整）。<br>$$\begin{align}<br>logF(QS, MS) &#x3D; log(w_1QS \bullet w_2MS) &#x3D; log(w_1QS) + log(w_2MS)<br>\end{align}$$</p>
+<p>此时，为了便于计算，可以进一步转化$w_1$、$w_2$。<br>$$\begin{align}<br>\frac{1}{w_1} &#x3D; w^\backprime_1, \frac{1}{w_2} &#x3D; w^\backprime_2\ \ (w_1 \in R^+,\ w_2 \in R^+,\ w_1 + w_2 &#x3D; 1, w^\backprime_1 \in N^+, w^\backprime_2 \in N^+)<br>\end{align}$$<br>使得<br>$$\begin{align}<br>logF(QS, MS) &amp;&#x3D; log(w_1QS) + log(w_2MS) \\<br>&amp;&#x3D; log(\frac{QS}{w^\backprime_1}) + log(\frac{MS}{w^\backprime_2}) \\<br>&amp;&#x3D; log(QS) - log(w^\backprime_1) + log(MS) - log(w^\backprime_2)<br>\end{align}$$</p>
 <blockquote>
 <p>  这一点在这里用其实有一些多余，因为搜索排名的权值，小数位的精度丢失其实对整个大的排名结果影响不大——我们搜索一半关心的是最匹配的前N个而精度丢失常常只影响最不匹配的N个。在这里提出这一点只是为了引出这一通过对数运算解决精度丢失的计算方法。这点在NLP或其它精度敏感的运算中十分重要。</p>
 </blockquote>
@@ -223,10 +223,10 @@
 <li>S在区间 $QS \in [0, +∞),\ MS \in (0, +∞)$ 中是连续函数</li>
 <li>S在区间 $QS \in [0, +∞),\ MS \in (0, +∞)$ 中是单调函数</li>
 </ol>
-<p>符合这几点要求的函数模型有很多，可以用已有的，也可以自行设定。这里我采用<strong>高斯概率密度函数之比</strong>作为最终结果。高斯概率密度函数之比，符合柯西分布——函数有界且单调连续。基于柯西分布，我们十分易于确定总数据集中符合我们需求的结果集并以此排序。<br>$$\begin{align}<br>&amp; QS^\backprime = QS_{max} - QS; MS^\backprime = MS_{max} - MS  \\<br>&amp; QS^\backprime \sim N(0, 1),\ Cauchy(QS^\backprime) = \frac{Gaussion(QS^\backprime)}{Gaussion(0)}\\<br>&amp; MS^\backprime \sim N(0, 1),\ Cauchy(MS^\backprime) = \frac{Gaussion(MS^\backprime)}{Gaussion(0)}\\<br>&amp; S = Cauchy(QS^\backprime) + Cauchy(MS^\backprime)<br>\end{align}$$<br>其中，$MS_{max}$ 由搜索引擎提供，匹配结果集中匹配度最高的分值。在数据中，质量评分$QS \in [0, 100]$，因此$QS_{max}$ 为100。</p>
+<p>符合这几点要求的函数模型有很多，可以用已有的，也可以自行设定。这里我采用<strong>高斯概率密度函数之比</strong>作为最终结果。高斯概率密度函数之比，符合柯西分布——函数有界且单调连续。基于柯西分布，我们十分易于确定总数据集中符合我们需求的结果集并以此排序。<br>$$\begin{align}<br>&amp; QS^\backprime &#x3D; QS_{max} - QS; MS^\backprime &#x3D; MS_{max} - MS  \\<br>&amp; QS^\backprime \sim N(0, 1),\ Cauchy(QS^\backprime) &#x3D; \frac{Gaussion(QS^\backprime)}{Gaussion(0)}\\<br>&amp; MS^\backprime \sim N(0, 1),\ Cauchy(MS^\backprime) &#x3D; \frac{Gaussion(MS^\backprime)}{Gaussion(0)}\\<br>&amp; S &#x3D; Cauchy(QS^\backprime) + Cauchy(MS^\backprime)<br>\end{align}$$<br>其中，$MS_{max}$ 由搜索引擎提供，匹配结果集中匹配度最高的分值。在数据中，质量评分$QS \in [0, 100]$，因此$QS_{max}$ 为100。</p>
 <p>如此，我们不但解决了最终评分无界的问题，同时，也基于Gaussion求得比较符合实际情况的评分模型$S$。同时，为了进一步解决浮点运算<strong>精度丢失</strong>问题、<strong>权重</strong>问题。再次基于前文所述方法进行变换即可，这里不作进一步描述。</p>
 <blockquote>
-<p>  难以理解的同学请自行了解<strong>高斯分布的物理意义</strong>，因为我也难以解释清楚。在此之后，我们要确认高斯分布的一个重要性质：$X \sim N(0, 1), Y \sim N(0, 1) \rightarrow X/Y \in C(1, 0) $。</p>
+<p>  难以理解的同学请自行了解<strong>高斯分布的物理意义</strong>，因为我也难以解释清楚。在此之后，我们要确认高斯分布的一个重要性质：$X \sim N(0, 1), Y \sim N(0, 1) \rightarrow X&#x2F;Y \in C(1, 0) $。</p>
 </blockquote>
 
           
@@ -524,11 +524,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">HTTP/2 HTTP/1.1 HTTP/3.0</a>
+                <a href="javascript:void(0)" class="js-tag color3">Go</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Go</a>
+                <a href="javascript:void(0)" class="js-tag color5">HTTP/2 HTTP/1.1 HTTP/3.0</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -544,10 +544,6 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Latex 文件转换 docx</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">lumen</a>
               </li>
              
@@ -557,6 +553,10 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">thrift</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Latex 文件转换 docx</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -573,6 +573,30 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Linux</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">反射</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">reflection</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">底层</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">变量</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">引用</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">优化</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -600,15 +624,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">反射</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">reflection</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">底层</a>
+                <a href="javascript:void(0)" class="js-tag color3">Reactor</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -624,23 +640,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">变量</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">引用</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">优化</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">跳跃表</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Reactor</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -649,6 +649,34 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">性能优化</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">阿里云</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">sts</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">推荐系统</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">NLP</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">CF-IDF</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">canal</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">ES</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -688,11 +716,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">canal</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">ES</a>
+                <a href="javascript:void(0)" class="js-tag color4">线段树</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -700,7 +724,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">线段树</a>
+                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -717,66 +741,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">world</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">阿里云</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">sts</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">推荐系统</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">NLP</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">CF-IDF</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">acm</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">树</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">字典树</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">前缀树</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">二进制</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">位运算</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">macro</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">model</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">数据库</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -812,6 +776,46 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">macro</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">model</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">数据库</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">acm</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">树</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">字典树</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">前缀树</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">二进制</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">位运算</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">底层分析</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">事务</a>
               </li>
              
@@ -821,10 +825,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Python</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">底层分析</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -844,15 +844,15 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">ACID</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">sysbench</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">压力测试</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">ACID</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -864,6 +864,14 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">UUID</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">MySQL</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">架构</a>
               </li>
              
@@ -872,11 +880,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">UUID</a>
+                <a href="javascript:void(0)" class="js-tag color5">日志服务</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">MySQL</a>
+                <a href="javascript:void(0)" class="js-tag color4">SLS</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -916,14 +924,6 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">日志服务</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">SLS</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">大数据</a>
               </li>
              
@@ -948,6 +948,10 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">熔断</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">容器</a>
               </li>
              
@@ -957,10 +961,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">基本计算器</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">熔断</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1024,7 +1024,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">边框识别 答题卡 试卷 考试</a>
+                <a href="javascript:void(0)" class="js-tag color5">机器学习</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1044,11 +1044,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">缓存</a>
+                <a href="javascript:void(0)" class="js-tag color5">边框识别 答题卡 试卷 考试</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">机器学习</a>
+                <a href="javascript:void(0)" class="js-tag color3">缓存</a>
               </li>
              
               <li class="article-tag-list-item">

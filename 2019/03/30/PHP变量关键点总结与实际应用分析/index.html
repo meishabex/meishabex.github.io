@@ -186,20 +186,26 @@
             <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;《PHP7底层设计与源码实现》一书，内容不多也不少。看完后，对开发中的优化思路有不少启发，其中最多的，便是有关变量方面的认识，也是我个人认为，在日常开发中，最值得多注意多思考的方面。</p>
 <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 在此，个人结合github中最新的php-src，整理一些个人认为应该注意的点以及想法出来，与大家交流。同时，我会对其中的关键结构体在github上php-src源码中的定义的位置标注出来（截止发文时的最新版本）。这一点，是原书中没有标注的，在这里给出，更易于必要时查阅。</p>
 <h2 id="请确保具备以下知识基础"><a href="#请确保具备以下知识基础" class="headerlink" title="请确保具备以下知识基础"></a>请确保具备以下知识基础</h2><ol>
-<li>有C/C++基础</li>
+<li>有C&#x2F;C++基础</li>
 <li>确保了解结构体struct和联合体union的定义和使用（特别是联合体的）</li>
-<li>确保了解C/C++的取地址符&amp;</li>
+<li>确保了解C&#x2F;C++的取地址符&amp;</li>
 </ol>
 <h1 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h1><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;很多同学应该都晓得php的写时拷贝这个点，但是我还是选择对这方面深入探讨，是因为我发现日常工作中，还是个人与其他同学理依然容易混淆php7与php5的拷贝机制，且网上大多数文章脱离了php源码仅对结论做列举和验证。因此，在这里，我结合github中的源码对该部分做知识梳理。</p>
 <h2 id="一个问题"><a href="#一个问题" class="headerlink" title="一个问题"></a>一个问题</h2><p>我们先来做个赋值，并获取赋值前后的内存占用，以此抛出我们后续要讨论的问题。</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$a = str_repeat(<span class="string">'hello'</span>, <span class="number">1</span>);</span><br><span class="line">$before = memory_get_usage();</span><br><span class="line"></span><br><span class="line">$b = $a;</span><br><span class="line"><span class="keyword">echo</span> <span class="string">'after: '</span> . (memory_get_usage() - $before); <span class="comment">// 输出 after: 0</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$a</span> = <span class="title function_ invoke__">str_repeat</span>(<span class="string">&#x27;hello&#x27;</span>, <span class="number">1</span>);</span><br><span class="line"><span class="variable">$before</span> = <span class="title function_ invoke__">memory_get_usage</span>();</span><br><span class="line"></span><br><span class="line"><span class="variable">$b</span> = <span class="variable">$a</span>;</span><br><span class="line"><span class="keyword">echo</span> <span class="string">&#x27;after: &#x27;</span> . (<span class="title function_ invoke__">memory_get_usage</span>() - <span class="variable">$before</span>); <span class="comment">// 输出 after: 0</span></span><br></pre></td></tr></table></figure>
+
 <p>接下来，仅在第三行增加引用符号</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$a = str_repeat(<span class="string">'hello'</span>, <span class="number">1</span>);</span><br><span class="line">$before = memory_get_usage();</span><br><span class="line"></span><br><span class="line">$b = &amp;$a; <span class="comment">// 仅在这里增加取引用符</span></span><br><span class="line"><span class="keyword">echo</span> <span class="string">'after: '</span> . (memory_get_usage() - $before); <span class="comment">// 输出 after: 24</span></span><br></pre></td></tr></table></figure>
-<p>由此，我们可以得到一个简单的结论：取引用符不能帮助我们节省内存空间，反而会增加内存空间使用。学过C\C++的同学，可能会对此比较懵逼（实际上，我并不止一次听到用同学认为『&amp;』与C/C++中的取地址符等效）</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$a</span> = <span class="title function_ invoke__">str_repeat</span>(<span class="string">&#x27;hello&#x27;</span>, <span class="number">1</span>);</span><br><span class="line"><span class="variable">$before</span> = <span class="title function_ invoke__">memory_get_usage</span>();</span><br><span class="line"></span><br><span class="line"><span class="variable">$b</span> = &amp;<span class="variable">$a</span>; <span class="comment">// 仅在这里增加取引用符</span></span><br><span class="line"><span class="keyword">echo</span> <span class="string">&#x27;after: &#x27;</span> . (<span class="title function_ invoke__">memory_get_usage</span>() - <span class="variable">$before</span>); <span class="comment">// 输出 after: 24</span></span><br></pre></td></tr></table></figure>
+
+
+<p>由此，我们可以得到一个简单的结论：取引用符不能帮助我们节省内存空间，反而会增加内存空间使用。学过C\C++的同学，可能会对此比较懵逼（实际上，我并不止一次听到用同学认为『&amp;』与C&#x2F;C++中的取地址符等效）</p>
 <p>接下来，我们带着这点疑问，继续深入探讨，自然就明白了。</p>
 <h2 id="引用"><a href="#引用" class="headerlink" title="引用"></a>引用</h2><p>先来看一段代码和原理图。</p>
-<p><strong>示例代码与原理图</strong><br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$a = <span class="number">10</span>;</span><br><span class="line">$b = $a;</span><br></pre></td></tr></table></figure></p>
+<p><strong>示例代码与原理图</strong></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$a</span> = <span class="number">10</span>;</span><br><span class="line"><span class="variable">$b</span> = <span class="variable">$a</span>;</span><br></pre></td></tr></table></figure>
+
 <img src="http://www.plantuml.com/plantuml/svg/gofBp56mKgXApKk91p9BKnN095T-KbPgSeb28eoH16DafERav7CbAkZfrTWfL04LSoKXiP7CiL98paWi0XaNRHWBrc07rPo4n0QJK0FWUW40">
+
 <p>实际上，在php7的底层中，存在一个zval结构体，任何的变量底层都是该结构体，且该结构体不存储真实value，其结构体中存在一个value字段，指向真正的存储值的结构体（在这里指向zend_string）。</p>
 <p>因此，我们可以看到，php7底层已经做了优化。在赋值后，只会创建表示变量的zval结构体实例，不会创建新的zend_value结构体实例。</p>
 <p>那么，什么时候会创建新的zend_value呢？这就是接下来要讲的写时拷贝。</p>
@@ -207,7 +213,7 @@
 <p>简单的扩展：</p>
 <ul>
 <li>memory_get_usage()仅跟踪底层中emalloc()分配的内存。</li>
-<li>所有底层定义，我们都可以很方便的在php的github中的源码查阅，具体路径为php-src/Zend/zend_types.h。</li>
+<li>所有底层定义，我们都可以很方便的在php的github中的源码查阅，具体路径为php-src&#x2F;Zend&#x2F;zend_types.h。</li>
 <li>变量的结构体是zval，实际上他是_zend_struct的宏定义（typedef）。</li>
 <li>zval中，实际存储值的是结构体成员zend_value value（line 197 from zend_types.h），而zend_value是_zend_value的宏定义。</li>
 <li>zend_value通过联合体实现支持存储多种类型的(line 176 from zend_types.h)，其中实际存储字符串的是联合体成员zend_string。</li>
@@ -215,8 +221,10 @@
 </ul>
 </blockquote>
 <h2 id="写时拷贝"><a href="#写时拷贝" class="headerlink" title="写时拷贝"></a>写时拷贝</h2><p>我们再来看一段代码与原理图</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">$a = str_repeat(<span class="string">'hello1'</span>, <span class="number">1</span>);</span><br><span class="line">$before = memory_get_usage();</span><br><span class="line"></span><br><span class="line">$b = $a;</span><br><span class="line"><span class="keyword">echo</span> <span class="string">'after: '</span> . (memory_get_usage() - $before) . PHP_EOL; <span class="comment">// after: 0</span></span><br><span class="line"></span><br><span class="line">$before = memory_get_usage();</span><br><span class="line">$b = str_repeat(<span class="string">'hello2'</span>, <span class="number">1</span>);</span><br><span class="line"><span class="keyword">echo</span> <span class="string">'write after: '</span> . (memory_get_usage() - $before) . PHP_EOL; <span class="comment">// write after: 40</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$a</span> = <span class="title function_ invoke__">str_repeat</span>(<span class="string">&#x27;hello1&#x27;</span>, <span class="number">1</span>);</span><br><span class="line"><span class="variable">$before</span> = <span class="title function_ invoke__">memory_get_usage</span>();</span><br><span class="line"></span><br><span class="line"><span class="variable">$b</span> = <span class="variable">$a</span>;</span><br><span class="line"><span class="keyword">echo</span> <span class="string">&#x27;after: &#x27;</span> . (<span class="title function_ invoke__">memory_get_usage</span>() - <span class="variable">$before</span>) . PHP_EOL; <span class="comment">// after: 0</span></span><br><span class="line"></span><br><span class="line"><span class="variable">$before</span> = <span class="title function_ invoke__">memory_get_usage</span>();</span><br><span class="line"><span class="variable">$b</span> = <span class="title function_ invoke__">str_repeat</span>(<span class="string">&#x27;hello2&#x27;</span>, <span class="number">1</span>);</span><br><span class="line"><span class="keyword">echo</span> <span class="string">&#x27;write after: &#x27;</span> . (<span class="title function_ invoke__">memory_get_usage</span>() - <span class="variable">$before</span>) . PHP_EOL; <span class="comment">// write after: 40</span></span><br></pre></td></tr></table></figure>
+
 <img src="http://www.plantuml.com/plantuml/svg/gofBp56mKgXApKk91p9BKnN095T-KbPgSeb28eoH16DafERav1kYy8ou4XNqz6hi5Ag0UhcIaDX8nbef96Sa5e5CZpQC1MkmWvcLXE0OSK74e6R0jKE4ZT250G00">
+
 <p>通过对比上方两次赋值后的内存使用，可以看到，在第二次的时候，内存使用差值不再是0，因为，在执行<code>$b = str_repeat(&#39;hello2&#39;, 1);</code> 后，产生了一个新的zend_value，这就是所谓的写时拷贝——<strong>仅在变量值被执行写操作时，才拷贝新的zend_value空间，并对该新的zend_value执行相关修改操作</strong>。</p>
 <p>这样的设计同时满足了两点需求（也是php7较php5的优点）：</p>
 <ol>
@@ -229,11 +237,14 @@
 </ul>
 </blockquote>
 <h2 id="取引用赋值"><a href="#取引用赋值" class="headerlink" title="取引用赋值"></a>取引用赋值</h2><p>我们回顾一下，开篇的两段示例代码。</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$a = str_repeat(<span class="string">'hello'</span>, <span class="number">1</span>);</span><br><span class="line">$before = memory_get_usage();</span><br><span class="line"></span><br><span class="line">$b = $a;</span><br><span class="line"><span class="keyword">echo</span> <span class="string">'after: '</span> . (memory_get_usage() - $before); <span class="comment">// 输出 after: 0</span></span><br></pre></td></tr></table></figure>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$a = str_repeat(<span class="string">'hello'</span>, <span class="number">1</span>);</span><br><span class="line">$before = memory_get_usage();</span><br><span class="line"></span><br><span class="line">$b = &amp;$a; <span class="comment">// 仅在这里增加取引用符</span></span><br><span class="line"><span class="keyword">echo</span> <span class="string">'after: '</span> . (memory_get_usage() - $before); <span class="comment">// 输出 after: 24</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$a</span> = <span class="title function_ invoke__">str_repeat</span>(<span class="string">&#x27;hello&#x27;</span>, <span class="number">1</span>);</span><br><span class="line"><span class="variable">$before</span> = <span class="title function_ invoke__">memory_get_usage</span>();</span><br><span class="line"></span><br><span class="line"><span class="variable">$b</span> = <span class="variable">$a</span>;</span><br><span class="line"><span class="keyword">echo</span> <span class="string">&#x27;after: &#x27;</span> . (<span class="title function_ invoke__">memory_get_usage</span>() - <span class="variable">$before</span>); <span class="comment">// 输出 after: 0</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$a</span> = <span class="title function_ invoke__">str_repeat</span>(<span class="string">&#x27;hello&#x27;</span>, <span class="number">1</span>);</span><br><span class="line"><span class="variable">$before</span> = <span class="title function_ invoke__">memory_get_usage</span>();</span><br><span class="line"></span><br><span class="line"><span class="variable">$b</span> = &amp;<span class="variable">$a</span>; <span class="comment">// 仅在这里增加取引用符</span></span><br><span class="line"><span class="keyword">echo</span> <span class="string">&#x27;after: &#x27;</span> . (<span class="title function_ invoke__">memory_get_usage</span>() - <span class="variable">$before</span>); <span class="comment">// 输出 after: 24</span></span><br></pre></td></tr></table></figure>
+
 <p>对于第二段代码，执行后实际上会产生如下效果。</p>
 <img src="http://www.plantuml.com/plantuml/svg/gofBp56mKgXApKk91p9BKnN091UIW9L2SaPY4KWysZ0M8b6KcfPQb9gN39Ai0afmvITbfIQNA2J264am1b0bZ9cHcfEJpvMeeATNOmVHbOJ41Yg4yb0i0Akt0nkJ16T1rDf1JGIJI7h1hWO0">
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;也就是说，产生了一个新的结构体zend_reference实例，那么，我们应该就能明白了，引用赋值后，多出来的空间就是来自这里的。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;当执行了引用赋值后，我们<strong>不应该将其理解为C/C++中的指向同一地址</strong>，而是二者会<strong>指向同一引用</strong>，而该引用的zval字段的value字段才指向了真正的值存储空间。在引用赋值后，之所以实现了修改其中一个变量，会影响到另一变量的效果，是因为当zend发现当前zval变量的类型zval.u1.type_flag是引用类型IS_REFERENCE时，就知道zval.value是引用类型，此时会继续搜索zval.value.zval，并对该zval类型字段执行相应修改。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>再简单点说</strong>就是，引用赋值后，通过将两个zval指向同一zend_reference实例，实现与真正的zend_value实例隔离，从而避免了写时拷贝带来的影响。</p>
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;也就是说，产生了一个新的结构体zend_reference实例，那么，我们应该就能明白了，引用赋值后，多出来的空间就是来自这里的。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;当执行了引用赋值后，我们<strong>不应该将其理解为C&#x2F;C++中的指向同一地址</strong>，而是二者会<strong>指向同一引用</strong>，而该引用的zval字段的value字段才指向了真正的值存储空间。在引用赋值后，之所以实现了修改其中一个变量，会影响到另一变量的效果，是因为当zend发现当前zval变量的类型zval.u1.type_flag是引用类型IS_REFERENCE时，就知道zval.value是引用类型，此时会继续搜索zval.value.zval，并对该zval类型字段执行相应修改。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>再简单点说</strong>就是，引用赋值后，通过将两个zval指向同一zend_reference实例，实现与真正的zend_value实例隔离，从而避免了写时拷贝带来的影响。</p>
 <blockquote>
 <ul>
 <li>zend_reference是_zend_reference的宏定义（line 94 from zend_types.h）。</li>
@@ -243,7 +254,7 @@
 </ul>
 </blockquote>
 <h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;现在，我们可以回到一开始的问题了：在函数传参或赋值过程中，使用取引用符号<code>&amp;</code>，能减少内存空间占用吗？</p>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这是我在之前重构项目的过程中，为了功能模块解耦，出现同一数据，向下传递多层嵌套函数参数时，想到的一个问题，为了避免数据重复copy，考虑到这样是否能够减少运行时间和内存占用。然而，<strong>目前的情况来看，是不行的</strong>。取引用符号<code>&amp;</code>，与C/C++中的取地址符含义不一样，并且，对于只读不写的参数，使用引用传递，反而更浪费内存。</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这是我在之前重构项目的过程中，为了功能模块解耦，出现同一数据，向下传递多层嵌套函数参数时，想到的一个问题，为了避免数据重复copy，考虑到这样是否能够减少运行时间和内存占用。然而，<strong>目前的情况来看，是不行的</strong>。取引用符号<code>&amp;</code>，与C&#x2F;C++中的取地址符含义不一样，并且，对于只读不写的参数，使用引用传递，反而更浪费内存。</p>
 <h2 id="垃圾回收"><a href="#垃圾回收" class="headerlink" title="垃圾回收"></a>垃圾回收</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;又一个绕不开的，在这里，期望与最简单的描述，理清垃圾回收机制，而与童鞋们交流。在上文中，我们知道，当执行<code>$b = $a</code>时，不会创建新的的zend_value的存储空间，那么此时，除了会为$b创建一个zval，并将zval.value指向$a的zval.value以外，还会对zval.value共同指向的zend_string.gc执行增加计数操作（gc实际上是一个结构体，其中有一个字段用于计数）。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;需要注意的是，php的整形和浮点型都直接存储在_zend_value中，并不会使用指针指向额外的空间，因此他们的引用计数由_zend_value.counted决定，它是zend_refcounted类型的指针，<br>而zend_refcounted其实是只有一个zend_refcounted_h类型字段gc的结构体。</p>
 <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;由此，我们可以知道，任何类型的变量都存在zend_refcounted_h类型的引用计数器，垃圾回收本质也正是对引用计数为0的zend_value执行回收。但是，它又不会马上回收，而是会先标记，当空间池满时，才会释放被标记的zend_value。</p>
 <blockquote>
@@ -253,9 +264,11 @@
 </blockquote>
 <h2 id="隐式的类型转换"><a href="#隐式的类型转换" class="headerlink" title="隐式的类型转换"></a>隐式的类型转换</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这点和前文所述内容关系不大，但是一个我认为非常重要的点，当整形数超出了最大值PHP_INT_MAX时，不会产生任何错误，而会自动转化为浮点型。</p>
 <p><strong>示例</strong></p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">$num = <span class="number">0</span>;</span><br><span class="line">var_dump($num);		<span class="comment">// 输出int(0)</span></span><br><span class="line"></span><br><span class="line">$num = PHP_INT_MAX;</span><br><span class="line">var_dump($num);		<span class="comment">// 输出int(9223372036854775807)</span></span><br><span class="line"></span><br><span class="line">$num++;</span><br><span class="line">var_dump($num);		<span class="comment">// 输出float(9.2233720368548E+18)</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="variable">$num</span> = <span class="number">0</span>;</span><br><span class="line"><span class="title function_ invoke__">var_dump</span>(<span class="variable">$num</span>);		<span class="comment">// 输出int(0)</span></span><br><span class="line"></span><br><span class="line"><span class="variable">$num</span> = PHP_INT_MAX;</span><br><span class="line"><span class="title function_ invoke__">var_dump</span>(<span class="variable">$num</span>);		<span class="comment">// 输出int(9223372036854775807)</span></span><br><span class="line"></span><br><span class="line"><span class="variable">$num</span>++;</span><br><span class="line"><span class="title function_ invoke__">var_dump</span>(<span class="variable">$num</span>);		<span class="comment">// 输出float(9.2233720368548E+18)</span></span><br></pre></td></tr></table></figure>
+
 <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;然而，如果对float继续增加，会导致float不会有任何变化，进一步的，如果对变量赋值<code>2*PHP_FLOAT_MAX</code>，会导致变量溢出，但此时变量依然不会报错，而是会自动转化为INF（无穷大），同时，INF可比较，这一点可能会导致php在处理大量数据的时候，产生预料意外的情况。</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">$num = PHP_FLOAT_MAX;</span><br><span class="line">var_dump($num);		<span class="comment">// 输出float(1.7976931348623E+308)</span></span><br><span class="line"></span><br><span class="line">$num = PHP_FLOAT_MAX + PHP_FLOAT_MAX / pow(<span class="number">2</span>, <span class="number">512</span>);</span><br><span class="line">var_dump($num);		<span class="comment">// 输出float(1.7976931348623E+308)</span></span><br><span class="line"></span><br><span class="line">$num = <span class="number">2</span> * PHP_FLOAT_MAX;</span><br><span class="line">var_dump($num);		<span class="comment">// 输出float(INF)</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$num</span> = PHP_FLOAT_MAX;</span><br><span class="line"><span class="title function_ invoke__">var_dump</span>(<span class="variable">$num</span>);		<span class="comment">// 输出float(1.7976931348623E+308)</span></span><br><span class="line"></span><br><span class="line"><span class="variable">$num</span> = PHP_FLOAT_MAX + PHP_FLOAT_MAX / <span class="title function_ invoke__">pow</span>(<span class="number">2</span>, <span class="number">512</span>);</span><br><span class="line"><span class="title function_ invoke__">var_dump</span>(<span class="variable">$num</span>);		<span class="comment">// 输出float(1.7976931348623E+308)</span></span><br><span class="line"></span><br><span class="line"><span class="variable">$num</span> = <span class="number">2</span> * PHP_FLOAT_MAX;</span><br><span class="line"><span class="title function_ invoke__">var_dump</span>(<span class="variable">$num</span>);		<span class="comment">// 输出float(INF)</span></span><br></pre></td></tr></table></figure>
+
 <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这个点，严格来讲，书中没有提及，是我在阅览过程中，无意中发现的一个点，我认为我们可能应该意识到并注意，避免可能对我们的程序产生意外的影响。当然，我们有时候也可以此来实现某些超出整形，但不超过浮点型的运算。</p>
 <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;关于浮点数运算，还有很多验证性实验可做，由于实际应用很难遇到，这里不一一列举，有兴趣的同学可以对PHP_FLOAT_MAX进行各种运算尝试。</p>
 <blockquote>
@@ -273,7 +286,7 @@
 </ul>
 <h1 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h1><ul>
 <li>[1]  陈雷. PHP7底层设计与源码实现[M]. 机械工业出版社, 2018.</li>
-<li>[2]  <a href="https://github.com/php/php-src/" target="_blank" rel="noopener">php-src in github</a></li>
+<li>[2]  <a href="https://github.com/php/php-src/">php-src in github</a></li>
 </ul>
 <blockquote>
 <p>最后，再讲一下我写这一篇分享的小感受吧。可能是我理解不够透彻的原因，我在看完这本书之后，我又去github看了一下最新版的源码，并尽可能简单的描述它，但最后我发现我讲的还是有点乱了。<br>因此，如果同学们有任何不懂的或者认为我说的不正确的地方，都欢迎交流指教。</p>
@@ -566,11 +579,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">HTTP/2 HTTP/1.1 HTTP/3.0</a>
+                <a href="javascript:void(0)" class="js-tag color3">Go</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Go</a>
+                <a href="javascript:void(0)" class="js-tag color5">HTTP/2 HTTP/1.1 HTTP/3.0</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -586,10 +599,6 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Latex 文件转换 docx</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">lumen</a>
               </li>
              
@@ -599,6 +608,10 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">thrift</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Latex 文件转换 docx</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -615,6 +628,30 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Linux</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">反射</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">reflection</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">底层</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">变量</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">引用</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">优化</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -642,15 +679,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">反射</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">reflection</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">底层</a>
+                <a href="javascript:void(0)" class="js-tag color3">Reactor</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -666,23 +695,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">变量</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">引用</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">优化</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">跳跃表</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Reactor</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -691,6 +704,34 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">性能优化</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">阿里云</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">sts</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">推荐系统</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">NLP</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">CF-IDF</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">canal</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">ES</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -730,11 +771,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">canal</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">ES</a>
+                <a href="javascript:void(0)" class="js-tag color4">线段树</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -742,7 +779,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">线段树</a>
+                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -759,66 +796,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">world</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">阿里云</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">sts</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">推荐系统</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">NLP</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">CF-IDF</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">acm</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">树</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">字典树</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">前缀树</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">二进制</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">位运算</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">macro</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">model</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">数据库</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -854,6 +831,46 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">macro</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">model</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">数据库</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">acm</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">树</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">字典树</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">前缀树</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">二进制</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">位运算</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">底层分析</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">事务</a>
               </li>
              
@@ -863,10 +880,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Python</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">底层分析</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -886,15 +899,15 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">ACID</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">sysbench</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">压力测试</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">ACID</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -906,6 +919,14 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">UUID</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">MySQL</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">架构</a>
               </li>
              
@@ -914,11 +935,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">UUID</a>
+                <a href="javascript:void(0)" class="js-tag color5">日志服务</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">MySQL</a>
+                <a href="javascript:void(0)" class="js-tag color4">SLS</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -958,14 +979,6 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">日志服务</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">SLS</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">大数据</a>
               </li>
              
@@ -990,6 +1003,10 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">熔断</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">容器</a>
               </li>
              
@@ -999,10 +1016,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">基本计算器</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">熔断</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1066,7 +1079,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">边框识别 答题卡 试卷 考试</a>
+                <a href="javascript:void(0)" class="js-tag color5">机器学习</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1086,11 +1099,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">缓存</a>
+                <a href="javascript:void(0)" class="js-tag color5">边框识别 答题卡 试卷 考试</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">机器学习</a>
+                <a href="javascript:void(0)" class="js-tag color3">缓存</a>
               </li>
              
               <li class="article-tag-list-item">

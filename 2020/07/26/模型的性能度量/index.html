@@ -16,20 +16,20 @@
 <meta property="og:site_name" content="Meisha Bex">
 <meta property="og:description" content="前言在项目实践中，我们不能单凭直觉选择算法模型并使用。需要有一些评价依据，且这些评价依据可以根据需求灵活调整。既可以说服自己，也可以说服他人。 本文，将总结回顾一下 ML 领域训练、测试与验证过程中涉及的几个基本概念。然后，总结笔者最近一段时间，在『推荐系统』和『机器学习』的学校过程中，遇到的几种评价方式——其中，有一些方式在国内 机器学习或推荐系统教材中并不多见，是笔者在查阅文献过程中无意中发现">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://bex.meishakeji.com/2020/07/26/%E6%A8%A1%E5%9E%8B%E7%9A%84%E6%80%A7%E8%83%BD%E5%BA%A6%E9%87%8F/image-20200714145425378-20200804140855704.png">
-<meta property="og:image" content="https://bex.meishakeji.com/2020/07/26/%E6%A8%A1%E5%9E%8B%E7%9A%84%E6%80%A7%E8%83%BD%E5%BA%A6%E9%87%8F/image-20200714145228617-20200804140859219.png">
-<meta property="og:image" content="https://bex.meishakeji.com/2020/07/26/%E6%A8%A1%E5%9E%8B%E7%9A%84%E6%80%A7%E8%83%BD%E5%BA%A6%E9%87%8F/sphx_glr_plot_precision_recall_001-20200714212924094-20200804140901988.png">
-<meta property="og:image" content="https://bex.meishakeji.com/2020/07/26/%E6%A8%A1%E5%9E%8B%E7%9A%84%E6%80%A7%E8%83%BD%E5%BA%A6%E9%87%8F/4b1eek0aoz.jpeg">
-<meta property="og:image" content="https://bex.meishakeji.com/2020/07/26/%E6%A8%A1%E5%9E%8B%E7%9A%84%E6%80%A7%E8%83%BD%E5%BA%A6%E9%87%8F/image-20200717000958276-6521353.png">
-<meta property="og:image" content="https://bex.meishakeji.com/2020/07/26/%E6%A8%A1%E5%9E%8B%E7%9A%84%E6%80%A7%E8%83%BD%E5%BA%A6%E9%87%8F/image-20200714213131282-6521358.png">
-<meta property="og:image" content="https://bex.meishakeji.com/2020/07/26/%E6%A8%A1%E5%9E%8B%E7%9A%84%E6%80%A7%E8%83%BD%E5%BA%A6%E9%87%8F/image-20200714213205390.png">
+<meta property="og:image" content="https://bex.meishakeji.com/.com//image-20200714145425378-20200804140855704.png">
+<meta property="og:image" content="https://bex.meishakeji.com/.com//image-20200714145228617-20200804140859219.png">
+<meta property="og:image" content="https://bex.meishakeji.com/.com//sphx_glr_plot_precision_recall_001-20200714212924094-20200804140901988.png">
+<meta property="og:image" content="https://bex.meishakeji.com/.com//4b1eek0aoz.jpeg">
+<meta property="og:image" content="https://bex.meishakeji.com/.com//image-20200717000958276-6521353.png">
+<meta property="og:image" content="https://bex.meishakeji.com/.com//image-20200714213131282-6521358.png">
+<meta property="og:image" content="https://bex.meishakeji.com/.com//image-20200714213205390.png">
 <meta property="article:published_time" content="2020-07-26T03:04:49.000Z">
 <meta property="article:modified_time" content="2024-12-31T14:59:26.504Z">
 <meta property="article:author" content="Meisha Bex">
 <meta property="article:tag" content="推荐系统">
 <meta property="article:tag" content="机器学习">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://bex.meishakeji.com/2020/07/26/%E6%A8%A1%E5%9E%8B%E7%9A%84%E6%80%A7%E8%83%BD%E5%BA%A6%E9%87%8F/image-20200714145425378-20200804140855704.png">
+<meta name="twitter:image" content="https://bex.meishakeji.com/.com//image-20200714145425378-20200804140855704.png">
   
     <link rel="alternative" href="/atom.xml" title="Meisha Bex" type="application/atom+xml">
   
@@ -192,7 +192,10 @@
 <p>在模型选择和调参过程中，可以对训练集进一步划分得到新的训练集和<strong>验证集</strong>(validation set) 。注意，验证集用于反复验证调参，测试集用于评价模型性能（比如用于评价不同算法模型间的泛化能力——<strong>泛化误差</strong>）。</p>
 <h3 id="混淆矩阵"><a href="#混淆矩阵" class="headerlink" title="混淆矩阵"></a>混淆矩阵</h3><p>机器学习解决的是分类问题，<strong>假设</strong> 现在有一个二分类问题，将一个模型的分类结果与样本集比较，可以得到一个混淆矩阵，如下图。</p>
 <p>经典图来啦！</p>
-<p><img src="/2020/07/26/模型的性能度量/./image-20200714145425378-20200804140855704.png" alt="image-20200714145425378" style="zoom:50%;"></p>
+<img src="/.com//image-20200714145425378-20200804140855704.png" alt="image-20200714145425378" style="zoom:50%;">
+
+
+
 <p>翻译一下~</p>
 <ol>
 <li><p>TP (True Positve)</p>
@@ -208,26 +211,30 @@
 <p>真实值为真，模型判断结果为假</p>
 </li>
 </ol>
-<p><img src="/2020/07/26/模型的性能度量/./image-20200714145228617-20200804140859219.png" alt="image-20200714145228617" style="zoom: 50%;"></p>
+<img src="/.com//image-20200714145228617-20200804140859219.png" alt="image-20200714145228617" style="zoom: 50%;">
+
+
+
 <h2 id="常见"><a href="#常见" class="headerlink" title="常见"></a>常见</h2><h3 id="P-R-曲线"><a href="#P-R-曲线" class="headerlink" title="P-R 曲线"></a>P-R 曲线</h3><p>P-R 曲线即 Precision (准确率) - Recall (召回率) 曲线，如下图$^{[3]}$。</p>
-<p><img src="/2020/07/26/模型的性能度量/./sphx_glr_plot_precision_recall_001-20200714212924094-20200804140901988.png" alt="../../_images/sphx_glr_plot_precision_recall_001.png"></p>
+<p><img src="/.com//sphx_glr_plot_precision_recall_001-20200714212924094-20200804140901988.png" alt="../../_images/sphx_glr_plot_precision_recall_001.png"></p>
 <p>其中，<strong>准确率</strong> ( <strong>Precision</strong>，也称查准率 )，体现判断结果为真的数据中，正确判断的量。</p>
-<p>若从前文所述的混淆矩阵出发，则其计算方法如下。<br>$$<br>P = \frac{TP}{TP + FP}<br>$$</p>
+<p>若从前文所述的混淆矩阵出发，则其计算方法如下。<br>$$<br>P &#x3D; \frac{TP}{TP + FP}<br>$$</p>
 <p>而<strong>召回率</strong> ( <strong>Recall</strong>，也称查全率 )，体现真实值为真的数据中，判定结果为真的量。</p>
-<p>若从前文所述的混淆矩阵出发，则其计算方法如下。<br>$$<br>R = \frac{TP}{TP + FN}<br>$$<br>在实践中，我们<strong>无法保证 P 值趋向于 1 的同时，R 值也趋于 1</strong>。因此，我们常常需要绘制 P-R 曲线观察当前模型在不同 R 值下，P 值是多少，并比较模型之间的P-R曲线，来判定优劣。</p>
-<p><img src="/2020/07/26/模型的性能度量/./4b1eek0aoz.jpeg" alt="4b1eek0aoz" style="zoom: 67%;"></p>
+<p>若从前文所述的混淆矩阵出发，则其计算方法如下。<br>$$<br>R &#x3D; \frac{TP}{TP + FN}<br>$$<br>在实践中，我们<strong>无法保证 P 值趋向于 1 的同时，R 值也趋于 1</strong>。因此，我们常常需要绘制 P-R 曲线观察当前模型在不同 R 值下，P 值是多少，并比较模型之间的P-R曲线，来判定优劣。</p>
+<img src="/.com//4b1eek0aoz.jpeg" alt="4b1eek0aoz" style="zoom: 67%;">
+
 <p>比较 P-R 曲线有两种常见方法：</p>
 <ol>
 <li><p>面积</p>
 <p>比较曲线下的面积，越大，则<strong>可能</strong>越好。</p>
-<p><strong>注意</strong>：若整个定义域范围内，B曲线<strong>完全『包住』</strong>C曲线，即：$\forall Recall_c = Recall_b ， \exists  Precision_c &lt;= Precision_b$，则<strong>可以断言</strong> B 优于 C。</p>
+<p><strong>注意</strong>：若整个定义域范围内，B曲线<strong>完全『包住』</strong>C曲线，即：$\forall Recall_c &#x3D; Recall_b ， \exists  Precision_c &lt;&#x3D; Precision_b$，则<strong>可以断言</strong> B 优于 C。</p>
 </li>
 <li><p>BEP (平衡点)</p>
 <p>从坐标系零点出发，画一条 45° 的射线，该射线一定会穿过每条曲线，其交点称为平衡点。则，我们可以观察，BEP越靠外的，<strong>可能</strong>越好。</p>
 </li>
 <li><p>$F_\beta$  与 $F_1$</p>
 <p>需要注意，P-R 曲线通常是不均匀的，有的模型，其 P-R 曲线虽然在 R 值较高时，表现不加，但在 R 值小时，其 P 值远高于其他模型。此时，该模型对于注重 P 值的业务场景可能是更好的方法（比如，推荐系统中，希望预测结果中符合用户需求的数量尽可能多，而不符合需求的数量尽可能少）。</p>
-<p>在实际应用中，以面积作为比较可能无法体现 P 与 R 之间的侧重点。以 BEP 作为比较又可能不够客观，此时我们可以使用 $F_\beta$ (调和均值) 作为评价依据。$\beta = 1$ 时，则变为 $F_1$ 度量；$\beta &lt; 1$ 时，P 值权重大，$\beta &gt; 1$ 时，R 权重大。$\beta$ 可以依赖直觉人为指定，也可以通过多次调参验证计算。<br>$$<br>F_\beta = \frac{(1 + \beta^2) \times P \times R}{ (\beta^2 \times P) + R}<br>$$<br>$$<br>F_1 = \frac{2 \times P \times R}{ P + R}<br>$$</p>
+<p>在实际应用中，以面积作为比较可能无法体现 P 与 R 之间的侧重点。以 BEP 作为比较又可能不够客观，此时我们可以使用 $F_\beta$ (调和均值) 作为评价依据。$\beta &#x3D; 1$ 时，则变为 $F_1$ 度量；$\beta &lt; 1$ 时，P 值权重大，$\beta &gt; 1$ 时，R 权重大。$\beta$ 可以依赖直觉人为指定，也可以通过多次调参验证计算。<br>$$<br>F_\beta &#x3D; \frac{(1 + \beta^2) \times P \times R}{ (\beta^2 \times P) + R}<br>$$<br>$$<br>F_1 &#x3D; \frac{2 \times P \times R}{ P + R}<br>$$</p>
 </li>
 </ol>
 <blockquote>
@@ -237,24 +244,27 @@
 <li>各混淆矩阵对应元素平均，再计算P值、R值、F值，分别得到 micro-P、micro-R、micro-F</li>
 </ol>
 </blockquote>
-<h3 id="ROC-与-AUC"><a href="#ROC-与-AUC" class="headerlink" title="ROC 与 AUC"></a>ROC 与 AUC</h3><p>ROC ( Receiver Operating Characteristic, 受试者工作特征 ) 曲线$^{[8]}$，由两个维度组成：真正例率(True Positive Rate, TPR) 和假正例率(False Positive Rate, FPR)。顾名思义，$TPR$ 等于 $Recall$。<br>$$<br>TPR = \frac{TP}{TP + FN}<br>$$</p>
-<p>$$<br>FPR = \frac{FP}{TN + FP}<br>$$</p>
+<h3 id="ROC-与-AUC"><a href="#ROC-与-AUC" class="headerlink" title="ROC 与 AUC"></a>ROC 与 AUC</h3><p>ROC ( Receiver Operating Characteristic, 受试者工作特征 ) 曲线$^{[8]}$，由两个维度组成：真正例率(True Positive Rate, TPR) 和假正例率(False Positive Rate, FPR)。顾名思义，$TPR$ 等于 $Recall$。<br>$$<br>TPR &#x3D; \frac{TP}{TP + FN}<br>$$</p>
+<p>$$<br>FPR &#x3D; \frac{FP}{TN + FP}<br>$$</p>
 <p>一个示意图如下$^{[8]}$，<em>图 (a)</em> 是分类器 A 和 B 的的 ROC 曲线，<em>图 (b)</em> 是两者曲线面积的变化过程。通过 $TPR$ 和 FPR 的计算方式（定义）结合 <em>图(b)</em> 的观察结果，我们可以直观感受到 B <strong>总体</strong>优于 A。但在 $FPR &gt; 0.6$ 时，分类器 B 的 ROC 曲线面积显然小于分类器 A，也即： $FPR &gt; 0.6$ 时，分类器 A 优于分类器 B。此后，我们就可以从实际业务出发，考虑选择哪个分类器了。</p>
 <p><em><strong>新人注意！！！</strong>这里不同的 FPR 下，得到不同的 TPR。是通过变化 阈值 Cut-off 后，依据分类机的分类结果计算得到的（后文有介绍）。</em></p>
-<p><img src="/2020/07/26/模型的性能度量/./image-20200717000958276-6521353.png" alt="image-20200717000958276" style="zoom:50%;"></p>
-<p><strong>以推荐系统为例</strong>，如果我现在要结合 ML/DL 做一个智能题目推荐 ，<strong>推荐的目的</strong>是尽可能让学生接触到所有他需要的题目，则，显然，这时候我们希望<strong>需要的题目尽可能被推送</strong>（召回率）的同时，推送的<strong>错误内容尽可能少</strong>，则通过 ROC 图像，我们可以估计，选择分类器 B，且调整阈值控制 FPR 在 0.2，是相对合适的方案。</p>
+<img src="/.com//image-20200717000958276-6521353.png" alt="image-20200717000958276" style="zoom:50%;">
+
+<p><strong>以推荐系统为例</strong>，如果我现在要结合 ML&#x2F;DL 做一个智能题目推荐 ，<strong>推荐的目的</strong>是尽可能让学生接触到所有他需要的题目，则，显然，这时候我们希望<strong>需要的题目尽可能被推送</strong>（召回率）的同时，推送的<strong>错误内容尽可能少</strong>，则通过 ROC 图像，我们可以估计，选择分类器 B，且调整阈值控制 FPR 在 0.2，是相对合适的方案。</p>
 <h3 id="Kappa系数"><a href="#Kappa系数" class="headerlink" title="Kappa系数"></a>Kappa系数</h3><p>Kappa系数 ( Kappa-Statistics, Cohen’s Kappa, 科恩 Kappa 系数 ) ，最早出现于 1960 年$^{[3]}$。由于其可<strong>基于混淆矩阵计算分类精度</strong>，因而在推荐系统一类的论文中也常见，其本质是<strong>计算偶然一致的概率</strong>。</p>
-<p>Kappa 系数包含 $p_0$ 和 $p_e$。其中， $p_0$ 是<strong>分类/评分与真实值一致的比例</strong> (the proportion of units in which the judges agreed$^{[3]}$)，等价 ML 中常见的另一指标——<strong>准确率</strong> (Accuracy)。$p_e$ 是<strong>偶然一致的的占比</strong> (the proportion of units for which agreement is expected by chance$^{[3]}$)，基本方法是<strong>计算各分类真实数量与分类器实际数量的乘积之比</strong>。</p>
-<p>公式定义如下。<br>$$<br>设 i 为行标, j为列标, n为分类数量, x_{ij}表示混淆矩阵中的像元\<br>p_o = Accuracy =  \frac{\sum_{i = 1}^{n}x_{ii}}{\sum_{i = 1}^{n}\sum_{j = 1}^{n}x_{ij}} \<br>p_e = \frac{\sum( 类型i的分类总数 \times 类型i的实际总数 )}{1 - 样本总数^2} = \frac{\sum_{i=1}^{n}x_{i+}x_{+i}}{1 - (\sum_{i = 1}^{n}\sum_{j = 1}^{n}x_{ij})^2}  \<br>K = \frac{p_o - p_e}{1 - p_e}<br>$$</p>
-<p>若以前文二分类混淆矩阵计算，则对应的 $p_o$ 、 $p_e$ 和 Kappa 系数。<br>$$<br>p_o = \frac{TP + TN}{TP + FP + TN + FN} \<br>p_e = \frac{(TP + FN) \times (TP + FP) + (FP + TN)\times( FN + TN)}{(TP + FP + TN + FN)^2}<br>$$<br>关于 K 值多少较好，百科和网上能搜到的资料普遍按照五个级别来区分：[0.0, 0.20] 极低的一致性(slight)、[0.21, 0.40] 一般的一致性(fair)、[0.41, 0.60] 中等的一致性(moderate)、[0.61, 0.80] 高度的一致性(substantial)和 [0.81, 1]几乎完全一致(almost perfect)。但原始论文并没有给出这样分类的解释，<strong>笔者暂时没有找到相关论文对此论证</strong>，因此，该分级<strong>建议仅作参考</strong>，在实际应用中，用于对比多个算法模型的 Kappa 系数衡量分类精度，依然是可行的。</p>
+<p>Kappa 系数包含 $p_0$ 和 $p_e$。其中， $p_0$ 是<strong>分类&#x2F;评分与真实值一致的比例</strong> (the proportion of units in which the judges agreed$^{[3]}$)，等价 ML 中常见的另一指标——<strong>准确率</strong> (Accuracy)。$p_e$ 是<strong>偶然一致的的占比</strong> (the proportion of units for which agreement is expected by chance$^{[3]}$)，基本方法是<strong>计算各分类真实数量与分类器实际数量的乘积之比</strong>。</p>
+<p>公式定义如下。<br>$$<br>设 i 为行标, j为列标, n为分类数量, x_{ij}表示混淆矩阵中的像元\<br>p_o &#x3D; Accuracy &#x3D;  \frac{\sum_{i &#x3D; 1}^{n}x_{ii}}{\sum_{i &#x3D; 1}^{n}\sum_{j &#x3D; 1}^{n}x_{ij}} \<br>p_e &#x3D; \frac{\sum( 类型i的分类总数 \times 类型i的实际总数 )}{1 - 样本总数^2} &#x3D; \frac{\sum_{i&#x3D;1}^{n}x_{i+}x_{+i}}{1 - (\sum_{i &#x3D; 1}^{n}\sum_{j &#x3D; 1}^{n}x_{ij})^2}  \<br>K &#x3D; \frac{p_o - p_e}{1 - p_e}<br>$$</p>
+<p>若以前文二分类混淆矩阵计算，则对应的 $p_o$ 、 $p_e$ 和 Kappa 系数。<br>$$<br>p_o &#x3D; \frac{TP + TN}{TP + FP + TN + FN} \<br>p_e &#x3D; \frac{(TP + FN) \times (TP + FP) + (FP + TN)\times( FN + TN)}{(TP + FP + TN + FN)^2}<br>$$<br>关于 K 值多少较好，百科和网上能搜到的资料普遍按照五个级别来区分：[0.0, 0.20] 极低的一致性(slight)、[0.21, 0.40] 一般的一致性(fair)、[0.41, 0.60] 中等的一致性(moderate)、[0.61, 0.80] 高度的一致性(substantial)和 [0.81, 1]几乎完全一致(almost perfect)。但原始论文并没有给出这样分类的解释，<strong>笔者暂时没有找到相关论文对此论证</strong>，因此，该分级<strong>建议仅作参考</strong>，在实际应用中，用于对比多个算法模型的 Kappa 系数衡量分类精度，依然是可行的。</p>
 <h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><p>这里是面向英文菜鸡（没错，就是笔者）的一点儿扩展延伸。</p>
 <h3 id="关于-Cut-off"><a href="#关于-Cut-off" class="headerlink" title="关于 Cut-off"></a>关于 Cut-off</h3><p>有些英文不好的新人菜鸟在看外文文献时，偶尔会看到 F1、Precision、 Kappa系数或其他指标与 Cut-off 组合得到的曲线，可能会有点懵逼，如下图$^{[2]}$。</p>
-<p><img src="/2020/07/26/模型的性能度量/./image-20200714213131282-6521358.png" alt="image-20200714213131282" style="zoom: 50%;"></p>
-<p><img src="/2020/07/26/模型的性能度量/./image-20200714213205390.png" alt="image-20200714213205390" style="zoom: 50%;"></p>
+<img src="/.com//image-20200714213131282-6521358.png" alt="image-20200714213131282" style="zoom: 50%;">
+
+<img src="/.com//image-20200714213205390.png" alt="image-20200714213205390" style="zoom: 50%;">
+
 <p>这里的 Cut-off 实际上就是<strong>阈值</strong>、<strong>截止值</strong>。很多时候，我们是无法直接判断真假的。例如：如何判断『我爱跑步』 与 『我爱运动』是否相似？<strong>如果以对应位差异作为相似度</strong>，则这里相似度为 2（完全一致为 0，完全不一致为 1）。如果我们定义 Cut-off 为 1，则这两个字符串被判定为 <strong>不相似</strong>。如果我们定义 Cut-off 为 2，则这两个字符串被判定为 <strong>相似</strong>。这时我们知道了，<strong>不同的 Cut-off 值下，同一模型可能表现出不同的判定结果</strong>，因此，就有了各种评价指标与 Cut-off 结合得到的曲线。</p>
 <h3 id="更多一致性检验方法"><a href="#更多一致性检验方法" class="headerlink" title="更多一致性检验方法"></a>更多一致性检验方法</h3><p>上面提及的方法，以及各个系数与 Cut-off 结合得到的曲线，已经足够应对大多数情况。这里再抛一些砖，作为了解。</p>
 <ol>
-<li><p><a href="http://www.wpic.pitt.edu/research/biometrics/Publications/Biometrics%20Archives%20PDF/395-1971%20Fleiss0001.pdf" target="_blank" rel="noopener">Fleiss kappa (弗莱斯 Kappa 系数)</a>$^{[5]}$</p>
+<li><p><a href="http://www.wpic.pitt.edu/research/biometrics/Publications/Biometrics%20Archives%20PDF/395-1971%20Fleiss0001.pdf">Fleiss kappa (弗莱斯 Kappa 系数)</a>$^{[5]}$</p>
 <p>Kappa 系数的泛化，当存在多个评分器时适用。关于评分器，原文为 raters，个人理解为多个分类器，相应得到的是多维的混淆矩阵。科恩 Kappa 只能对比两个 raters 的一致性（在本文中，即对比真实分类与分类结果，得到的是二维的混淆矩阵）</p>
 </li>
 <li><p>Weighted Kappa（加权 Kappa 系数）</p>
@@ -270,7 +280,7 @@
 <p>判断两个序列的线性相关度，计算值落在 [-1, 1] 之间，0 为不相关，越趋近 -1 或 1，越相关（一致性越强）</p>
 </li>
 <li><p>Spearman (斯皮尔曼系数)</p>
-<p>计算值落在 [-1, 1] 之间，一般定义为等级量的 <a href="https://baike.baidu.com/item/皮尔逊相关系数" target="_blank" rel="noopener">皮尔森相关系数</a>（这部分我理解不深刻，个人暂且认为有向性版本的皮尔森相关系数）</p>
+<p>计算值落在 [-1, 1] 之间，一般定义为等级量的 <a href="https://baike.baidu.com/item/%E7%9A%AE%E5%B0%94%E9%80%8A%E7%9B%B8%E5%85%B3%E7%B3%BB%E6%95%B0">皮尔森相关系数</a>（这部分我理解不深刻，个人暂且认为有向性版本的皮尔森相关系数）</p>
 </li>
 </ol>
 <p>其实再延生思考一下，推荐系统的协同过滤原理就是寻找用户与用户、物品与物品或用户与物品之间的关联性，这些方法某些时候都可以考虑作为相似度度量。但实际应用前需要比较差异，结合数据特征选取。</p>
@@ -278,12 +288,12 @@
 <p>不同的评价指标从不同的维度描述模型性能，同时，<strong>不同的业务需求对不同的指标具有不同的要求</strong>，因此，选择什么评价方式作为依据，是要看业务需求的，不能一概而论。例如：在推荐系统中，我们希望预测结果中，目标用户感兴趣的内容尽可能多，不感兴趣的内容尽可能少，这时，对 模型的 Precision 可能比 Recall 值更重要，相应的，我们就可以将 ROC曲线、Precision 与 Cut-off 曲线、 Kappa-Statistic 与 Cut-off 曲线作为<strong>主要</strong>评价依据（其他评价依据可以按需计算）。</p>
 <h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><ol>
 <li>周志华. 机器学习[M]. 清华大学出版社, 2016.</li>
-<li>Brocken E , Hartveld A , Koning E D , et al. Bing-CF-IDF+: A Semantics-Driven News Recommender System[M]// Advanced Information Systems Engineering. Springer, Cham, 2019.</li>
-<li>Precision-Recall. <a href="https://scikit-learn.org/stable/auto_examples/model_selection/plot_precision_recall.html" target="_blank" rel="noopener">https://scikit-learn.org/stable/auto_examples/model_selection/plot_precision_recall.html</a></li>
+<li>Brocken E , Hartveld A , Koning E D , et al. Bing-CF-IDF+: A Semantics-Driven News Recommender System[M]&#x2F;&#x2F; Advanced Information Systems Engineering. Springer, Cham, 2019.</li>
+<li>Precision-Recall. <a href="https://scikit-learn.org/stable/auto_examples/model_selection/plot_precision_recall.html">https://scikit-learn.org/stable/auto_examples/model_selection/plot_precision_recall.html</a></li>
 <li>Cohen, J. A Coefficient of Agreement for Nominal Scales[J]. Educational &amp; Psychological Measurement, 1960.</li>
 <li>Fleiss, Joseph L . Measuring nominal scale agreement among many raters.[J]. Psychological Bulletin, 1971.</li>
-<li>Kappa statistics and Kendall’s coefficients. <a href="https://support.minitab.com/en-us/minitab/18/help-and-how-to/quality-and-process-improvement/measurement-system-analysis/supporting-topics/attribute-agreement-analysis/kappa-statistics-and-kendall-s-coefficients/#a-comparison-of-fleiss-s-kappa-and-cohen-s-kappa" target="_blank" rel="noopener">https://support.minitab.com/en-us/minitab/18/help-and-how-to/quality-and-process-improvement/measurement-system-analysis/supporting-topics/attribute-agreement-analysis/kappa-statistics-and-kendall-s-coefficients/#a-comparison-of-fleiss-s-kappa-and-cohen-s-kappa</a></li>
-<li>检验一致性，你用哪种方法？<a href="https://zhuanlan.zhihu.com/p/77782584" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/77782584</a></li>
+<li>Kappa statistics and Kendall’s coefficients. <a href="https://support.minitab.com/en-us/minitab/18/help-and-how-to/quality-and-process-improvement/measurement-system-analysis/supporting-topics/attribute-agreement-analysis/kappa-statistics-and-kendall-s-coefficients/#a-comparison-of-fleiss-s-kappa-and-cohen-s-kappa">https://support.minitab.com/en-us/minitab/18/help-and-how-to/quality-and-process-improvement/measurement-system-analysis/supporting-topics/attribute-agreement-analysis/kappa-statistics-and-kendall-s-coefficients/#a-comparison-of-fleiss-s-kappa-and-cohen-s-kappa</a></li>
+<li>检验一致性，你用哪种方法？<a href="https://zhuanlan.zhihu.com/p/77782584">https://zhuanlan.zhihu.com/p/77782584</a></li>
 <li>Fawcett T . An introduction to ROC analysis[J]. Pattern Recognition Letters, 2005.</li>
 </ol>
 
@@ -562,11 +572,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">HTTP/2 HTTP/1.1 HTTP/3.0</a>
+                <a href="javascript:void(0)" class="js-tag color3">Go</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Go</a>
+                <a href="javascript:void(0)" class="js-tag color5">HTTP/2 HTTP/1.1 HTTP/3.0</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -582,10 +592,6 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Latex 文件转换 docx</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">lumen</a>
               </li>
              
@@ -595,6 +601,10 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">thrift</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Latex 文件转换 docx</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -611,6 +621,30 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Linux</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">反射</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">reflection</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">底层</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">变量</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">引用</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">优化</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -638,15 +672,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">反射</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">reflection</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">底层</a>
+                <a href="javascript:void(0)" class="js-tag color3">Reactor</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -662,23 +688,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">变量</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">引用</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">优化</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">跳跃表</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Reactor</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -687,6 +697,34 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">性能优化</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">阿里云</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">sts</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">推荐系统</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">NLP</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">CF-IDF</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">canal</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">ES</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -726,11 +764,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">canal</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">ES</a>
+                <a href="javascript:void(0)" class="js-tag color4">线段树</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -738,7 +772,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">线段树</a>
+                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -755,66 +789,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">world</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">阿里云</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">sts</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">推荐系统</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">NLP</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">CF-IDF</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">acm</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">树</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">字典树</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">前缀树</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">二进制</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">位运算</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">macro</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">model</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">数据库</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -850,6 +824,46 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">macro</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">model</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">数据库</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">acm</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">树</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">字典树</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">前缀树</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">二进制</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">位运算</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">底层分析</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">事务</a>
               </li>
              
@@ -859,10 +873,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Python</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">底层分析</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -882,15 +892,15 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">ACID</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">sysbench</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">压力测试</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">ACID</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -902,6 +912,14 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">UUID</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">MySQL</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">架构</a>
               </li>
              
@@ -910,11 +928,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">UUID</a>
+                <a href="javascript:void(0)" class="js-tag color5">日志服务</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">MySQL</a>
+                <a href="javascript:void(0)" class="js-tag color4">SLS</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -954,14 +972,6 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">日志服务</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">SLS</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">大数据</a>
               </li>
              
@@ -986,6 +996,10 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">熔断</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">容器</a>
               </li>
              
@@ -995,10 +1009,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">基本计算器</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">熔断</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1062,7 +1072,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">边框识别 答题卡 试卷 考试</a>
+                <a href="javascript:void(0)" class="js-tag color5">机器学习</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1082,11 +1092,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">缓存</a>
+                <a href="javascript:void(0)" class="js-tag color5">边框识别 答题卡 试卷 考试</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">机器学习</a>
+                <a href="javascript:void(0)" class="js-tag color3">缓存</a>
               </li>
              
               <li class="article-tag-list-item">

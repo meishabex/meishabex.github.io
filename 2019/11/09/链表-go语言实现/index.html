@@ -178,79 +178,67 @@
           
           
             <p>最近复习数据结构与算法，正好也顺带练习下go语言。</p>
-<h2 id="结构体定义"><a href="#结构体定义" class="headerlink" title="结构体定义"></a>结构体定义</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> node <span class="keyword">struct</span> &#123;</span><br><span class="line">	value <span class="keyword">int</span></span><br><span class="line">	next  *node</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(node *node)</span> <span class="title">setValue</span><span class="params">(value <span class="keyword">int</span>)</span></span> &#123;</span><br><span class="line">	node.value = value</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(node *node)</span> <span class="title">getValue</span><span class="params">(value <span class="keyword">int</span>)</span> <span class="title">int</span></span> &#123;</span><br><span class="line">	<span class="keyword">return</span> node.value</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="结构体定义"><a href="#结构体定义" class="headerlink" title="结构体定义"></a>结构体定义</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> node <span class="keyword">struct</span> &#123;</span><br><span class="line">	value <span class="type">int</span></span><br><span class="line">	next  *node</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(node *node)</span></span> setValue(value <span class="type">int</span>) &#123;</span><br><span class="line">	node.value = value</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(node *node)</span></span> getValue(value <span class="type">int</span>) <span class="type">int</span> &#123;</span><br><span class="line">	<span class="keyword">return</span> node.value</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>首先定义链表的结点并定义与其关联的getset方法用来操作结点的值。此处和java等面向对象的语言有些不同，go语言方法接收一个定义的结点类型的变量，并修改其值，由于go本身是值传递，此处接收者定义为指针。</p>
 <h2 id="相关操作方法定义"><a href="#相关操作方法定义" class="headerlink" title="相关操作方法定义"></a>相关操作方法定义</h2><p>对于一个链表来说，自然对其少不了增删改查的操作故定义以下五个方法：</p>
 <table>
 <thead>
 <tr>
-<th style="text-align:center"></th>
-<th style="text-align:center">方法名</th>
-<th>声明</th>
+<th align="center">方法名</th>
+<th align="center">声明</th>
 </tr>
 </thead>
-<tbody>
-<tr>
-<td style="text-align:center"></td>
-<td style="text-align:center">创建新链表</td>
-<td>newList()</td>
-<td></td>
+<tbody><tr>
+<td align="center">创建新链表</td>
+<td align="center">newList()</td>
 </tr>
 <tr>
-<td style="text-align:center"></td>
-<td style="text-align:center">增加链表值</td>
-<td>add()</td>
-<td></td>
+<td align="center">增加链表值</td>
+<td align="center">add()</td>
 </tr>
 <tr>
-<td style="text-align:center"></td>
-<td style="text-align:center">删除链表值</td>
-<td>delete(index int)</td>
-<td></td>
+<td align="center">删除链表值</td>
+<td align="center">delete(index int)</td>
 </tr>
 <tr>
-<td style="text-align:center"></td>
-<td style="text-align:center">修改链表值</td>
-<td>update(index int,value int)</td>
-<td></td>
+<td align="center">修改链表值</td>
+<td align="center">update(index int,value int)</td>
 </tr>
 <tr>
-<td style="text-align:center"></td>
-<td style="text-align:center">查找链表值</td>
-<td>find(value int) int</td>
-<td></td>
+<td align="center">查找链表值</td>
+<td align="center">find(value int) int</td>
 </tr>
-</tbody>
-</table>
+</tbody></table>
 <ul>
 <li><p>创建新链表</p>
-  <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">newList</span><span class="params">()</span> <span class="title">node</span></span> &#123;</span><br><span class="line"> <span class="keyword">return</span> node&#123;</span><br><span class="line">  value: <span class="number">-1</span>,</span><br><span class="line">  next:  <span class="literal">nil</span>,</span><br><span class="line"> &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
+  <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">newList</span><span class="params">()</span></span> node &#123;</span><br><span class="line"> <span class="keyword">return</span> node&#123;</span><br><span class="line">  value: <span class="number">-1</span>,</span><br><span class="line">  next:  <span class="literal">nil</span>,</span><br><span class="line"> &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
 </ul>
 <p>这个方法做的操作很简单，主要是初始化了链表的头节点并返回头节点的实例，表示该链表建立以便进行后续的增删改查等操作。</p>
 <ul>
 <li>给链表增加值</li>
 </ul>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(list *node)</span> <span class="title">add</span><span class="params">(value <span class="keyword">int</span>)</span></span> &#123;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">var</span> temp *node = <span class="literal">nil</span></span><br><span class="line"></span><br><span class="line">	newNode := <span class="built_in">new</span>(node)</span><br><span class="line">	newNode.value = value</span><br><span class="line">	newNode.next = <span class="literal">nil</span></span><br><span class="line"></span><br><span class="line">	temp = list.next</span><br><span class="line">	list.next = newNode</span><br><span class="line">	newNode.next = temp</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(list *node)</span></span> add(value <span class="type">int</span>) &#123;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">var</span> temp *node = <span class="literal">nil</span></span><br><span class="line"></span><br><span class="line">	newNode := <span class="built_in">new</span>(node)</span><br><span class="line">	newNode.value = value</span><br><span class="line">	newNode.next = <span class="literal">nil</span></span><br><span class="line"></span><br><span class="line">	temp = list.next</span><br><span class="line">	list.next = newNode</span><br><span class="line">	newNode.next = temp</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>当需要给链表中插入新值时，首先需要申请容纳新值的空间，如代码中第5行所示，其申请了一个node类型的空间并将新值放进去。接下来采用头插法node插入链表，操作完成。</p>
 <ul>
 <li>删除链表值</li>
 </ul>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(list *node)</span> <span class="title">delete</span><span class="params">(index <span class="keyword">int</span>)</span> <span class="title">error</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> temp *node = <span class="literal">nil</span></span><br><span class="line"></span><br><span class="line">	temp = list;</span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">1</span>; i &lt;= index; i++ &#123;</span><br><span class="line">		<span class="keyword">if</span> (i == index &amp;&amp; temp.next != <span class="literal">nil</span>) &#123;</span><br><span class="line">			temp.next = temp.next.next;</span><br><span class="line">			<span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line"></span><br><span class="line">		&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">			temp = temp.next</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> errors.New(<span class="string">"删除失败"</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(list *node)</span></span> <span class="built_in">delete</span>(index <span class="type">int</span>) <span class="type">error</span> &#123;</span><br><span class="line">	<span class="keyword">var</span> temp *node = <span class="literal">nil</span></span><br><span class="line"></span><br><span class="line">	temp = list;</span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">1</span>; i &lt;= index; i++ &#123;</span><br><span class="line">		<span class="keyword">if</span> (i == index &amp;&amp; temp.next != <span class="literal">nil</span>) &#123;</span><br><span class="line">			temp.next = temp.next.next;</span><br><span class="line">			<span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line"></span><br><span class="line">		&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">			temp = temp.next</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> errors.New(<span class="string">&quot;删除失败&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 <p>个人感觉这种实现方式有点low，但是如果在结构体中设置下标，维护下标又需要成本，且按位置删除总要先找到位置，在列表无序的情况下这样做也还算清晰，但还是low。（其实也可以按值删除，第一个符合的删去）重点理解删除思想。<br>将待删节点的前一个节点的next指向待删节点的下一个节点，就算ok。</p>
 <ul>
 <li>更新链表指定位置的值</li>
 </ul>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(list *node)</span> <span class="title">update</span><span class="params">(index <span class="keyword">int</span>, value <span class="keyword">int</span>)</span> <span class="title">error</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> temp *node = <span class="literal">nil</span></span><br><span class="line"></span><br><span class="line">	temp = list;</span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">1</span>; i &lt;= index; i++ &#123;</span><br><span class="line">		<span class="keyword">if</span> (i == index &amp;&amp; temp.next != <span class="literal">nil</span>) &#123;</span><br><span class="line">			temp.next.value = value;</span><br><span class="line">			<span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line"></span><br><span class="line">		&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">			temp = temp.next</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> errors.New(<span class="string">"更新失败"</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(list *node)</span></span> update(index <span class="type">int</span>, value <span class="type">int</span>) <span class="type">error</span> &#123;</span><br><span class="line">	<span class="keyword">var</span> temp *node = <span class="literal">nil</span></span><br><span class="line"></span><br><span class="line">	temp = list;</span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">1</span>; i &lt;= index; i++ &#123;</span><br><span class="line">		<span class="keyword">if</span> (i == index &amp;&amp; temp.next != <span class="literal">nil</span>) &#123;</span><br><span class="line">			temp.next.value = value;</span><br><span class="line">			<span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line"></span><br><span class="line">		&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">			temp = temp.next</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> errors.New(<span class="string">&quot;更新失败&quot;</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>此处和删除逻辑流程差不多，都是先找到需要操作的节点，不同的是一个删除，一个仅仅是更新value。</p>
 <ul>
 <li>查找链表值</li>
 </ul>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(list *node)</span> <span class="title">find</span><span class="params">(value <span class="keyword">int</span>)</span> <span class="params">(index <span class="keyword">int</span>)</span></span> &#123;</span><br><span class="line"></span><br><span class="line">	list = list.next</span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">1</span>; list != <span class="literal">nil</span>; i++ &#123;</span><br><span class="line">		<span class="keyword">if</span> list.value == value &#123;</span><br><span class="line">			index = i</span><br><span class="line">			<span class="keyword">return</span></span><br><span class="line">		&#125;</span><br><span class="line">		list = list.next</span><br><span class="line">	&#125;</span><br><span class="line">	index = <span class="number">-1</span></span><br><span class="line">	<span class="keyword">return</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(list *node)</span></span> find(value <span class="type">int</span>) (index <span class="type">int</span>) &#123;</span><br><span class="line"></span><br><span class="line">	list = list.next</span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">1</span>; list != <span class="literal">nil</span>; i++ &#123;</span><br><span class="line">		<span class="keyword">if</span> list.value == value &#123;</span><br><span class="line">			index = i</span><br><span class="line">			<span class="keyword">return</span></span><br><span class="line">		&#125;</span><br><span class="line">		list = list.next</span><br><span class="line">	&#125;</span><br><span class="line">	index = <span class="number">-1</span></span><br><span class="line">	<span class="keyword">return</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>此处主要是在匹配值，如果匹配则返回元素所在的位置找不到则返回-1，下标从1开始，头结点不存储值所以去除。这里也可以看出go语言返回值的特色，可以在函数签名中进行返回值变量的声明，这样就可以直接在代码中yin引用，最后return即可，个人觉得这个特性有利于代码的整洁度。</p>
-<h2 id="完整代码"><a href="#完整代码" class="headerlink" title="完整代码"></a>完整代码</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">type</span> node <span class="keyword">struct</span> &#123;</span><br><span class="line">	value <span class="keyword">int</span></span><br><span class="line">	next  *node</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(node *node)</span> <span class="title">setValue</span><span class="params">(value <span class="keyword">int</span>)</span></span> &#123;</span><br><span class="line">	node.value = value</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(node *node)</span> <span class="title">getValue</span><span class="params">(value <span class="keyword">int</span>)</span> <span class="title">int</span></span> &#123;</span><br><span class="line">	<span class="keyword">return</span> node.value</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">newList</span><span class="params">()</span> <span class="title">node</span></span> &#123;</span><br><span class="line">	<span class="keyword">return</span> node&#123;</span><br><span class="line">		value: <span class="number">-1</span>,</span><br><span class="line">		next:  <span class="literal">nil</span>,</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(list *node)</span> <span class="title">add</span><span class="params">(value <span class="keyword">int</span>)</span></span> &#123;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">var</span> temp *node = <span class="literal">nil</span></span><br><span class="line"></span><br><span class="line">	newNode := <span class="built_in">new</span>(node)</span><br><span class="line">	newNode.value = value</span><br><span class="line">	newNode.next = <span class="literal">nil</span></span><br><span class="line"></span><br><span class="line">	temp = list.next</span><br><span class="line">	list.next = newNode</span><br><span class="line">	newNode.next = temp</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(list *node)</span> <span class="title">delete</span><span class="params">(index <span class="keyword">int</span>)</span> <span class="title">error</span></span> &#123;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">1</span>; i &lt;= index; i++ &#123;</span><br><span class="line">		<span class="keyword">if</span> (i == index &amp;&amp; list.next != <span class="literal">nil</span>) &#123;</span><br><span class="line">			list.next = list.next.next;</span><br><span class="line">			<span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line"></span><br><span class="line">		&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">			list = list.next</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> errors.New(<span class="string">"删除失败"</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(list *node)</span> <span class="title">update</span><span class="params">(index <span class="keyword">int</span>, value <span class="keyword">int</span>)</span> <span class="title">error</span></span> &#123;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">1</span>; i &lt;= index; i++ &#123;</span><br><span class="line">		<span class="keyword">if</span> (i == index &amp;&amp; list.next != <span class="literal">nil</span>) &#123;</span><br><span class="line">			list.next.value = value;</span><br><span class="line">			<span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line"></span><br><span class="line">		&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">			list = list.next</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> errors.New(<span class="string">"更新失败"</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(list *node)</span> <span class="title">find</span><span class="params">(value <span class="keyword">int</span>)</span> <span class="params">(index <span class="keyword">int</span>)</span></span> &#123;</span><br><span class="line"></span><br><span class="line">	list = list.next</span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">1</span>; list != <span class="literal">nil</span>; i++ &#123;</span><br><span class="line">		<span class="keyword">if</span> list.value == value &#123;</span><br><span class="line">			index = i</span><br><span class="line">			<span class="keyword">return</span></span><br><span class="line">		&#125;</span><br><span class="line">		list = list.next</span><br><span class="line">	&#125;</span><br><span class="line">	index = <span class="number">-1</span></span><br><span class="line">	<span class="keyword">return</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="完整代码"><a href="#完整代码" class="headerlink" title="完整代码"></a>完整代码</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">type</span> node <span class="keyword">struct</span> &#123;</span><br><span class="line">	value <span class="type">int</span></span><br><span class="line">	next  *node</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(node *node)</span></span> setValue(value <span class="type">int</span>) &#123;</span><br><span class="line">	node.value = value</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(node *node)</span></span> getValue(value <span class="type">int</span>) <span class="type">int</span> &#123;</span><br><span class="line">	<span class="keyword">return</span> node.value</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">newList</span><span class="params">()</span></span> node &#123;</span><br><span class="line">	<span class="keyword">return</span> node&#123;</span><br><span class="line">		value: <span class="number">-1</span>,</span><br><span class="line">		next:  <span class="literal">nil</span>,</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(list *node)</span></span> add(value <span class="type">int</span>) &#123;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">var</span> temp *node = <span class="literal">nil</span></span><br><span class="line"></span><br><span class="line">	newNode := <span class="built_in">new</span>(node)</span><br><span class="line">	newNode.value = value</span><br><span class="line">	newNode.next = <span class="literal">nil</span></span><br><span class="line"></span><br><span class="line">	temp = list.next</span><br><span class="line">	list.next = newNode</span><br><span class="line">	newNode.next = temp</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(list *node)</span></span> <span class="built_in">delete</span>(index <span class="type">int</span>) <span class="type">error</span> &#123;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">1</span>; i &lt;= index; i++ &#123;</span><br><span class="line">		<span class="keyword">if</span> (i == index &amp;&amp; list.next != <span class="literal">nil</span>) &#123;</span><br><span class="line">			list.next = list.next.next;</span><br><span class="line">			<span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line"></span><br><span class="line">		&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">			list = list.next</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> errors.New(<span class="string">&quot;删除失败&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(list *node)</span></span> update(index <span class="type">int</span>, value <span class="type">int</span>) <span class="type">error</span> &#123;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">1</span>; i &lt;= index; i++ &#123;</span><br><span class="line">		<span class="keyword">if</span> (i == index &amp;&amp; list.next != <span class="literal">nil</span>) &#123;</span><br><span class="line">			list.next.value = value;</span><br><span class="line">			<span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line"></span><br><span class="line">		&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">			list = list.next</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> errors.New(<span class="string">&quot;更新失败&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(list *node)</span></span> find(value <span class="type">int</span>) (index <span class="type">int</span>) &#123;</span><br><span class="line"></span><br><span class="line">	list = list.next</span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">1</span>; list != <span class="literal">nil</span>; i++ &#123;</span><br><span class="line">		<span class="keyword">if</span> list.value == value &#123;</span><br><span class="line">			index = i</span><br><span class="line">			<span class="keyword">return</span></span><br><span class="line">		&#125;</span><br><span class="line">		list = list.next</span><br><span class="line">	&#125;</span><br><span class="line">	index = <span class="number">-1</span></span><br><span class="line">	<span class="keyword">return</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
 <p>以上就是这次所定义的链表，以及对其所定义的一系列操作，下面运行看看我们的程序是否可以正常运行。</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> list Node</span><br><span class="line">	list = NewList()</span><br><span class="line">	list.add(<span class="number">1</span>)</span><br><span class="line">	list.add(<span class="number">2</span>)</span><br><span class="line">	list.add(<span class="number">3</span>)</span><br><span class="line">	<span class="built_in">println</span>(list.find(<span class="number">1</span>), list.find(<span class="number">2</span>), list.find(<span class="number">3</span>))</span><br><span class="line">	err := list.<span class="built_in">delete</span>(<span class="number">1</span>)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		<span class="built_in">println</span>(err)</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="built_in">println</span>(list.find(<span class="number">3</span>))</span><br><span class="line"></span><br><span class="line">	err = list.update(<span class="number">2</span>, <span class="number">9</span>)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		<span class="built_in">println</span>(err)</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="built_in">println</span>(list.find(<span class="number">9</span>))</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>运行结果：<br><img src="http://static.zybuluo.com/yiranblade/egdzthhwg2da1bkpqlsdtok3/image.png" alt="image.png-9.2kB"></p>
 <p>  可以看到结果正如我们所期待的那样，先给链表中插入三个值，1，2，3.由于是按照头插法插入的，所以输出顺序为逆序。紧接着删除掉第一个位置的元素3，然后3不存在结果输出-1。然后再更新第二个位置的元素为9，输出9确实在第二个位置。</p>
 <h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>链表其本质上就是一组离散结构的顺序表，使用任何语言都可以实现，其类型包括单向链表，双向链表，单向循环链表，双向循环链表等。在日常编程中具有相当广的应用范围，本次我们仅仅是用其完成了一个具有简单增删改查功能的列表容器结构，算是简单的小回顾复习了下吧。</p>
@@ -537,11 +525,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">HTTP/2 HTTP/1.1 HTTP/3.0</a>
+                <a href="javascript:void(0)" class="js-tag color3">Go</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Go</a>
+                <a href="javascript:void(0)" class="js-tag color5">HTTP/2 HTTP/1.1 HTTP/3.0</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -557,10 +545,6 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Latex 文件转换 docx</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">lumen</a>
               </li>
              
@@ -570,6 +554,10 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">thrift</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Latex 文件转换 docx</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -586,6 +574,30 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Linux</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">反射</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">reflection</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">底层</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">变量</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">引用</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">优化</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -613,15 +625,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">反射</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">reflection</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">底层</a>
+                <a href="javascript:void(0)" class="js-tag color3">Reactor</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -637,23 +641,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">变量</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">引用</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">优化</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">跳跃表</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Reactor</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -662,6 +650,34 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">性能优化</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">阿里云</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">sts</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">推荐系统</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">NLP</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">CF-IDF</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">canal</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">ES</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -701,11 +717,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">canal</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">ES</a>
+                <a href="javascript:void(0)" class="js-tag color4">线段树</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -713,7 +725,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">线段树</a>
+                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -730,66 +742,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">world</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">阿里云</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">sts</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">推荐系统</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">NLP</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">CF-IDF</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">acm</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">树</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">字典树</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">前缀树</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">二进制</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">位运算</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">macro</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">model</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">数据库</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -825,6 +777,46 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">macro</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">model</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">数据库</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">acm</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">树</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">字典树</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">前缀树</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">二进制</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">位运算</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">底层分析</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">事务</a>
               </li>
              
@@ -834,10 +826,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Python</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">底层分析</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -857,15 +845,15 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">ACID</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">sysbench</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">压力测试</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">ACID</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -877,6 +865,14 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">UUID</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">MySQL</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">架构</a>
               </li>
              
@@ -885,11 +881,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">UUID</a>
+                <a href="javascript:void(0)" class="js-tag color5">日志服务</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">MySQL</a>
+                <a href="javascript:void(0)" class="js-tag color4">SLS</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -929,14 +925,6 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">日志服务</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">SLS</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">大数据</a>
               </li>
              
@@ -961,6 +949,10 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">熔断</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">容器</a>
               </li>
              
@@ -970,10 +962,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">基本计算器</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">熔断</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1037,7 +1025,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">边框识别 答题卡 试卷 考试</a>
+                <a href="javascript:void(0)" class="js-tag color5">机器学习</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1057,11 +1045,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">缓存</a>
+                <a href="javascript:void(0)" class="js-tag color5">边框识别 答题卡 试卷 考试</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">机器学习</a>
+                <a href="javascript:void(0)" class="js-tag color3">缓存</a>
               </li>
              
               <li class="article-tag-list-item">

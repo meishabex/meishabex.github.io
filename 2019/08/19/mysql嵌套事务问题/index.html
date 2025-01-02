@@ -184,27 +184,35 @@
 </blockquote>
 <p>事务可以是任意嵌套的，但是当父事务被提交或中止时，它的所有子事务（嵌套）事务也都被提交或中止。所有嵌套事务的更改将对父项和同一父项的其他当前活动嵌套事务可见。</p>
 <p>####举个例子</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">start transaction ;</span><br><span class="line">insert into tb_test values (1);</span><br><span class="line">start transaction ;</span><br><span class="line">insert into tb_test values (2);</span><br><span class="line">commit;</span><br><span class="line">rollback;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">start transaction ;</span><br><span class="line">insert into tb_test values (1);</span><br><span class="line">start transaction ;</span><br><span class="line">insert into tb_test values (2);</span><br><span class="line">commit;</span><br><span class="line">rollback;</span><br></pre></td></tr></table></figure>
+
 <p>期望的结果本来是只有子事务提交，外层事务回滚，但事实是1,2都插入成功了即子事务和父事务都提交成功了。</p>
 <h4 id="php中的实际问题"><a href="#php中的实际问题" class="headerlink" title="php中的实际问题"></a>php中的实际问题</h4><p>实际项目中，很常见的一种实现场景是：方法A中使用了事务，A中调用了B方法，B内部也使用了事务。不同框架对嵌套事务的处理机制不一样。</p>
 <ol>
 <li><p>Eloquent</p>
 <p>来看beginTransaction的实现：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * Start a new database transaction.</span><br><span class="line"> *</span><br><span class="line"> * @return void</span><br><span class="line"> * @throws \Exception</span><br><span class="line"> */</span><br><span class="line">public function beginTransaction()</span><br><span class="line">&#123;</span><br><span class="line">    $this-&gt;createTransaction();</span><br><span class="line"></span><br><span class="line">    $this-&gt;transactions++;</span><br><span class="line"></span><br><span class="line">    $this-&gt;fireConnectionEvent(&apos;beganTransaction&apos;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * Start a new database transaction.</span><br><span class="line"> *</span><br><span class="line"> * @return void</span><br><span class="line"> * @throws \Exception</span><br><span class="line"> */</span><br><span class="line">public function beginTransaction()</span><br><span class="line">&#123;</span><br><span class="line">    $this-&gt;createTransaction();</span><br><span class="line"></span><br><span class="line">    $this-&gt;transactions++;</span><br><span class="line"></span><br><span class="line">    $this-&gt;fireConnectionEvent(&#x27;beganTransaction&#x27;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>transactions计数加1，接着是内部createTransaction的实现</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line">     * Create a transaction within the database.</span><br><span class="line">     *</span><br><span class="line">     * @return void</span><br><span class="line">     */</span><br><span class="line">    protected function createTransaction()</span><br><span class="line">    &#123;</span><br><span class="line">        if ($this-&gt;transactions == 0) &#123;</span><br><span class="line">            try &#123;</span><br><span class="line">                $this-&gt;getPdo()-&gt;beginTransaction();</span><br><span class="line">            &#125; catch (Exception $e) &#123;</span><br><span class="line">                $this-&gt;handleBeginTransactionException($e);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; elseif ($this-&gt;transactions &gt;= 1 &amp;&amp; $this-&gt;queryGrammar-&gt;supportsSavepoints()) &#123;</span><br><span class="line">            $this-&gt;createSavepoint();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line">     * Create a transaction within the database.</span><br><span class="line">     *</span><br><span class="line">     * @return void</span><br><span class="line">     */</span><br><span class="line">    protected function createTransaction()</span><br><span class="line">    &#123;</span><br><span class="line">        if ($this-&gt;transactions == 0) &#123;</span><br><span class="line">            try &#123;</span><br><span class="line">                $this-&gt;getPdo()-&gt;beginTransaction();</span><br><span class="line">            &#125; catch (Exception $e) &#123;</span><br><span class="line">                $this-&gt;handleBeginTransactionException($e);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; elseif ($this-&gt;transactions &gt;= 1 &amp;&amp; $this-&gt;queryGrammar-&gt;supportsSavepoints()) &#123;</span><br><span class="line">            $this-&gt;createSavepoint();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
 <p>首先判断是否在最外层，是的话则执行数据库层的begin命令，否则创建保存点，设置保存点的实现如下，执行数据库层的SAVEPOINT命令</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * Create a save point within the database.</span><br><span class="line"> *</span><br><span class="line"> * @return void</span><br><span class="line"> */</span><br><span class="line">protected function createSavepoint()</span><br><span class="line">&#123;</span><br><span class="line">    $this-&gt;getPdo()-&gt;exec(</span><br><span class="line">        $this-&gt;queryGrammar-&gt;compileSavepoint(&apos;trans&apos;.($this-&gt;transactions + 1))</span><br><span class="line">    );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * Create a save point within the database.</span><br><span class="line"> *</span><br><span class="line"> * @return void</span><br><span class="line"> */</span><br><span class="line">protected function createSavepoint()</span><br><span class="line">&#123;</span><br><span class="line">    $this-&gt;getPdo()-&gt;exec(</span><br><span class="line">        $this-&gt;queryGrammar-&gt;compileSavepoint(&#x27;trans&#x27;.($this-&gt;transactions + 1))</span><br><span class="line">    );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>接着看rollback方法的实现</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * Rollback the active database transaction.</span><br><span class="line"> *</span><br><span class="line"> * @param  int|null  $toLevel</span><br><span class="line"> * @return void</span><br><span class="line"> */</span><br><span class="line">public function rollBack($toLevel = null)</span><br><span class="line">&#123;</span><br><span class="line">    // We allow developers to rollback to a certain transaction level. We will verify</span><br><span class="line">    // that this given transaction level is valid before attempting to rollback to</span><br><span class="line">    // that level. If it&apos;s not we will just return out and not attempt anything.</span><br><span class="line">    $toLevel = is_null($toLevel)</span><br><span class="line">                ? $this-&gt;transactions - 1</span><br><span class="line">                : $toLevel;</span><br><span class="line"></span><br><span class="line">    if ($toLevel &lt; 0 || $toLevel &gt;= $this-&gt;transactions) &#123;</span><br><span class="line">        return;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // Next, we will actually perform this rollback within this database and fire the</span><br><span class="line">    // rollback event. We will also set the current transaction level to the given</span><br><span class="line">    // level that was passed into this method so it will be right from here out.</span><br><span class="line">    $this-&gt;performRollBack($toLevel);</span><br><span class="line"></span><br><span class="line">    $this-&gt;transactions = $toLevel;</span><br><span class="line"></span><br><span class="line">    $this-&gt;fireConnectionEvent(&apos;rollingBack&apos;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * Rollback the active database transaction.</span><br><span class="line"> *</span><br><span class="line"> * @param  int|null  $toLevel</span><br><span class="line"> * @return void</span><br><span class="line"> */</span><br><span class="line">public function rollBack($toLevel = null)</span><br><span class="line">&#123;</span><br><span class="line">    // We allow developers to rollback to a certain transaction level. We will verify</span><br><span class="line">    // that this given transaction level is valid before attempting to rollback to</span><br><span class="line">    // that level. If it&#x27;s not we will just return out and not attempt anything.</span><br><span class="line">    $toLevel = is_null($toLevel)</span><br><span class="line">                ? $this-&gt;transactions - 1</span><br><span class="line">                : $toLevel;</span><br><span class="line"></span><br><span class="line">    if ($toLevel &lt; 0 || $toLevel &gt;= $this-&gt;transactions) &#123;</span><br><span class="line">        return;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // Next, we will actually perform this rollback within this database and fire the</span><br><span class="line">    // rollback event. We will also set the current transaction level to the given</span><br><span class="line">    // level that was passed into this method so it will be right from here out.</span><br><span class="line">    $this-&gt;performRollBack($toLevel);</span><br><span class="line"></span><br><span class="line">    $this-&gt;transactions = $toLevel;</span><br><span class="line"></span><br><span class="line">    $this-&gt;fireConnectionEvent(&#x27;rollingBack&#x27;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>和beginTransaction对应的逆向操作是transactions计数-1并且重新设置执行数据库层的SAVEPOINT命令</p>
 <p>最后看commit方法的实现</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * Commit the active database transaction.</span><br><span class="line"> *</span><br><span class="line"> * @return void</span><br><span class="line"> */</span><br><span class="line">public function commit()</span><br><span class="line">&#123;</span><br><span class="line">    if ($this-&gt;transactions == 1) &#123;</span><br><span class="line">        $this-&gt;getPdo()-&gt;commit();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    $this-&gt;transactions = max(0, $this-&gt;transactions - 1);</span><br><span class="line"></span><br><span class="line">    $this-&gt;fireConnectionEvent(&apos;committed&apos;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * Commit the active database transaction.</span><br><span class="line"> *</span><br><span class="line"> * @return void</span><br><span class="line"> */</span><br><span class="line">public function commit()</span><br><span class="line">&#123;</span><br><span class="line">    if ($this-&gt;transactions == 1) &#123;</span><br><span class="line">        $this-&gt;getPdo()-&gt;commit();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    $this-&gt;transactions = max(0, $this-&gt;transactions - 1);</span><br><span class="line"></span><br><span class="line">    $this-&gt;fireConnectionEvent(&#x27;committed&#x27;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>只有在最外层执行才会真正提交，也就是说只有最后一个commit才会是真commit，其余的都是伪commit</p>
 <p>回到开头的例子来说</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">public function handleA()</span><br><span class="line">&#123;</span><br><span class="line">    \DB::beginTransaction();</span><br><span class="line">    $this-&gt;handleA1();</span><br><span class="line">    $this-&gt;handleB();</span><br><span class="line">    \DB::commit();</span><br><span class="line">&#125;</span><br><span class="line">protected function handleA1()</span><br><span class="line">&#123;</span><br><span class="line">    //A内部的处理逻辑</span><br><span class="line">&#125;</span><br><span class="line">public function handleB()</span><br><span class="line">&#123;</span><br><span class="line">    \DB::beginTransaction();</span><br><span class="line">    //B内部的处理逻辑</span><br><span class="line">    \DB::rollBack();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">public function handleA()</span><br><span class="line">&#123;</span><br><span class="line">    \DB::beginTransaction();</span><br><span class="line">    $this-&gt;handleA1();</span><br><span class="line">    $this-&gt;handleB();</span><br><span class="line">    \DB::commit();</span><br><span class="line">&#125;</span><br><span class="line">protected function handleA1()</span><br><span class="line">&#123;</span><br><span class="line">    //A内部的处理逻辑</span><br><span class="line">&#125;</span><br><span class="line">public function handleB()</span><br><span class="line">&#123;</span><br><span class="line">    \DB::beginTransaction();</span><br><span class="line">    //B内部的处理逻辑</span><br><span class="line">    \DB::rollBack();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>数据库层面的操作就会是</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">begin;</span><br><span class="line">insert into tb_test values (3);</span><br><span class="line">savepoint p1;</span><br><span class="line">insert into tb_test values (4);</span><br><span class="line">rollback  to savepoint  p1;</span><br><span class="line">release savepoint p1;</span><br><span class="line">commit;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">begin;</span><br><span class="line">insert into tb_test values (3);</span><br><span class="line">savepoint p1;</span><br><span class="line">insert into tb_test values (4);</span><br><span class="line">rollback  to savepoint  p1;</span><br><span class="line">release savepoint p1;</span><br><span class="line">commit;</span><br></pre></td></tr></table></figure>
+
 <p>最后的结果是只有3保存了4回滚没提交成功。</p>
 </li>
 <li><p>paris</p>
@@ -492,11 +500,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">HTTP/2 HTTP/1.1 HTTP/3.0</a>
+                <a href="javascript:void(0)" class="js-tag color3">Go</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Go</a>
+                <a href="javascript:void(0)" class="js-tag color5">HTTP/2 HTTP/1.1 HTTP/3.0</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -512,10 +520,6 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Latex 文件转换 docx</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">lumen</a>
               </li>
              
@@ -525,6 +529,10 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">thrift</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Latex 文件转换 docx</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -541,6 +549,30 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Linux</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">反射</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">reflection</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">底层</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">变量</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">引用</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">优化</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -568,15 +600,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">反射</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">reflection</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">底层</a>
+                <a href="javascript:void(0)" class="js-tag color3">Reactor</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -592,23 +616,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">变量</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">引用</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">优化</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">跳跃表</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Reactor</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -617,6 +625,34 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">性能优化</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">阿里云</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">sts</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">推荐系统</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">NLP</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">CF-IDF</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">canal</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">ES</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -656,11 +692,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">canal</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">ES</a>
+                <a href="javascript:void(0)" class="js-tag color4">线段树</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -668,7 +700,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">线段树</a>
+                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -685,66 +717,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">world</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">阿里云</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">sts</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">推荐系统</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">NLP</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">CF-IDF</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">acm</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">树</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">字典树</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">前缀树</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">二进制</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">位运算</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">macro</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">model</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">数据库</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -780,6 +752,46 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">macro</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">model</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">数据库</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">acm</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">树</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">字典树</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">前缀树</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">二进制</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">位运算</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">底层分析</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">事务</a>
               </li>
              
@@ -789,10 +801,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Python</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">底层分析</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -812,15 +820,15 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">ACID</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">sysbench</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">压力测试</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">ACID</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -832,6 +840,14 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">UUID</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">MySQL</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">架构</a>
               </li>
              
@@ -840,11 +856,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">UUID</a>
+                <a href="javascript:void(0)" class="js-tag color5">日志服务</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">MySQL</a>
+                <a href="javascript:void(0)" class="js-tag color4">SLS</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -884,14 +900,6 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">日志服务</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">SLS</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">大数据</a>
               </li>
              
@@ -916,6 +924,10 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">熔断</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">容器</a>
               </li>
              
@@ -925,10 +937,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">基本计算器</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">熔断</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -992,7 +1000,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">边框识别 答题卡 试卷 考试</a>
+                <a href="javascript:void(0)" class="js-tag color5">机器学习</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1012,11 +1020,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">缓存</a>
+                <a href="javascript:void(0)" class="js-tag color5">边框识别 答题卡 试卷 考试</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">机器学习</a>
+                <a href="javascript:void(0)" class="js-tag color3">缓存</a>
               </li>
              
               <li class="article-tag-list-item">

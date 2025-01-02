@@ -9,27 +9,27 @@
   <link rel="dns-prefetch" href="https://bex.meishakeji.com">
   <title>分析php的系统调用 | Meisha Bex</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="分析php的系统调用前言某一天，突然发现cpu占用特别高，top了一下发现是php导致的。那应该怎么去处理呢？ 尝试去解决 查看日志，日志也没报错。  只能把php-fpm重启了，cpu早降下来了。可是才一阵子，cpu又飙上来了。   使用strace去跟踪php的调用starce的安装1yum install strace strace 指令的使用，这里就不多解释了。 模拟多次读写文件代码 12">
+  <meta name="description" content="分析php的系统调用前言某一天，突然发现cpu占用特别高，top了一下发现是php导致的。那应该怎么去处理呢？ 尝试去解决 查看日志，日志也没报错。  只能把php-fpm重启了，cpu早降下来了。可是才一阵子，cpu又飙上来了。   使用strace去跟踪php的调用starce的安装1yum install strace  strace 指令的使用，这里就不多解释了。 模拟多次读写文件代码 1">
 <meta property="og:type" content="article">
 <meta property="og:title" content="分析php的系统调用">
 <meta property="og:url" content="https://bex.meishakeji.com/2019/03/11/%E5%88%86%E6%9E%90php%E7%9A%84%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8/index.html">
 <meta property="og:site_name" content="Meisha Bex">
-<meta property="og:description" content="分析php的系统调用前言某一天，突然发现cpu占用特别高，top了一下发现是php导致的。那应该怎么去处理呢？ 尝试去解决 查看日志，日志也没报错。  只能把php-fpm重启了，cpu早降下来了。可是才一阵子，cpu又飙上来了。   使用strace去跟踪php的调用starce的安装1yum install strace strace 指令的使用，这里就不多解释了。 模拟多次读写文件代码 12">
+<meta property="og:description" content="分析php的系统调用前言某一天，突然发现cpu占用特别高，top了一下发现是php导致的。那应该怎么去处理呢？ 尝试去解决 查看日志，日志也没报错。  只能把php-fpm重启了，cpu早降下来了。可是才一阵子，cpu又飙上来了。   使用strace去跟踪php的调用starce的安装1yum install strace  strace 指令的使用，这里就不多解释了。 模拟多次读写文件代码 1">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://bex.meishakeji.com/2019/03/11/%E5%88%86%E6%9E%90php%E7%9A%84%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8/image-20190310184848503.png">
-<meta property="og:image" content="https://bex.meishakeji.com/2019/03/11/%E5%88%86%E6%9E%90php%E7%9A%84%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8/image-20190310180701827.png">
-<meta property="og:image" content="https://bex.meishakeji.com/2019/03/11/%E5%88%86%E6%9E%90php%E7%9A%84%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8/image-20190310182431546.png">
-<meta property="og:image" content="https://bex.meishakeji.com/2019/03/11/%E5%88%86%E6%9E%90php%E7%9A%84%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8/image-20190310182859640.png">
-<meta property="og:image" content="https://bex.meishakeji.com/2019/03/11/%E5%88%86%E6%9E%90php%E7%9A%84%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8/image-20190310184822781.png">
-<meta property="og:image" content="https://bex.meishakeji.com/2019/03/11/%E5%88%86%E6%9E%90php%E7%9A%84%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8/image-20190310190409623.png">
-<meta property="og:image" content="https://bex.meishakeji.com/2019/03/11/%E5%88%86%E6%9E%90php%E7%9A%84%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8/image-20190310190515800.png">
+<meta property="og:image" content="https://bex.meishakeji.com/.com//image-20190310184848503.png">
+<meta property="og:image" content="https://bex.meishakeji.com/.com//image-20190310180701827.png">
+<meta property="og:image" content="https://bex.meishakeji.com/.com//image-20190310182431546.png">
+<meta property="og:image" content="https://bex.meishakeji.com/.com//image-20190310182859640.png">
+<meta property="og:image" content="https://bex.meishakeji.com/.com//image-20190310184822781.png">
+<meta property="og:image" content="https://bex.meishakeji.com/.com//image-20190310190409623.png">
+<meta property="og:image" content="https://bex.meishakeji.com/.com//image-20190310190515800.png">
 <meta property="article:published_time" content="2019-03-11T00:32:57.000Z">
 <meta property="article:modified_time" content="2024-12-31T14:59:26.384Z">
 <meta property="article:author" content="Meisha Bex">
 <meta property="article:tag" content="php">
 <meta property="article:tag" content="优化">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://bex.meishakeji.com/2019/03/11/%E5%88%86%E6%9E%90php%E7%9A%84%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8/image-20190310184848503.png">
+<meta name="twitter:image" content="https://bex.meishakeji.com/.com//image-20190310184848503.png">
   
     <link rel="alternative" href="/atom.xml" title="Meisha Bex" type="application/atom+xml">
   
@@ -192,30 +192,37 @@
 </li>
 </ol>
 <h2 id="使用strace去跟踪php的调用"><a href="#使用strace去跟踪php的调用" class="headerlink" title="使用strace去跟踪php的调用"></a>使用strace去跟踪php的调用</h2><h3 id="starce的安装"><a href="#starce的安装" class="headerlink" title="starce的安装"></a>starce的安装</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install strace</span><br></pre></td></tr></table></figure>
+
 <p>strace 指令的使用，这里就不多解释了。</p>
 <h3 id="模拟多次读写文件"><a href="#模拟多次读写文件" class="headerlink" title="模拟多次读写文件"></a>模拟多次读写文件</h3><p>代码</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> ($i= <span class="number">0</span> ; $i &lt; <span class="number">50000</span>; $i ++) &#123;</span><br><span class="line">    $filename=<span class="string">"./logs/text.txt"</span>;</span><br><span class="line">    $handle=fopen($filename,<span class="string">"a+"</span>);</span><br><span class="line">    fwrite($handle,<span class="string">"test\n"</span>);</span><br><span class="line">    fclose($handle);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>如下，cpu使用率一下就上来了。<br><img src="/2019/03/11/分析php的系统调用/image-20190310184848503.png" alt="image-20190310184848503"></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="variable">$i</span>= <span class="number">0</span> ; <span class="variable">$i</span> &lt; <span class="number">50000</span>; <span class="variable">$i</span> ++) &#123;</span><br><span class="line">    <span class="variable">$filename</span>=<span class="string">&quot;./logs/text.txt&quot;</span>;</span><br><span class="line">    <span class="variable">$handle</span>=<span class="title function_ invoke__">fopen</span>(<span class="variable">$filename</span>,<span class="string">&quot;a+&quot;</span>);</span><br><span class="line">    <span class="title function_ invoke__">fwrite</span>(<span class="variable">$handle</span>,<span class="string">&quot;test\n&quot;</span>);</span><br><span class="line">    <span class="title function_ invoke__">fclose</span>(<span class="variable">$handle</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如下，cpu使用率一下就上来了。<br><img src="/.com//image-20190310184848503.png" alt="image-20190310184848503"></p>
 <p>使用 strace -c -p <strong>25792</strong>（此数字为跑上面代码的脚本的pid），结果如下：</p>
-<p><img src="/2019/03/11/分析php的系统调用/image-20190310180701827.png" alt="image-20190310180701827"></p>
+<p><img src="/.com//image-20190310180701827.png" alt="image-20190310180701827"></p>
 <p>可以看得出有大量的 lseek、open、write、close等的系统调用。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">lseek：lseek函数可以改变文件的cfo。所有打开的文件都有一个当前文件偏移量（current file offset），简称为 	cfo。读写操作通常开始于 cfo，并且使 cfo增大，增量为读写的字节数。</span><br><span class="line">open：打开文件</span><br><span class="line">write：写文件</span><br><span class="line">close：关闭文件</span><br><span class="line">fstat：获取文件状态信息</span><br><span class="line">getcwd：获取文件目录</span><br><span class="line">munmap：去除内存页映射</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">lseek：lseek函数可以改变文件的cfo。所有打开的文件都有一个当前文件偏移量（current file offset），简称为 	cfo。读写操作通常开始于 cfo，并且使 cfo增大，增量为读写的字节数。</span><br><span class="line">open：打开文件</span><br><span class="line">write：写文件</span><br><span class="line">close：关闭文件</span><br><span class="line">fstat：获取文件状态信息</span><br><span class="line">getcwd：获取文件目录</span><br><span class="line">munmap：去除内存页映射</span><br></pre></td></tr></table></figure>
+
 <p>可能使用以下命令，获取更详细的结果：</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">strace -o /tmp/strace_output.log -T -tt -F -e trace=all -p 25792</span><br></pre></td></tr></table></figure>
+
 <p>结果如下：</p>
-<p><img src="/2019/03/11/分析php的系统调用/image-20190310182431546.png" alt="image-20190310182431546"></p>
+<p><img src="/.com//image-20190310182431546.png" alt="image-20190310182431546"></p>
 <p>↑↑↑↑↑ 会发现上图大量这样的重复的日志，因为上面的测试的代码就是不断这样的读写，以及关闭文件。</p>
-<p><img src="/2019/03/11/分析php的系统调用/image-20190310182859640.png" alt="image-20190310182859640"></p>
+<p><img src="/.com//image-20190310182859640.png" alt="image-20190310182859640"></p>
 <p>↑↑↑↑↑ 到最后，会有释放内存映射这样的操作，从上图开始到下图的结束，总共耗时了30s多。</p>
 <p><strong>总结</strong>：尽量少进行文件操作，以及注意文件的打开和关闭。</p>
 <h3 id="模拟多次连接数据库并读取"><a href="#模拟多次连接数据库并读取" class="headerlink" title="模拟多次连接数据库并读取"></a>模拟多次连接数据库并读取</h3><p>代码</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">for ($i= 0 ; $i &lt; 5000; $i ++) &#123;</span><br><span class="line">	$conn = new mysqli($servername, $username, $password, $dbname);</span><br><span class="line">	$sql = &quot;SELECT * FROM tb_test where id = &apos;***&apos;&quot;;</span><br><span class="line">	$result = $conn-&gt;query($sql);</span><br><span class="line"></span><br><span class="line">	if ($result-&gt;num_rows &gt; 0) &#123;</span><br><span class="line">    	// 输出数据</span><br><span class="line">    	while($row = $result-&gt;fetch_assoc()) &#123;</span><br><span class="line">    		echo &quot;id: &quot; . $row[&quot;id&quot;]. &quot;\n&quot;;</span><br><span class="line">		&#125;</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">   	 	echo &quot;0 结果&quot;;</span><br><span class="line">    &#125;</span><br><span class="line">	$conn-&gt;close();	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><img src="/2019/03/11/分析php的系统调用/image-20190310184822781.png" alt="image-20190310184822781"></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">recvfrom：接受信息</span><br><span class="line">sendto：发送信息</span><br><span class="line">connect：连接远程主机</span><br><span class="line">setsockopt：设置端口参数</span><br><span class="line">socket：建立socket</span><br><span class="line">getsockopt：获取端口设置</span><br><span class="line">gettimeofday：获取时间和时区</span><br><span class="line">fcntl：文件控制</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">for ($i= 0 ; $i &lt; 5000; $i ++) &#123;</span><br><span class="line">	$conn = new mysqli($servername, $username, $password, $dbname);</span><br><span class="line">	$sql = &quot;SELECT * FROM tb_test where id = &#x27;***&#x27;&quot;;</span><br><span class="line">	$result = $conn-&gt;query($sql);</span><br><span class="line"></span><br><span class="line">	if ($result-&gt;num_rows &gt; 0) &#123;</span><br><span class="line">    	// 输出数据</span><br><span class="line">    	while($row = $result-&gt;fetch_assoc()) &#123;</span><br><span class="line">    		echo &quot;id: &quot; . $row[&quot;id&quot;]. &quot;\n&quot;;</span><br><span class="line">		&#125;</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">   	 	echo &quot;0 结果&quot;;</span><br><span class="line">    &#125;</span><br><span class="line">	$conn-&gt;close();	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p><img src="/.com//image-20190310184822781.png" alt="image-20190310184822781"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">recvfrom：接受信息</span><br><span class="line">sendto：发送信息</span><br><span class="line">connect：连接远程主机</span><br><span class="line">setsockopt：设置端口参数</span><br><span class="line">socket：建立socket</span><br><span class="line">getsockopt：获取端口设置</span><br><span class="line">gettimeofday：获取时间和时区</span><br><span class="line">fcntl：文件控制</span><br></pre></td></tr></table></figure>
+
 <p>从上图可以看出，有大量的连接和关闭的操作，这也是很消耗系统资源的。</p>
 <p>部分详细结果如下：</p>
-<p><img src="/2019/03/11/分析php的系统调用/image-20190310190409623.png" alt="image-20190310190409623"></p>
-<p><img src="/2019/03/11/分析php的系统调用/image-20190310190515800.png" alt="image-20190310190515800"></p>
+<p><img src="/.com//image-20190310190409623.png" alt="image-20190310190409623"></p>
+<p><img src="/.com//image-20190310190515800.png" alt="image-20190310190515800"></p>
 <p>↑↑↑↑↑ 会发现上图大量不断的连接、发送、接收、关闭等的操作，相当消耗系统资源。</p>
 <p><strong>总结</strong>：像上面这样的操作是相当消耗资源，而且还会影响到数据库机器的性能。比如要注意，数据库实例使用单例，不要不断建立连接，关闭连接。也可以使用一些数据库的中间件，减少与数据库机器的连接。</p>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ol>
@@ -499,11 +506,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">HTTP/2 HTTP/1.1 HTTP/3.0</a>
+                <a href="javascript:void(0)" class="js-tag color3">Go</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Go</a>
+                <a href="javascript:void(0)" class="js-tag color5">HTTP/2 HTTP/1.1 HTTP/3.0</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -519,10 +526,6 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Latex 文件转换 docx</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">lumen</a>
               </li>
              
@@ -532,6 +535,10 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">thrift</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Latex 文件转换 docx</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -548,6 +555,30 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Linux</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">反射</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">reflection</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">底层</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">变量</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">引用</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">优化</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -575,15 +606,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">反射</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">reflection</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">底层</a>
+                <a href="javascript:void(0)" class="js-tag color3">Reactor</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -599,23 +622,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">变量</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">引用</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">优化</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">跳跃表</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Reactor</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -624,6 +631,34 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">性能优化</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">阿里云</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">sts</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">推荐系统</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">NLP</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">CF-IDF</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">canal</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">ES</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -663,11 +698,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">canal</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">ES</a>
+                <a href="javascript:void(0)" class="js-tag color4">线段树</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -675,7 +706,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">线段树</a>
+                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -692,66 +723,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">world</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">阿里云</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">sts</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">推荐系统</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">NLP</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">CF-IDF</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">acm</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">树</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">字典树</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">前缀树</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">二进制</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">位运算</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">macro</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">model</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">数据库</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -787,6 +758,46 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">macro</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">model</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">数据库</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">acm</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">树</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">字典树</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">前缀树</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">二进制</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">位运算</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">底层分析</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">事务</a>
               </li>
              
@@ -796,10 +807,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Python</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">底层分析</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -819,15 +826,15 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">ACID</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">sysbench</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">压力测试</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">ACID</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -839,6 +846,14 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">UUID</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">MySQL</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">架构</a>
               </li>
              
@@ -847,11 +862,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">UUID</a>
+                <a href="javascript:void(0)" class="js-tag color5">日志服务</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">MySQL</a>
+                <a href="javascript:void(0)" class="js-tag color4">SLS</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -891,14 +906,6 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">日志服务</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">SLS</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">大数据</a>
               </li>
              
@@ -923,6 +930,10 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">熔断</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">容器</a>
               </li>
              
@@ -932,10 +943,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">基本计算器</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">熔断</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -999,7 +1006,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">边框识别 答题卡 试卷 考试</a>
+                <a href="javascript:void(0)" class="js-tag color5">机器学习</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1019,11 +1026,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">缓存</a>
+                <a href="javascript:void(0)" class="js-tag color5">边框识别 答题卡 试卷 考试</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">机器学习</a>
+                <a href="javascript:void(0)" class="js-tag color3">缓存</a>
               </li>
              
               <li class="article-tag-list-item">

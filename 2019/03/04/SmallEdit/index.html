@@ -9,12 +9,12 @@
   <link rel="dns-prefetch" href="https://bex.meishakeji.com">
   <title>最小编辑距离 | Meisha Bex</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="前言全日制有一个规划中的小游戏，其最优解与最小编辑距离问题类似，所以把这个题翻了出来，炒炒冷饭。 题目来源 编辑距离 https:&#x2F;&#x2F;leetcode-cn.com&#x2F;problems&#x2F;edit-distance&#x2F;  算法描述两种办法，dp和动态规划。但是，如果不出意外，dp会很慢，因为他测试样例有几个字符串长度几百的，最长的500。 假设有两个字符串A和B，如果A通过多次执行删除&#x2F;替换&#x2F;插入一个字">
+  <meta name="description" content="前言全日制有一个规划中的小游戏，其最优解与最小编辑距离问题类似，所以把这个题翻了出来，炒炒冷饭。 题目来源 编辑距离 https:&#x2F;&#x2F;leetcode-cn.com&#x2F;problems&#x2F;edit-distance&#x2F;  算法描述两种办法，dp和动态规划。但是，如果不出意外，dp会很慢，因为他测试样例有几个字符串长度几百的，最长的500。 假设有两个字符串A和B，如果A通过多次执行删除&#x2F;替换&amp;">
 <meta property="og:type" content="article">
 <meta property="og:title" content="最小编辑距离">
 <meta property="og:url" content="https://bex.meishakeji.com/2019/03/04/SmallEdit/index.html">
 <meta property="og:site_name" content="Meisha Bex">
-<meta property="og:description" content="前言全日制有一个规划中的小游戏，其最优解与最小编辑距离问题类似，所以把这个题翻了出来，炒炒冷饭。 题目来源 编辑距离 https:&#x2F;&#x2F;leetcode-cn.com&#x2F;problems&#x2F;edit-distance&#x2F;  算法描述两种办法，dp和动态规划。但是，如果不出意外，dp会很慢，因为他测试样例有几个字符串长度几百的，最长的500。 假设有两个字符串A和B，如果A通过多次执行删除&#x2F;替换&#x2F;插入一个字">
+<meta property="og:description" content="前言全日制有一个规划中的小游戏，其最优解与最小编辑距离问题类似，所以把这个题翻了出来，炒炒冷饭。 题目来源 编辑距离 https:&#x2F;&#x2F;leetcode-cn.com&#x2F;problems&#x2F;edit-distance&#x2F;  算法描述两种办法，dp和动态规划。但是，如果不出意外，dp会很慢，因为他测试样例有几个字符串长度几百的，最长的500。 假设有两个字符串A和B，如果A通过多次执行删除&#x2F;替换&amp;">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2019-03-04T01:44:08.000Z">
 <meta property="article:modified_time" content="2024-12-31T14:59:26.365Z">
@@ -181,10 +181,10 @@
           
             <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>全日制有一个规划中的小游戏，其最优解与最小编辑距离问题类似，所以把这个题翻了出来，炒炒冷饭。</p>
 <h3 id="题目来源"><a href="#题目来源" class="headerlink" title="题目来源"></a>题目来源</h3><ol start="72">
-<li>编辑距离 <a href="https://leetcode-cn.com/problems/edit-distance/" target="_blank" rel="noopener">https://leetcode-cn.com/problems/edit-distance/</a></li>
+<li>编辑距离 <a href="https://leetcode-cn.com/problems/edit-distance/">https://leetcode-cn.com/problems/edit-distance/</a></li>
 </ol>
 <h3 id="算法描述"><a href="#算法描述" class="headerlink" title="算法描述"></a>算法描述</h3><p>两种办法，dp和动态规划。但是，如果不出意外，dp会很慢，因为他测试样例有几个字符串长度几百的，最长的500。</p>
-<p>假设有两个字符串A和B，如果A通过多次执行删除/替换/插入一个字符，最终可以变换为字符串B，则执行的次数就是编辑距离。</p>
+<p>假设有两个字符串A和B，如果A通过多次执行删除&#x2F;替换&#x2F;插入一个字符，最终可以变换为字符串B，则执行的次数就是编辑距离。</p>
 <p>比如，存在字符串horse和ros</p>
 <ol>
 <li>替换r-&gt;h，ros-&gt;hos</li>
@@ -194,61 +194,7 @@
 <p>这样，我们就可以得知，horse最少需要通过3次操作才能变为ros。</p>
 <p>我们如果希望用动态规划的办法去求解，则首先需要有一个初始状态和一个变化过程，并有一张表去记录这个初始状态和变化过程。</p>
 <p>假设，有字符串str1和str2，长度分别为len1，和len2，则可以设置表distance[len1+1][len2+1]。用distance[i][j]表示截取str1长度i的子串与截取str2的长度为j的子串的匹配。这时，我们就可以轻易确定初始状态，distance[i][0]表示str1各个子串与str2的空子串编辑距离，distance[0][j]表示str2各个子串与str1的空子串编辑距离。初始状态如下表。</p>
-<table>
-<thead>
-<tr>
-<th></th>
-<th></th>
-<th>r</th>
-<th>o</th>
-<th>s</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td></td>
-<td>0</td>
-<td>1</td>
-<td>2</td>
-<td>3</td>
-</tr>
-<tr>
-<td>h</td>
-<td>1</td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>o</td>
-<td>2</td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>r</td>
-<td>3</td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>s</td>
-<td>4</td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>e</td>
-<td>5</td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-</tbody>
-</table>
+<p>|  | | r | o | s |<br>| ———— | ———— | ———— |<br>|  | 0 | 1 | 2 | 3|<br>| h | 1 |  | ||<br>| o | 2 |  |||<br>| r | 3 |  |||<br>| s | 4 |  |||<br>| e | 5 | ||||</p>
 <p>得到初始状态之后，就是确定变化过程了。题目已经明确要求，只允许三种操作。</p>
 <ol>
 <li>插入一个字符</li>
@@ -267,7 +213,8 @@
 <p>但是，要知道我们要求的是最小编辑距离。以上三种操作都能让我们得到<code>distance[i][j]</code>的值，但不一定是<code>distance[i][j]</code>的最小值，因此我们要取以上三种情况的最小值作为<code>distance[i][j]</code>的最小值。</p>
 <p>按照这个步骤，从distance[1][1]一直遍历到distance[len1][len2]就能得到最终结果了。</p>
 <h3 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h3><p>我直接按照上面的思路写的代码，有优化空间，百度很多，这里我不搬砖，但是按照我的了解，思路都是一样的，仅初始化过程不同的代码有明显差别。distance的取值过程是一样的。</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">minDistance</span><span class="params">(<span class="built_in">string</span> word1, <span class="built_in">string</span> word2)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len1 = word1.length(), len2 = word2.length(), i = <span class="number">0</span>, j = <span class="number">0</span>, up = <span class="number">0</span>, left = <span class="number">0</span>, upLeft = <span class="number">0</span>;</span><br><span class="line">		<span class="comment">// 编辑距离表</span></span><br><span class="line">		<span class="keyword">int</span> distance[<span class="number">501</span>][<span class="number">501</span>] = &#123;<span class="number">0</span>&#125;;</span><br><span class="line">		<span class="comment">// 初始化</span></span><br><span class="line">		<span class="keyword">for</span> (i = <span class="number">0</span>; i&lt;= len1; i++) &#123;</span><br><span class="line">			<span class="keyword">for</span> (j = <span class="number">0</span>; j &lt;= len2; j++) &#123;</span><br><span class="line">				<span class="keyword">if</span> (i == <span class="number">0</span>) &#123;</span><br><span class="line">					distance[i][j] = j;</span><br><span class="line">				&#125; <span class="keyword">else</span> <span class="keyword">if</span> (j == <span class="number">0</span>) &#123;</span><br><span class="line">					distance[i][j] = i;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="comment">// 计算</span></span><br><span class="line">		<span class="keyword">for</span> (i = <span class="number">1</span>; i&lt;= len1; i++) &#123;</span><br><span class="line">			<span class="keyword">for</span> (j = <span class="number">1</span>; j &lt;= len2; j++) &#123;</span><br><span class="line">				up = distance[i<span class="number">-1</span>][j] + <span class="number">1</span>;</span><br><span class="line">				left = distance[i][j<span class="number">-1</span>] + <span class="number">1</span>;</span><br><span class="line">				upLeft = distance[i<span class="number">-1</span>][j<span class="number">-1</span>] + (word1[i<span class="number">-1</span>] == word2[j<span class="number">-1</span>] ? <span class="number">0</span> : <span class="number">1</span>);</span><br><span class="line">				distance[i][j] = up &gt; left ? (left &gt; upLeft ? upLeft : left) : (up &gt; upLeft ? upLeft : up);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> distance[len1][len2];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">minDistance</span><span class="params">(string word1, string word2)</span> </span>&#123;</span><br><span class="line">        <span class="type">int</span> len1 = word<span class="number">1.l</span>ength(), len2 = word<span class="number">2.l</span>ength(), i = <span class="number">0</span>, j = <span class="number">0</span>, up = <span class="number">0</span>, left = <span class="number">0</span>, upLeft = <span class="number">0</span>;</span><br><span class="line">		<span class="comment">// 编辑距离表</span></span><br><span class="line">		<span class="type">int</span> distance[<span class="number">501</span>][<span class="number">501</span>] = &#123;<span class="number">0</span>&#125;;</span><br><span class="line">		<span class="comment">// 初始化</span></span><br><span class="line">		<span class="keyword">for</span> (i = <span class="number">0</span>; i&lt;= len1; i++) &#123;</span><br><span class="line">			<span class="keyword">for</span> (j = <span class="number">0</span>; j &lt;= len2; j++) &#123;</span><br><span class="line">				<span class="keyword">if</span> (i == <span class="number">0</span>) &#123;</span><br><span class="line">					distance[i][j] = j;</span><br><span class="line">				&#125; <span class="keyword">else</span> <span class="keyword">if</span> (j == <span class="number">0</span>) &#123;</span><br><span class="line">					distance[i][j] = i;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="comment">// 计算</span></span><br><span class="line">		<span class="keyword">for</span> (i = <span class="number">1</span>; i&lt;= len1; i++) &#123;</span><br><span class="line">			<span class="keyword">for</span> (j = <span class="number">1</span>; j &lt;= len2; j++) &#123;</span><br><span class="line">				up = distance[i<span class="number">-1</span>][j] + <span class="number">1</span>;</span><br><span class="line">				left = distance[i][j<span class="number">-1</span>] + <span class="number">1</span>;</span><br><span class="line">				upLeft = distance[i<span class="number">-1</span>][j<span class="number">-1</span>] + (word1[i<span class="number">-1</span>] == word2[j<span class="number">-1</span>] ? <span class="number">0</span> : <span class="number">1</span>);</span><br><span class="line">				distance[i][j] = up &gt; left ? (left &gt; upLeft ? upLeft : left) : (up &gt; upLeft ? upLeft : up);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> distance[len1][len2];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
 <h3 id="算法应用"><a href="#算法应用" class="headerlink" title="算法应用"></a>算法应用</h3><p>编辑距离实际上可以反应两个字符串的相似程度，类似的还有一个汉明距，他们在信息纠错、图像识别等多个领域都有应用，可以参考pHash算法（图像感知算法）， 这里面就用到了编辑距或汉明距判断图像相似度。<br>此外，有一点想法不知是否正确，如果这样求出来的是最小编辑距离，那么用较长的一个字符串其长度值减去这个最小编辑距离是否就是『最大匹配距离』，这个想法简单验证了几个字符串，似乎是合理的，但是样例不够全面，因此不敢定论。<br>更多扩展应用可以自行百度，欢迎交流。</p>
 
           
@@ -557,11 +504,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">HTTP/2 HTTP/1.1 HTTP/3.0</a>
+                <a href="javascript:void(0)" class="js-tag color3">Go</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Go</a>
+                <a href="javascript:void(0)" class="js-tag color5">HTTP/2 HTTP/1.1 HTTP/3.0</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -577,10 +524,6 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Latex 文件转换 docx</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">lumen</a>
               </li>
              
@@ -590,6 +533,10 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">thrift</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Latex 文件转换 docx</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -606,6 +553,30 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Linux</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">反射</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">reflection</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">底层</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">变量</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">引用</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">优化</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -633,15 +604,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">反射</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">reflection</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">底层</a>
+                <a href="javascript:void(0)" class="js-tag color3">Reactor</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -657,23 +620,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">变量</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">引用</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">优化</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">跳跃表</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Reactor</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -682,6 +629,34 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">性能优化</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">阿里云</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">sts</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">推荐系统</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">NLP</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">CF-IDF</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">canal</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">ES</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -721,11 +696,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">canal</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">ES</a>
+                <a href="javascript:void(0)" class="js-tag color4">线段树</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -733,7 +704,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">线段树</a>
+                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -750,66 +721,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">world</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">阿里云</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">sts</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">推荐系统</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">NLP</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">CF-IDF</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">acm</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">树</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">字典树</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">前缀树</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">二进制</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">位运算</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">macro</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">model</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">数据库</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -845,6 +756,46 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">macro</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">model</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">数据库</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">acm</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">树</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">字典树</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">前缀树</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">二进制</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">位运算</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">底层分析</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">事务</a>
               </li>
              
@@ -854,10 +805,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Python</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">底层分析</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -877,15 +824,15 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">ACID</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">sysbench</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">压力测试</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">ACID</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -897,6 +844,14 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">UUID</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">MySQL</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">架构</a>
               </li>
              
@@ -905,11 +860,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">UUID</a>
+                <a href="javascript:void(0)" class="js-tag color5">日志服务</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">MySQL</a>
+                <a href="javascript:void(0)" class="js-tag color4">SLS</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -949,14 +904,6 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">日志服务</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">SLS</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">大数据</a>
               </li>
              
@@ -981,6 +928,10 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">熔断</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">容器</a>
               </li>
              
@@ -990,10 +941,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">基本计算器</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">熔断</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1057,7 +1004,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">边框识别 答题卡 试卷 考试</a>
+                <a href="javascript:void(0)" class="js-tag color5">机器学习</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1077,11 +1024,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">缓存</a>
+                <a href="javascript:void(0)" class="js-tag color5">边框识别 答题卡 试卷 考试</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">机器学习</a>
+                <a href="javascript:void(0)" class="js-tag color3">缓存</a>
               </li>
              
               <li class="article-tag-list-item">

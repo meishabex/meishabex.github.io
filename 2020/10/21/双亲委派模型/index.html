@@ -9,12 +9,12 @@
   <link rel="dns-prefetch" href="https://bex.meishakeji.com">
   <title>双亲委派模型 | Meisha Bex</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="概念双亲委派模型是指当类加载器收到类加载任务时，会先交由自己的父类加载器去尝试加载，最终会传递到BootstrapClassLoader，只有当父类加载器无法加载任务时才会尝试自己加载。 常见类加载器BootstrapClassLoader（启动类加载器）：负责核心类库的加载，rt.jar，java.lang.*，JVM_HOME&#x2F;lib目录下的，构造ExtClassLoader和AppClass">
+  <meta name="description" content="概念双亲委派模型是指当类加载器收到类加载任务时，会先交由自己的父类加载器去尝试加载，最终会传递到BootstrapClassLoader，只有当父类加载器无法加载任务时才会尝试自己加载。 常见类加载器BootstrapClassLoader（启动类加载器）：负责核心类库的加载，rt.jar，java.lang.*，JVM_HOME&#x2F;lib目录下的，构造ExtClassLoader和App">
 <meta property="og:type" content="article">
 <meta property="og:title" content="双亲委派模型">
 <meta property="og:url" content="https://bex.meishakeji.com/2020/10/21/%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%B4%BE%E6%A8%A1%E5%9E%8B/index.html">
 <meta property="og:site_name" content="Meisha Bex">
-<meta property="og:description" content="概念双亲委派模型是指当类加载器收到类加载任务时，会先交由自己的父类加载器去尝试加载，最终会传递到BootstrapClassLoader，只有当父类加载器无法加载任务时才会尝试自己加载。 常见类加载器BootstrapClassLoader（启动类加载器）：负责核心类库的加载，rt.jar，java.lang.*，JVM_HOME&#x2F;lib目录下的，构造ExtClassLoader和AppClass">
+<meta property="og:description" content="概念双亲委派模型是指当类加载器收到类加载任务时，会先交由自己的父类加载器去尝试加载，最终会传递到BootstrapClassLoader，只有当父类加载器无法加载任务时才会尝试自己加载。 常见类加载器BootstrapClassLoader（启动类加载器）：负责核心类库的加载，rt.jar，java.lang.*，JVM_HOME&#x2F;lib目录下的，构造ExtClassLoader和App">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2020-10-21T06:34:59.000Z">
 <meta property="article:modified_time" content="2024-12-31T14:59:26.428Z">
@@ -178,24 +178,31 @@
           
           
             <h3 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h3><p>双亲委派模型是指当类加载器收到类加载任务时，会先交由自己的父类加载器去尝试加载，最终会传递到BootstrapClassLoader，只有当父类加载器无法加载任务时才会尝试自己加载。</p>
-<h3 id="常见类加载器"><a href="#常见类加载器" class="headerlink" title="常见类加载器"></a>常见类加载器</h3><p>BootstrapClassLoader（启动类加载器）：负责核心类库的加载，rt.jar，java.lang.*，JVM_HOME/lib目录下的，构造ExtClassLoader和AppClassLoader。</p>
-<p>ExtClassLoader（拓展类加载器）：负责加载jre/lib/ext的jar。</p>
+<h3 id="常见类加载器"><a href="#常见类加载器" class="headerlink" title="常见类加载器"></a>常见类加载器</h3><p>BootstrapClassLoader（启动类加载器）：负责核心类库的加载，rt.jar，java.lang.*，JVM_HOME&#x2F;lib目录下的，构造ExtClassLoader和AppClassLoader。</p>
+<p>ExtClassLoader（拓展类加载器）：负责加载jre&#x2F;lib&#x2F;ext的jar。</p>
 <p>AppClassLoader（系统类加载器）：加载应用程序的主函数类。</p>
 <h3 id="双亲委派模型的打破"><a href="#双亲委派模型的打破" class="headerlink" title="双亲委派模型的打破"></a>双亲委派模型的打破</h3><p>Java SPI机制：SPI全称Service Provider Interface，用于接入产商自定义组件，例如JDBC。SPI的思想是系统抽象的各个模块有多种实现方案，例如JDBC，日志模块等。面向对象中，我们倾向于基于接口编程，模块直接不对实现类进行硬编码，否则会破坏开闭原则。为了能在模块装配的时候不需要在程序中显示声明，需要服务发现机制，SPI就是提供这样一个服务。</p>
-<p>SPI的约定：当服务提供者提供服务接口后，在jar包下的META-INF/services/目录同时创建一个以服务接口命名的具体实现类文件。当外部程序装配模块的时候，能够以META-INF/services/里的配置文件找到具体的实现类并实例化。jdk中提供了java.util.ServiceLoader进行实现。</p>
+<p>SPI的约定：当服务提供者提供服务接口后，在jar包下的META-INF&#x2F;services&#x2F;目录同时创建一个以服务接口命名的具体实现类文件。当外部程序装配模块的时候，能够以META-INF&#x2F;services&#x2F;里的配置文件找到具体的实现类并实例化。jdk中提供了java.util.ServiceLoader进行实现。</p>
 <p>以JDBC为例，我们通常用以下方式获取数据库连接</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">String url = &quot;jdbc:mysql://localhost:3306/testdb&quot;;    </span><br><span class="line">Connection conn = java.sql.DriverManager.getConnection(url, &quot;name&quot;, &quot;password&quot;);</span><br></pre></td></tr></table></figure>
-<p>getConnection()继续调用了重载的getConnection方法<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">public static Connection getConnection(String url,</span><br><span class="line">    java.util.Properties info) throws SQLException &#123;</span><br><span class="line"></span><br><span class="line">    return (getConnection(url, info, Reflection.getCallerClass()));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>重载的方法，省略若干代码，看注释可以知道此时得到的callerCL为null，那么就会执行Thread.currentThread().getContextClassLoader()并赋值给callerCL，而且后面调用isDriverAllowed(aDriver.driver, callerCL)就是使用此时获取的类加载器进行类的加载。于是重点就是停留在Thread.currentThread().getContextClassLoader()。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line">private static Connection getConnection(</span><br><span class="line">    String url, java.util.Properties info, Class&lt;?&gt; caller) throws SQLException &#123;</span><br><span class="line">    /*</span><br><span class="line">     * When callerCl is null, we should check the application&apos;s</span><br><span class="line">     * (which is invoking this class indirectly)</span><br><span class="line">     * classloader, so that the JDBC driver class outside rt.jar</span><br><span class="line">     * can be loaded from here.</span><br><span class="line">     */</span><br><span class="line">    ClassLoader callerCL = caller != null ? caller.getClassLoader() : null;</span><br><span class="line">    synchronized(DriverManager.class) &#123;</span><br><span class="line">        // synchronize loading of the correct classloader.</span><br><span class="line">        if (callerCL == null) &#123;</span><br><span class="line">            callerCL = Thread.currentThread().getContextClassLoader();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    ...</span><br><span class="line">    ...</span><br><span class="line">    ...</span><br><span class="line"></span><br><span class="line">    for(DriverInfo aDriver : registeredDrivers) &#123;</span><br><span class="line">        // If the caller does not have permission to load the driver then</span><br><span class="line">        // skip it.</span><br><span class="line">        if(isDriverAllowed(aDriver.driver, callerCL)) &#123;</span><br><span class="line">            ...</span><br><span class="line">            ...</span><br><span class="line">            ...</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            ...</span><br><span class="line">            ...</span><br><span class="line">            ...</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    ...</span><br><span class="line">    ...</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">private static boolean isDriverAllowed(Driver driver, ClassLoader classLoader) &#123;</span><br><span class="line">    boolean result = false;</span><br><span class="line">    if(driver != null) &#123;</span><br><span class="line">        Class&lt;?&gt; aClass = null;</span><br><span class="line">        try &#123;</span><br><span class="line">            aClass =  Class.forName(driver.getClass().getName(), true, classLoader);</span><br><span class="line">        &#125; catch (Exception ex) &#123;</span><br><span class="line">            result = false;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">         result = ( aClass == driver.getClass() ) ? true : false;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    return result;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public ClassLoader getContextClassLoader() &#123;</span><br><span class="line">    if (contextClassLoader == null)</span><br><span class="line">        return null;</span><br><span class="line">    SecurityManager sm = System.getSecurityManager();</span><br><span class="line">    if (sm != null) &#123;</span><br><span class="line">        ClassLoader.checkClassLoaderPermission(contextClassLoader,</span><br><span class="line">                                               Reflection.getCallerClass());</span><br><span class="line">    &#125;</span><br><span class="line">    return contextClassLoader;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">String url = &quot;jdbc:mysql://localhost:3306/testdb&quot;;    </span><br><span class="line">Connection conn = java.sql.DriverManager.getConnection(url, &quot;name&quot;, &quot;password&quot;); </span><br></pre></td></tr></table></figure>
+
+<p>getConnection()继续调用了重载的getConnection方法</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">public static Connection getConnection(String url,</span><br><span class="line">    java.util.Properties info) throws SQLException &#123;</span><br><span class="line"></span><br><span class="line">    return (getConnection(url, info, Reflection.getCallerClass()));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>重载的方法，省略若干代码，看注释可以知道此时得到的callerCL为null，那么就会执行Thread.currentThread().getContextClassLoader()并赋值给callerCL，而且后面调用isDriverAllowed(aDriver.driver, callerCL)就是使用此时获取的类加载器进行类的加载。于是重点就是停留在Thread.currentThread().getContextClassLoader()。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line">private static Connection getConnection(</span><br><span class="line">    String url, java.util.Properties info, Class&lt;?&gt; caller) throws SQLException &#123;</span><br><span class="line">    /*</span><br><span class="line">     * When callerCl is null, we should check the application&#x27;s</span><br><span class="line">     * (which is invoking this class indirectly)</span><br><span class="line">     * classloader, so that the JDBC driver class outside rt.jar</span><br><span class="line">     * can be loaded from here.</span><br><span class="line">     */</span><br><span class="line">    ClassLoader callerCL = caller != null ? caller.getClassLoader() : null;</span><br><span class="line">    synchronized(DriverManager.class) &#123;</span><br><span class="line">        // synchronize loading of the correct classloader.</span><br><span class="line">        if (callerCL == null) &#123;</span><br><span class="line">            callerCL = Thread.currentThread().getContextClassLoader();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    ...</span><br><span class="line">    ...</span><br><span class="line">    ...</span><br><span class="line"></span><br><span class="line">    for(DriverInfo aDriver : registeredDrivers) &#123;</span><br><span class="line">        // If the caller does not have permission to load the driver then</span><br><span class="line">        // skip it.</span><br><span class="line">        if(isDriverAllowed(aDriver.driver, callerCL)) &#123;</span><br><span class="line">            ...</span><br><span class="line">            ...</span><br><span class="line">            ...</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            ...</span><br><span class="line">            ...</span><br><span class="line">            ...</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    ...</span><br><span class="line">    ...</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">private static boolean isDriverAllowed(Driver driver, ClassLoader classLoader) &#123;</span><br><span class="line">    boolean result = false;</span><br><span class="line">    if(driver != null) &#123;</span><br><span class="line">        Class&lt;?&gt; aClass = null;</span><br><span class="line">        try &#123;</span><br><span class="line">            aClass =  Class.forName(driver.getClass().getName(), true, classLoader);</span><br><span class="line">        &#125; catch (Exception ex) &#123;</span><br><span class="line">            result = false;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">         result = ( aClass == driver.getClass() ) ? true : false;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    return result;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public ClassLoader getContextClassLoader() &#123;</span><br><span class="line">    if (contextClassLoader == null)</span><br><span class="line">        return null;</span><br><span class="line">    SecurityManager sm = System.getSecurityManager();</span><br><span class="line">    if (sm != null) &#123;</span><br><span class="line">        ClassLoader.checkClassLoaderPermission(contextClassLoader,</span><br><span class="line">                                               Reflection.getCallerClass());</span><br><span class="line">    &#125;</span><br><span class="line">    return contextClassLoader;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>看一下getContextClassLoader方法，发现仅仅只是简单的校验就获取了。我们回到一开始的java.sql.DriverManager.getConnection(url, “name”, “password”)，这里的DriverManager，我们看一下它的初始化</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">private DriverManager()&#123;&#125;</span><br><span class="line"></span><br><span class="line">static &#123;</span><br><span class="line">    loadInitialDrivers();</span><br><span class="line">    println(&quot;JDBC DriverManager initialized&quot;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">private static void loadInitialDrivers() &#123;</span><br><span class="line"></span><br><span class="line">    ...</span><br><span class="line">    ...</span><br><span class="line">    ...</span><br><span class="line">    </span><br><span class="line">    for (String aDriver : driversList) &#123;</span><br><span class="line">        try &#123;</span><br><span class="line">            println(&quot;DriverManager.Initialize: loading &quot; + aDriver);</span><br><span class="line">            Class.forName(aDriver, true,</span><br><span class="line">                    ClassLoader.getSystemClassLoader());</span><br><span class="line">        &#125; catch (Exception ex) &#123;</span><br><span class="line">            println(&quot;DriverManager.Initialize: load failed: &quot; + ex);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public static ClassLoader getSystemClassLoader() &#123;</span><br><span class="line">    initSystemClassLoader();</span><br><span class="line">    if (scl == null) &#123;</span><br><span class="line">        return null;</span><br><span class="line">    &#125;</span><br><span class="line">    SecurityManager sm = System.getSecurityManager();</span><br><span class="line">    if (sm != null) &#123;</span><br><span class="line">        checkClassLoaderPermission(scl, Reflection.getCallerClass());</span><br><span class="line">    &#125;</span><br><span class="line">    return scl;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">private DriverManager()&#123;&#125;</span><br><span class="line"></span><br><span class="line">static &#123;</span><br><span class="line">    loadInitialDrivers();</span><br><span class="line">    println(&quot;JDBC DriverManager initialized&quot;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">private static void loadInitialDrivers() &#123;</span><br><span class="line"></span><br><span class="line">    ...</span><br><span class="line">    ...</span><br><span class="line">    ...</span><br><span class="line">    </span><br><span class="line">    for (String aDriver : driversList) &#123;</span><br><span class="line">        try &#123;</span><br><span class="line">            println(&quot;DriverManager.Initialize: loading &quot; + aDriver);</span><br><span class="line">            Class.forName(aDriver, true,</span><br><span class="line">                    ClassLoader.getSystemClassLoader());</span><br><span class="line">        &#125; catch (Exception ex) &#123;</span><br><span class="line">            println(&quot;DriverManager.Initialize: load failed: &quot; + ex);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public static ClassLoader getSystemClassLoader() &#123;</span><br><span class="line">    initSystemClassLoader();</span><br><span class="line">    if (scl == null) &#123;</span><br><span class="line">        return null;</span><br><span class="line">    &#125;</span><br><span class="line">    SecurityManager sm = System.getSecurityManager();</span><br><span class="line">    if (sm != null) &#123;</span><br><span class="line">        checkClassLoaderPermission(scl, Reflection.getCallerClass());</span><br><span class="line">    &#125;</span><br><span class="line">    return scl;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>构造方法被private修饰阻止了实例化，那么看一下静态代码块的loadInitialDrivers方法，省略若干代码，我们看一下ClassLoader.getSystemClassLoader()，发现了initSystemClassLoader()，继续往下看</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line">private static synchronized void initSystemClassLoader() &#123;</span><br><span class="line">    if (!sclSet) &#123;</span><br><span class="line">        if (scl != null)</span><br><span class="line">            throw new IllegalStateException(&quot;recursive invocation&quot;);</span><br><span class="line">        sun.misc.Launcher l = sun.misc.Launcher.getLauncher();</span><br><span class="line">        if (l != null) &#123;</span><br><span class="line">            Throwable oops = null;</span><br><span class="line">            scl = l.getClassLoader();</span><br><span class="line">            try &#123;</span><br><span class="line">                scl = AccessController.doPrivileged(</span><br><span class="line">                    new SystemClassLoaderAction(scl));</span><br><span class="line">            &#125; catch (PrivilegedActionException pae) &#123;</span><br><span class="line">                oops = pae.getCause();</span><br><span class="line">                if (oops instanceof InvocationTargetException) &#123;</span><br><span class="line">                    oops = oops.getCause();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            if (oops != null) &#123;</span><br><span class="line">                if (oops instanceof Error) &#123;</span><br><span class="line">                    throw (Error) oops;</span><br><span class="line">                &#125; else &#123;</span><br><span class="line">                    // wrap the exception</span><br><span class="line">                    throw new Error(oops);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        sclSet = true;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public Launcher() &#123;</span><br><span class="line">    Launcher.ExtClassLoader var1;</span><br><span class="line">    try &#123;</span><br><span class="line">        var1 = Launcher.ExtClassLoader.getExtClassLoader();</span><br><span class="line">    &#125; catch (IOException var10) &#123;</span><br><span class="line">        throw new InternalError(&quot;Could not create extension class loader&quot;, var10);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    try &#123;</span><br><span class="line">        this.loader = Launcher.AppClassLoader.getAppClassLoader(var1);</span><br><span class="line">    &#125; catch (IOException var9) &#123;</span><br><span class="line">        throw new InternalError(&quot;Could not create application class loader&quot;, var9);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    Thread.currentThread().setContextClassLoader(this.loader);</span><br><span class="line">    </span><br><span class="line">    ...</span><br><span class="line">    ...</span><br><span class="line">    ...</span><br><span class="line">    </span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line">private static synchronized void initSystemClassLoader() &#123;</span><br><span class="line">    if (!sclSet) &#123;</span><br><span class="line">        if (scl != null)</span><br><span class="line">            throw new IllegalStateException(&quot;recursive invocation&quot;);</span><br><span class="line">        sun.misc.Launcher l = sun.misc.Launcher.getLauncher();</span><br><span class="line">        if (l != null) &#123;</span><br><span class="line">            Throwable oops = null;</span><br><span class="line">            scl = l.getClassLoader();</span><br><span class="line">            try &#123;</span><br><span class="line">                scl = AccessController.doPrivileged(</span><br><span class="line">                    new SystemClassLoaderAction(scl));</span><br><span class="line">            &#125; catch (PrivilegedActionException pae) &#123;</span><br><span class="line">                oops = pae.getCause();</span><br><span class="line">                if (oops instanceof InvocationTargetException) &#123;</span><br><span class="line">                    oops = oops.getCause();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            if (oops != null) &#123;</span><br><span class="line">                if (oops instanceof Error) &#123;</span><br><span class="line">                    throw (Error) oops;</span><br><span class="line">                &#125; else &#123;</span><br><span class="line">                    // wrap the exception</span><br><span class="line">                    throw new Error(oops);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        sclSet = true;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public Launcher() &#123;</span><br><span class="line">    Launcher.ExtClassLoader var1;</span><br><span class="line">    try &#123;</span><br><span class="line">        var1 = Launcher.ExtClassLoader.getExtClassLoader();</span><br><span class="line">    &#125; catch (IOException var10) &#123;</span><br><span class="line">        throw new InternalError(&quot;Could not create extension class loader&quot;, var10);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    try &#123;</span><br><span class="line">        this.loader = Launcher.AppClassLoader.getAppClassLoader(var1);</span><br><span class="line">    &#125; catch (IOException var9) &#123;</span><br><span class="line">        throw new InternalError(&quot;Could not create application class loader&quot;, var9);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    Thread.currentThread().setContextClassLoader(this.loader);</span><br><span class="line">    </span><br><span class="line">    ...</span><br><span class="line">    ...</span><br><span class="line">    ...</span><br><span class="line">    </span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
 <p>这里就是实现的关键，注意initSystemClassLoader的以下代码段</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">sun.misc.Launcher l = sun.misc.Launcher.getLauncher();</span><br><span class="line"></span><br><span class="line">scl = l.getClassLoader();</span><br><span class="line">try &#123;</span><br><span class="line">    scl = AccessController.doPrivileged(</span><br><span class="line">        new SystemClassLoaderAction(scl));</span><br><span class="line">&#125; catch (PrivilegedActionException pae) &#123;</span><br><span class="line">    oops = pae.getCause();</span><br><span class="line">    if (oops instanceof InvocationTargetException) &#123;</span><br><span class="line">        oops = oops.getCause();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>看一下getLauncher()<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">public Launcher() &#123;</span><br><span class="line">    Launcher.ExtClassLoader var1;</span><br><span class="line">    try &#123;</span><br><span class="line">        var1 = Launcher.ExtClassLoader.getExtClassLoader();</span><br><span class="line">    &#125; catch (IOException var10) &#123;</span><br><span class="line">        throw new InternalError(&quot;Could not create extension class loader&quot;, var10);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    try &#123;</span><br><span class="line">        this.loader = Launcher.AppClassLoader.getAppClassLoader(var1);</span><br><span class="line">    &#125; catch (IOException var9) &#123;</span><br><span class="line">        throw new InternalError(&quot;Could not create application class loader&quot;, var9);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    Thread.currentThread().setContextClassLoader(this.loader);</span><br><span class="line">    </span><br><span class="line">    ...</span><br><span class="line">    ...</span><br><span class="line">    ...</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">sun.misc.Launcher l = sun.misc.Launcher.getLauncher();</span><br><span class="line"></span><br><span class="line">scl = l.getClassLoader();</span><br><span class="line">try &#123;</span><br><span class="line">    scl = AccessController.doPrivileged(</span><br><span class="line">        new SystemClassLoaderAction(scl));</span><br><span class="line">&#125; catch (PrivilegedActionException pae) &#123;</span><br><span class="line">    oops = pae.getCause();</span><br><span class="line">    if (oops instanceof InvocationTargetException) &#123;</span><br><span class="line">        oops = oops.getCause();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>看一下getLauncher()</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">public Launcher() &#123;</span><br><span class="line">    Launcher.ExtClassLoader var1;</span><br><span class="line">    try &#123;</span><br><span class="line">        var1 = Launcher.ExtClassLoader.getExtClassLoader();</span><br><span class="line">    &#125; catch (IOException var10) &#123;</span><br><span class="line">        throw new InternalError(&quot;Could not create extension class loader&quot;, var10);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    try &#123;</span><br><span class="line">        this.loader = Launcher.AppClassLoader.getAppClassLoader(var1);</span><br><span class="line">    &#125; catch (IOException var9) &#123;</span><br><span class="line">        throw new InternalError(&quot;Could not create application class loader&quot;, var9);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    Thread.currentThread().setContextClassLoader(this.loader);</span><br><span class="line">    </span><br><span class="line">    ...</span><br><span class="line">    ...</span><br><span class="line">    ...</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>发现这里先获取了当前的系统加载器，然后将系统加载器，然后将系统加载器作为线程上下文加载器的父类，相当于构造链表一样。我们再看一下new SystemClassLoaderAction(scl)，发现这个类居然有个run方法，而且是使用java.system.class.loader作为实现的线程上下文加载器。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">SystemClassLoaderAction(ClassLoader parent) &#123;</span><br><span class="line">    this.parent = parent;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public ClassLoader run() throws Exception &#123;</span><br><span class="line">    String cls = System.getProperty(&quot;java.system.class.loader&quot;);</span><br><span class="line">    if (cls == null) &#123;</span><br><span class="line">        return parent;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    Constructor&lt;?&gt; ctor = Class.forName(cls, true, parent)</span><br><span class="line">        .getDeclaredConstructor(new Class&lt;?&gt;[] &#123; ClassLoader.class &#125;);</span><br><span class="line">    ClassLoader sys = (ClassLoader) ctor.newInstance(</span><br><span class="line">        new Object[] &#123; parent &#125;);</span><br><span class="line">    Thread.currentThread().setContextClassLoader(sys);</span><br><span class="line">    return sys;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">SystemClassLoaderAction(ClassLoader parent) &#123;</span><br><span class="line">    this.parent = parent;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public ClassLoader run() throws Exception &#123;</span><br><span class="line">    String cls = System.getProperty(&quot;java.system.class.loader&quot;);</span><br><span class="line">    if (cls == null) &#123;</span><br><span class="line">        return parent;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    Constructor&lt;?&gt; ctor = Class.forName(cls, true, parent)</span><br><span class="line">        .getDeclaredConstructor(new Class&lt;?&gt;[] &#123; ClassLoader.class &#125;);</span><br><span class="line">    ClassLoader sys = (ClassLoader) ctor.newInstance(</span><br><span class="line">        new Object[] &#123; parent &#125;);</span><br><span class="line">    Thread.currentThread().setContextClassLoader(sys);</span><br><span class="line">    return sys;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>到这里我们可以得出结论：对于SPI，通过配置文件java.system.class.loader的方式实现了额外的线程上下文加载器并用于加载SPI组件，于是就打破了双亲委派模型。其实我们平时实现自定义类加载器的方式也是打破双亲委派模型，我们通过重写findClass（1.2之前是通过重写loadClass）阻止使用双亲委派模型。</p>
 <p>ps：为什么要使用自定义类加载器？因为系统类加载器只会加载指定目录下的class文件，想加载自己的文件就可以通过自定义ClassLoader，可以用于文件改动后不想重启Java程序的热加载。</p>
 
@@ -478,11 +485,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">HTTP/2 HTTP/1.1 HTTP/3.0</a>
+                <a href="javascript:void(0)" class="js-tag color3">Go</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Go</a>
+                <a href="javascript:void(0)" class="js-tag color5">HTTP/2 HTTP/1.1 HTTP/3.0</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -498,10 +505,6 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Latex 文件转换 docx</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">lumen</a>
               </li>
              
@@ -511,6 +514,10 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">thrift</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Latex 文件转换 docx</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -527,6 +534,30 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Linux</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">反射</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">reflection</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">底层</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">变量</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">引用</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">优化</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -554,15 +585,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">反射</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">reflection</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">底层</a>
+                <a href="javascript:void(0)" class="js-tag color3">Reactor</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -578,23 +601,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">变量</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">引用</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">优化</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">跳跃表</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Reactor</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -603,6 +610,34 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">性能优化</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">阿里云</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">sts</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">推荐系统</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">NLP</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">CF-IDF</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">canal</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">ES</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -642,11 +677,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">canal</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">ES</a>
+                <a href="javascript:void(0)" class="js-tag color4">线段树</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -654,7 +685,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">线段树</a>
+                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -671,66 +702,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">world</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">阿里云</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">sts</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">推荐系统</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">NLP</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">CF-IDF</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">acm</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">树</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">字典树</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">前缀树</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">二进制</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">位运算</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">macro</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">model</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">数据库</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -766,6 +737,46 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">macro</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">model</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">数据库</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">acm</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">树</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">字典树</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">前缀树</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">二进制</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">位运算</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">底层分析</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">事务</a>
               </li>
              
@@ -775,10 +786,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Python</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">底层分析</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -798,15 +805,15 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">ACID</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">sysbench</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">压力测试</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">ACID</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -818,6 +825,14 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">UUID</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">MySQL</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">架构</a>
               </li>
              
@@ -826,11 +841,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">UUID</a>
+                <a href="javascript:void(0)" class="js-tag color5">日志服务</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">MySQL</a>
+                <a href="javascript:void(0)" class="js-tag color4">SLS</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -870,14 +885,6 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">日志服务</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">SLS</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">大数据</a>
               </li>
              
@@ -902,6 +909,10 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">熔断</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">容器</a>
               </li>
              
@@ -911,10 +922,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">基本计算器</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">熔断</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -978,7 +985,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">边框识别 答题卡 试卷 考试</a>
+                <a href="javascript:void(0)" class="js-tag color5">机器学习</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -998,11 +1005,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">缓存</a>
+                <a href="javascript:void(0)" class="js-tag color5">边框识别 答题卡 试卷 考试</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">机器学习</a>
+                <a href="javascript:void(0)" class="js-tag color3">缓存</a>
               </li>
              
               <li class="article-tag-list-item">

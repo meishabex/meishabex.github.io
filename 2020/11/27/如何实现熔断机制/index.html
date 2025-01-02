@@ -16,16 +16,16 @@
 <meta property="og:site_name" content="Meisha Bex">
 <meta property="og:description" content="如何实现熔断机制一、服务调用链 通过该时序图，我们可以看到：客户端（Client）发起了一次请求 Request1，网关（Gateway）在接收到请求后将它转发（标记为 Request2）给 Service-A；由于这次请求涉及 Service-B 中的数据，所以 Service-A 又向 Service-B 发起了一次 Request3 获取对应的数据；处理结束后，将结果返回给网关，由网关将结果">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://bex.meishakeji.com/2020/11/27/%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0%E7%86%94%E6%96%AD%E6%9C%BA%E5%88%B6/IMG_6108.PNG">
-<meta property="og:image" content="https://bex.meishakeji.com/2020/11/27/%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0%E7%86%94%E6%96%AD%E6%9C%BA%E5%88%B6/IMG_6109.PNG">
-<meta property="og:image" content="https://bex.meishakeji.com/2020/11/27/%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0%E7%86%94%E6%96%AD%E6%9C%BA%E5%88%B6/IMG_6108-5489192.PNG">
-<meta property="og:image" content="https://bex.meishakeji.com/2020/11/27/%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0%E7%86%94%E6%96%AD%E6%9C%BA%E5%88%B6/IMG_6112.PNG">
+<meta property="og:image" content="https://bex.meishakeji.com/.com//IMG_6108.PNG">
+<meta property="og:image" content="https://bex.meishakeji.com/.com//IMG_6109.PNG">
+<meta property="og:image" content="https://bex.meishakeji.com/.com//IMG_6108-5489192.PNG">
+<meta property="og:image" content="https://bex.meishakeji.com/.com//IMG_6112.PNG">
 <meta property="article:published_time" content="2020-11-27T09:00:00.000Z">
 <meta property="article:modified_time" content="2024-12-31T14:59:26.494Z">
 <meta property="article:author" content="Meisha Bex">
 <meta property="article:tag" content="熔断">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://bex.meishakeji.com/2020/11/27/%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0%E7%86%94%E6%96%AD%E6%9C%BA%E5%88%B6/IMG_6108.PNG">
+<meta name="twitter:image" content="https://bex.meishakeji.com/.com//IMG_6108.PNG">
   
     <link rel="alternative" href="/atom.xml" title="Meisha Bex" type="application/atom+xml">
   
@@ -180,22 +180,22 @@
       
           
           
-            <h1 id="如何实现熔断机制"><a href="#如何实现熔断机制" class="headerlink" title="如何实现熔断机制"></a>如何实现熔断机制</h1><h3 id="一、服务调用链"><a href="#一、服务调用链" class="headerlink" title="一、服务调用链"></a><strong>一、服务调用链</strong></h3><p><img src="/2020/11/27/如何实现熔断机制/IMG_6108.PNG" alt="IMG_6108"></p>
+            <h1 id="如何实现熔断机制"><a href="#如何实现熔断机制" class="headerlink" title="如何实现熔断机制"></a>如何实现熔断机制</h1><h3 id="一、服务调用链"><a href="#一、服务调用链" class="headerlink" title="一、服务调用链"></a><strong>一、服务调用链</strong></h3><p><img src="/.com//IMG_6108.PNG" alt="IMG_6108"></p>
 <p>通过该时序图，我们可以看到：客户端（Client）发起了一次请求 Request1，网关（Gateway）在接收到请求后将它转发（标记为 Request2）给 Service-A；由于这次请求涉及 Service-B 中的数据，所以 Service-A 又向 Service-B 发起了一次 Request3 获取对应的数据；处理结束后，将结果返回给网关，由网关将结果返回给客户端。这里的 Request2 和 Request3 就共同组成了这次调用的调用链。</p>
 <h3 id="二、服务雪崩"><a href="#二、服务雪崩" class="headerlink" title="二、服务雪崩"></a>二、<strong>服务雪崩</strong></h3><p>服务雪崩是指当调用链的某个环节（特别是服务提供方服务）不可用时，将会导致其上游环节不可用，并最终将这种影响扩大到整个系统中，导致整个系统的不可用。如下图所示：</p>
-<p><img src="/2020/11/27/如何实现熔断机制/IMG_6109.PNG" alt="IMG_6109"></p>
+<p><img src="/.com//IMG_6109.PNG" alt="IMG_6109"></p>
 <p><strong>第一阶段是服务提供者不能用。</strong> 如上图所示，在初始阶段，一切运行良好，网关、Service-A 和 Service-B 可以响应客户端的各种请求。但在某一个时间节点，服务提供者 Service-B 由于网络故障或者请求过载不可用，而无法及时响应各类请求。</p>
 <p><strong>第二阶段是服务调用者不可用。</strong>在服务提供者不可用之后，客户端可能会因为错误提示或者长时间的阻塞而不断发送相同的请求到网关中，网关再次将请求转发给 Service-A 进行处理，Service-A 根据业务流程也向 Service-B 发起数据请求；同时，上一阶段中 Service-A 对 Service-B 超时或者失败的请求可能会因为 Service-A 中的重试机制再次请求 Service-B。但这些请求都无法从 Service-B 中获取到有效的返回，最坏的结果就是都被阻塞，无法及时响应。Service-A 会因为发起过多对 Service-B 的请求而逐渐累积一堆等待线程，耗尽线程池中的资源，从而无法响应其他请求，最终导致自身的不可用。</p>
 <p><strong>最后一阶段是整个系统的不可用。</strong>Service-A 中的等待请求同样阻塞了转发请求的网关。在多线程阻塞型的网关中，大量等待请求将会产生大量的阻塞线程，使得网关没有足够的资源处理其他请求，进而导致整个系统无法对外提供服务。</p>
 <h3 id="三、断路器"><a href="#三、断路器" class="headerlink" title="三、断路器"></a><strong>三、断路器</strong></h3><p>为了避免服务雪崩现象的出现，我们就需要及时“壮士断腕”，在必要的时候暂时切断对异常服务提供者的调用，以保证部分服务可用和整体系统的稳定性。</p>
-<p><img src="/2020/11/27/如何实现熔断机制/IMG_6108-5489192.PNG" alt="IMG_6108"></p>
+<p><img src="/.com//IMG_6108-5489192.PNG" alt="IMG_6108"></p>
 <p>如上图所示，我们在 Serivce-A 向 Service-B 的请求中增加了一根“保险丝”——断路器。它统计一段时间内 Service-A 对 Serivice-B 请求的响应结果，在超时或者失败次数过多的情况下，阻断 Service-A 对 Service-B 的请求，直接返回相关的异常处理结果，使得 Service-A 中的请求线程能够及时返回，避免资源耗尽而不可用，从而<strong>保护了服务调用者和避免了服务级联失败。</strong></p>
-<p><img src="/2020/11/27/如何实现熔断机制/IMG_6112.PNG" alt="IMG_6112"></p>
+<p><img src="/.com//IMG_6112.PNG" alt="IMG_6112"></p>
 <p>断路器的三种状态：关闭，打开，半开关。</p>
 <h3 id="四、实现"><a href="#四、实现" class="headerlink" title="四、实现"></a><strong>四、实现</strong></h3><p>golang：</p>
-<p><a href="https://studygolang.com/articles/11875" target="_blank" rel="noopener">https://studygolang.com/articles/11875</a></p>
+<p><a href="https://studygolang.com/articles/11875">https://studygolang.com/articles/11875</a></p>
 <p>php：</p>
-<p><a href="https://www.ctolib.com/mip/king19800105-breaker.html" target="_blank" rel="noopener">https://www.ctolib.com/mip/king19800105-breaker.html</a></p>
+<p><a href="https://www.ctolib.com/mip/king19800105-breaker.html">https://www.ctolib.com/mip/king19800105-breaker.html</a></p>
 
           
       
@@ -468,11 +468,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">HTTP/2 HTTP/1.1 HTTP/3.0</a>
+                <a href="javascript:void(0)" class="js-tag color3">Go</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Go</a>
+                <a href="javascript:void(0)" class="js-tag color5">HTTP/2 HTTP/1.1 HTTP/3.0</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -488,10 +488,6 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Latex 文件转换 docx</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">lumen</a>
               </li>
              
@@ -501,6 +497,10 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">thrift</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Latex 文件转换 docx</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -517,6 +517,30 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Linux</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">反射</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">reflection</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">底层</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">变量</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">引用</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">优化</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -544,15 +568,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">反射</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">reflection</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">底层</a>
+                <a href="javascript:void(0)" class="js-tag color3">Reactor</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -568,23 +584,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">变量</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">引用</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">优化</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">跳跃表</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Reactor</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -593,6 +593,34 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">性能优化</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">阿里云</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">sts</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">推荐系统</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">NLP</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">CF-IDF</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">canal</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">ES</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -632,11 +660,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">canal</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">ES</a>
+                <a href="javascript:void(0)" class="js-tag color4">线段树</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -644,7 +668,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">线段树</a>
+                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -661,66 +685,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">world</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">阿里云</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">sts</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">推荐系统</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">NLP</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">CF-IDF</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">acm</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">树</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">字典树</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">前缀树</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">二进制</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">位运算</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">macro</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">model</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">数据库</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -756,6 +720,46 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">macro</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">model</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">数据库</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">acm</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">树</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">字典树</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">前缀树</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">二进制</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">位运算</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">底层分析</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">事务</a>
               </li>
              
@@ -765,10 +769,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Python</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">底层分析</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -788,15 +788,15 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">ACID</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">sysbench</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">压力测试</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">ACID</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -808,6 +808,14 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">UUID</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">MySQL</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">架构</a>
               </li>
              
@@ -816,11 +824,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">UUID</a>
+                <a href="javascript:void(0)" class="js-tag color5">日志服务</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">MySQL</a>
+                <a href="javascript:void(0)" class="js-tag color4">SLS</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -860,14 +868,6 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">日志服务</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">SLS</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">大数据</a>
               </li>
              
@@ -892,6 +892,10 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">熔断</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">容器</a>
               </li>
              
@@ -901,10 +905,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">基本计算器</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">熔断</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -968,7 +968,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">边框识别 答题卡 试卷 考试</a>
+                <a href="javascript:void(0)" class="js-tag color5">机器学习</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -988,11 +988,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">缓存</a>
+                <a href="javascript:void(0)" class="js-tag color5">边框识别 答题卡 试卷 考试</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">机器学习</a>
+                <a href="javascript:void(0)" class="js-tag color3">缓存</a>
               </li>
              
               <li class="article-tag-list-item">

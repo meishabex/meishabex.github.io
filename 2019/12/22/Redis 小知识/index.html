@@ -179,27 +179,32 @@
           
             <h3 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;某一天,随着业务的发展，MYSQL负载越来越高，nginx和php已经忍不住疯狂吐槽了，阻塞了大量进程，MYSQL也都一天24小时的在处理查询、插入、更新操作；没过几天，数据库老头就罢工了</p>
 <h3 id="单机redis"><a href="#单机redis" class="headerlink" title="单机redis"></a>单机redis</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;于是，操作系统老大引入了redis小生，将MYSQL数据库和redis分别放到不同的机器上，业务查询访问MSYQL数据库前先访问redis判断是否能命中缓存，如果能够的话那么就直接从redis出获取，如果没有命中redis缓存再去MYSQL获取数据，并将数据缓存redis中，方便下次访问。。。。哎呀实在编不下去了。</p>
-<p>业务访问redis的过程如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">应用程序 1</span><br><span class="line">应用程序 2 &lt;--&gt; redis</span><br><span class="line">应用程序 3</span><br></pre></td></tr></table></figure></p>
-<p>随着业务量的增大业务结构就会变成下面这样：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">              redis 1</span><br><span class="line">应用程序 &lt;--&gt;  redis 2</span><br><span class="line">              redis 3</span><br></pre></td></tr></table></figure></p>
+<p>业务访问redis的过程如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">应用程序 1</span><br><span class="line">应用程序 2 &lt;--&gt; redis</span><br><span class="line">应用程序 3</span><br></pre></td></tr></table></figure>
+<p>随着业务量的增大业务结构就会变成下面这样：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">              redis 1</span><br><span class="line">应用程序 &lt;--&gt;  redis 2</span><br><span class="line">              redis 3</span><br></pre></td></tr></table></figure>
 <p>&nbsp;&nbsp;&nbsp;&nbsp;如果你仔细想想就会发现当应用程序将key1写到redis1后再次获取的时候一般不知道到底是那台机器获取，那么这时候就需要有一个规则让应用程序知道key1存在那个redis机器了。</p>
 <h4 id="PS：什么是hash算法"><a href="#PS：什么是hash算法" class="headerlink" title="PS：什么是hash算法"></a>PS：什么是hash算法</h4><blockquote>
 <p>所谓hash，一般是一个整数，通过某种算法，可以把一个字符串”压缩” 成一个整数，这个数称为hash，当然，无论如何，一个32位整数是无法对应回一个字符串的，但在程序中，两个字符串计算出的hash值相等的可能非常小</p>
 </blockquote>
-<h3 id="余数算法"><a href="#余数算法" class="headerlink" title="余数算法"></a>余数算法</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;余数算法，顾名思义—用到余数的算法，哈哈！举个栗子：现在有3台redis服务器提供给一个应用使用，那么第一次写入（key1,value1）,第二次写入（key2,value2）会有什么不一样呢？<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">现在有 redis-0服务器  redis-1服务器 redis-2服务器</span><br><span class="line"></span><br><span class="line">（key1,value1）        （key2,value3）        </span><br><span class="line">      ↓                      ↓</span><br><span class="line"> hash(key1)=100         hash(key1)=66            无</span><br><span class="line">      ↓                      ↓</span><br><span class="line">   100%3=1                66%3=0</span><br><span class="line">      ↓                      ↓</span><br><span class="line"> redis-1服务器           redis-0服务器        redis-2服务器</span><br></pre></td></tr></table></figure></p>
-<p>但是余数算法的缺陷也是显而易见的，当再增加一个机器redis-3的时候，那么机器总数达到4台，取余的时候如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">（key1,value1）        （key2,value3）        </span><br><span class="line">      ↓                      ↓</span><br><span class="line"> hash(key1)=100         hash(key1)=66            无                    无</span><br><span class="line">      ↓                      ↓</span><br><span class="line">   100%4=0                66%4=2</span><br><span class="line">      ↓                      ↓</span><br><span class="line"> redis-0服务器           redis-2服务器        redis-1服务器        redis-3服务器</span><br></pre></td></tr></table></figure></p>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;对比上面两种情况，就可以看到原来写进/读取的是redis-1 ，现在已经变成redis-0；原来是redis-0机器的数据需要在redis-2读取/写入；也就是说，当我们增加机器的时候会有很多的redis key缓存失效，命中率降低，而这并不是我们希望的。。。那么还有更好的方法吗？</p>
+<h3 id="余数算法"><a href="#余数算法" class="headerlink" title="余数算法"></a>余数算法</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;余数算法，顾名思义—用到余数的算法，哈哈！举个栗子：现在有3台redis服务器提供给一个应用使用，那么第一次写入（key1,value1）,第二次写入（key2,value2）会有什么不一样呢？</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">现在有 redis-0服务器  redis-1服务器 redis-2服务器</span><br><span class="line"></span><br><span class="line">（key1,value1）        （key2,value3）        </span><br><span class="line">      ↓                      ↓</span><br><span class="line"> hash(key1)=100         hash(key1)=66            无</span><br><span class="line">      ↓                      ↓</span><br><span class="line">   100%3=1                66%3=0</span><br><span class="line">      ↓                      ↓</span><br><span class="line"> redis-1服务器           redis-0服务器        redis-2服务器         </span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>但是余数算法的缺陷也是显而易见的，当再增加一个机器redis-3的时候，那么机器总数达到4台，取余的时候如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">（key1,value1）        （key2,value3）        </span><br><span class="line">      ↓                      ↓</span><br><span class="line"> hash(key1)=100         hash(key1)=66            无                    无</span><br><span class="line">      ↓                      ↓</span><br><span class="line">   100%4=0                66%4=2</span><br><span class="line">      ↓                      ↓</span><br><span class="line"> redis-0服务器           redis-2服务器        redis-1服务器        redis-3服务器      </span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;对比上面两种情况，就可以看到原来写进&#x2F;读取的是redis-1 ，现在已经变成redis-0；原来是redis-0机器的数据需要在redis-2读取&#x2F;写入；也就是说，当我们增加机器的时候会有很多的redis key缓存失效，命中率降低，而这并不是我们希望的。。。那么还有更好的方法吗？</p>
 <h3 id="一致性hash算法"><a href="#一致性hash算法" class="headerlink" title="一致性hash算法"></a>一致性hash算法</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;为了解决增加机器后，大量缓存丢失的问题，我们引入一致性hash算法,那么什么是一致性hash算法呢，他又能不能够百分百保证增删缓存服务器时缓存失效的问题呢？我们下面来看看吧：<br>我们画一个圆，这个圆由2^32个点构成，我们将多个redis服务器的ip或者是hostname，hash后分布在这个圆上，当然有可能不是很均匀，那么我们可以用虚拟机的方式让机器的hash均匀分布在圆上。</p>
-<p>那么下面我们举个例子：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">例如：</span><br><span class="line">有三个机器 r1\r2\r3, hash后平均分布在这个圆上</span><br><span class="line">现在有(key1,value1)，(key2,value2),将他们的hash之后分布在圆上</span><br><span class="line"></span><br><span class="line">hash(r1)=100 </span><br><span class="line">hash(r2)=300</span><br><span class="line">hash(r3)=800</span><br><span class="line"></span><br><span class="line">hash(key1)=150</span><br><span class="line">hash(key2)=500</span><br><span class="line"></span><br><span class="line">那么按照就近原则，key1会被写进r1 ，key2会被写进r2</span><br><span class="line"></span><br><span class="line">当增加一台机器r4的时候 hash(r4)=600</span><br><span class="line">这时候原来写进r2的key2就会失效，业务访问的时候将会从 r4 读/写</span><br></pre></td></tr></table></figure></p>
-<p>拓展阅读<a href="https://www.cnblogs.com/williamjie/p/9477852.html" target="_blank" rel="noopener">：点此文章地址</a></p>
+<p>那么下面我们举个例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">例如：</span><br><span class="line">有三个机器 r1\r2\r3, hash后平均分布在这个圆上</span><br><span class="line">现在有(key1,value1)，(key2,value2),将他们的hash之后分布在圆上</span><br><span class="line"></span><br><span class="line">hash(r1)=100 </span><br><span class="line">hash(r2)=300</span><br><span class="line">hash(r3)=800</span><br><span class="line"></span><br><span class="line">hash(key1)=150</span><br><span class="line">hash(key2)=500</span><br><span class="line"></span><br><span class="line">那么按照就近原则，key1会被写进r1 ，key2会被写进r2</span><br><span class="line"></span><br><span class="line">当增加一台机器r4的时候 hash(r4)=600</span><br><span class="line">这时候原来写进r2的key2就会失效，业务访问的时候将会从 r4 读/写</span><br></pre></td></tr></table></figure>
+<p>拓展阅读<a href="https://www.cnblogs.com/williamjie/p/9477852.html">：点此文章地址</a></p>
 <h3 id="hash槽（hash-slot）"><a href="#hash槽（hash-slot）" class="headerlink" title="hash槽（hash slot）"></a>hash槽（hash slot）</h3><ul>
 <li>hash 槽一共分为16348个槽，例如缓存服务器一共有三台(r1\r2\r3);那么[0,5499]槽会分布在r1,那么[5500,10999]槽会分布在r2,那么[11000,16383]槽会分布在r3。</li>
 <li>那么我们现在再来试试加一个机器r4是怎么处理，按照hash槽的方式，我们将会在这个三台机器同时取出一部分到r4机器，那么就是取出[4096,5499],[9596,10999],[15096,16383],并且在新增机器的同时会将这些hash槽里面的数据迁移到新的机器，这样数据就不会丢失了。</li>
-<li>hash槽 “安排” redis key的方式如下：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">(key1,value1)            (key1,value1)          (key3,value3)</span><br><span class="line">      ↓                       ↓                       ↓</span><br><span class="line">CRC16(key1)%16384=5000  CRC16(key1)%16384=7000  CRC16(key1)%16384=12000</span><br><span class="line">      ↓                       ↓                       ↓</span><br><span class="line">0-------------------5499------------------10999--------------------16383</span><br><span class="line">      ↓                       ↓                       ↓</span><br><span class="line">      r1                      r2                      r3</span><br></pre></td></tr></table></figure>
-</li>
+<li>hash槽 “安排” redis key的方式如下：<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">(key1,value1)            (key1,value1)          (key3,value3)</span><br><span class="line">      ↓                       ↓                       ↓</span><br><span class="line">CRC16(key1)%16384=5000  CRC16(key1)%16384=7000  CRC16(key1)%16384=12000</span><br><span class="line">      ↓                       ↓                       ↓</span><br><span class="line">0-------------------5499------------------10999--------------------16383</span><br><span class="line">      ↓                       ↓                       ↓</span><br><span class="line">      r1                      r2                      r3</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+增加机器后：<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">key1 查询-&gt; 将会到入r4机器，同时原来数据将会迁移到r4</span><br></pre></td></tr></table></figure></li>
 </ul>
-<p>增加机器后：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">key1 查询-&gt; 将会到入r4机器，同时原来数据将会迁移到r4</span><br></pre></td></tr></table></figure></p>
 <h3 id="故障转移"><a href="#故障转移" class="headerlink" title="故障转移"></a>故障转移</h3><p>其实上面说到的hash槽的方式，也就是现在redis cluster 集群的实现方式，那么既然hash槽的方式在增加机器的时候支持迁移数据，那么是不是在其中的一个服务器宕机的时候，数据服务也能够正常访问呢，答案是肯定的。完善的redis cluster 集群还会有主备，如下图：</p>
-<p>主服务节点应该是 node A 、node B 、node C<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">                         node A</span><br><span class="line">                      ↙          ↘</span><br><span class="line">                 node A1         node A2   </span><br><span class="line"></span><br><span class="line">              ↙↗                         ↖↘</span><br><span class="line"></span><br><span class="line">         node B             ←→               node C</span><br><span class="line">      ↙          ↘                       ↙          ↘</span><br><span class="line">node B1        node B2              node C1         node C2</span><br></pre></td></tr></table></figure></p>
+<p>主服务节点应该是 node A 、node B 、node C</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">                         node A</span><br><span class="line">                      ↙          ↘</span><br><span class="line">                 node A1         node A2   </span><br><span class="line"></span><br><span class="line">              ↙↗                         ↖↘</span><br><span class="line"></span><br><span class="line">         node B             ←→               node C</span><br><span class="line">      ↙          ↘                       ↙          ↘</span><br><span class="line">node B1        node B2              node C1         node C2</span><br></pre></td></tr></table></figure>
 <p>例如：当 node B 节点挂了之后，就会有某种算法将slave中的其中一个(node B1 或 node B2)选举为matser。这样就做到了故障转移了。</p>
 <h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;这篇小文章写起来也是有点随意了，因为这几个月一直都在看码农翻身这本书，然后看到了关于redis的一个发展史，所以就想把这个分享给小伙伴看，然后就写了，但写下来发现提炼能力还需要提升，算是抛砖引玉吧。</p>
 
@@ -482,11 +487,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">HTTP/2 HTTP/1.1 HTTP/3.0</a>
+                <a href="javascript:void(0)" class="js-tag color3">Go</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Go</a>
+                <a href="javascript:void(0)" class="js-tag color5">HTTP/2 HTTP/1.1 HTTP/3.0</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -502,10 +507,6 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Latex 文件转换 docx</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">lumen</a>
               </li>
              
@@ -515,6 +516,10 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">thrift</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Latex 文件转换 docx</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -531,6 +536,30 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Linux</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">反射</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">reflection</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">底层</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">变量</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">引用</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">优化</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -558,15 +587,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">反射</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">reflection</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">底层</a>
+                <a href="javascript:void(0)" class="js-tag color3">Reactor</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -582,23 +603,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">变量</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">引用</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">优化</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">跳跃表</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Reactor</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -607,6 +612,34 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">性能优化</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">阿里云</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">sts</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">推荐系统</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">NLP</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">CF-IDF</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">canal</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">ES</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -646,11 +679,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">canal</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">ES</a>
+                <a href="javascript:void(0)" class="js-tag color4">线段树</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -658,7 +687,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">线段树</a>
+                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -675,66 +704,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">world</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">阿里云</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">sts</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">推荐系统</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">NLP</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">CF-IDF</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">acm</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">树</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">字典树</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">前缀树</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">二进制</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">位运算</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">macro</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">model</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">数据库</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -770,6 +739,46 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">macro</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">model</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">数据库</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">acm</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">树</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">字典树</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">前缀树</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">二进制</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">位运算</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">底层分析</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">事务</a>
               </li>
              
@@ -779,10 +788,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Python</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">底层分析</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -802,15 +807,15 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">ACID</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">sysbench</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">压力测试</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">ACID</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -822,6 +827,14 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">UUID</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">MySQL</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">架构</a>
               </li>
              
@@ -830,11 +843,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">UUID</a>
+                <a href="javascript:void(0)" class="js-tag color5">日志服务</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">MySQL</a>
+                <a href="javascript:void(0)" class="js-tag color4">SLS</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -874,14 +887,6 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">日志服务</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">SLS</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">大数据</a>
               </li>
              
@@ -906,6 +911,10 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">熔断</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">容器</a>
               </li>
              
@@ -915,10 +924,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">基本计算器</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">熔断</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -982,7 +987,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">边框识别 答题卡 试卷 考试</a>
+                <a href="javascript:void(0)" class="js-tag color5">机器学习</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1002,11 +1007,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">缓存</a>
+                <a href="javascript:void(0)" class="js-tag color5">边框识别 答题卡 试卷 考试</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">机器学习</a>
+                <a href="javascript:void(0)" class="js-tag color3">缓存</a>
               </li>
              
               <li class="article-tag-list-item">

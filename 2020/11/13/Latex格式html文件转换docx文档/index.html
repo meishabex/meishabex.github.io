@@ -9,12 +9,12 @@
   <link rel="dns-prefetch" href="https://bex.meishakeji.com">
   <title>Latex格式html文件转换docx文档 | Meisha Bex</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Latex格式html文件转换docx文档业务功能背景有需求要展示及导出试卷题目内容，源数据来源于题库，是html格式。 1&lt;div&gt; 已知关于\(x\)的不等式组\(\begin&#123;cases&#125;x  &lt;  10 \\ x  &gt;  a\end&#123;cases&#125; \)无解，则\(a\)的取值范围是______． &lt;&#x2F;div&gt; 题目">
+  <meta name="description" content="Latex格式html文件转换docx文档业务功能背景有需求要展示及导出试卷题目内容，源数据来源于题库，是html格式。 1&lt;div&gt; 已知关于\(x\)的不等式组\(\begin&#123;cases&#125;x  &lt;  10 \\ x  &gt;  a\end&#123;cases&#125; \)无解，则\(a\)的取值范围是______． &lt;&#x2F;div&gt;  题">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Latex格式html文件转换docx文档">
 <meta property="og:url" content="https://bex.meishakeji.com/2020/11/13/Latex%E6%A0%BC%E5%BC%8Fhtml%E6%96%87%E4%BB%B6%E8%BD%AC%E6%8D%A2docx%E6%96%87%E6%A1%A3/index.html">
 <meta property="og:site_name" content="Meisha Bex">
-<meta property="og:description" content="Latex格式html文件转换docx文档业务功能背景有需求要展示及导出试卷题目内容，源数据来源于题库，是html格式。 1&lt;div&gt; 已知关于\(x\)的不等式组\(\begin&#123;cases&#125;x  &lt;  10 \\ x  &gt;  a\end&#123;cases&#125; \)无解，则\(a\)的取值范围是______． &lt;&#x2F;div&gt; 题目">
+<meta property="og:description" content="Latex格式html文件转换docx文档业务功能背景有需求要展示及导出试卷题目内容，源数据来源于题库，是html格式。 1&lt;div&gt; 已知关于\(x\)的不等式组\(\begin&#123;cases&#125;x  &lt;  10 \\ x  &gt;  a\end&#123;cases&#125; \)无解，则\(a\)的取值范围是______． &lt;&#x2F;div&gt;  题">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://cdn.meishakeji.com/md/lexiang/202011131607mathjax%E6%8C%87%E5%AE%9A%E8%A1%8C%E5%86%85%E5%85%AC%E5%BC%8F%E9%80%89%E6%8B%A9%E7%AC%A6.jpg">
 <meta property="og:image" content="https://cdn.meishakeji.com/md/lexiang/202011131524%E6%B5%8F%E8%A7%88%E5%99%A8%E5%85%AC%E5%BC%8F%E6%95%88%E6%9E%9C.jpg">
@@ -180,7 +180,8 @@
           
           
             <h3 id="Latex格式html文件转换docx文档"><a href="#Latex格式html文件转换docx文档" class="headerlink" title="Latex格式html文件转换docx文档"></a>Latex格式html文件转换docx文档</h3><h5 id="业务功能背景"><a href="#业务功能背景" class="headerlink" title="业务功能背景"></a>业务功能背景</h5><p>有需求要展示及导出试卷题目内容，源数据来源于题库，是html格式。</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span>&gt;</span> 已知关于\(x\)的不等式组\(\begin&#123;cases&#125;x  <span class="tag">&lt;  <span class="attr">10</span> \\ <span class="attr">x</span>  &gt;</span>  a\end&#123;cases&#125; \)无解，则\(a\)的取值范围是______． <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span>&gt;</span> 已知关于\(x\)的不等式组\(\begin&#123;cases&#125;x  &lt;  10 \\ x  &gt;  a\end&#123;cases&#125; \)无解，则\(a\)的取值范围是______． <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
 <p>题目如上所示，内容里会可能带有latex格式的数学公式。</p>
 <blockquote>
 <p>前端使用<strong>mathjax</strong>这个js库来展示html内容</p>
@@ -193,28 +194,29 @@
 <h5 id="解决思路"><a href="#解决思路" class="headerlink" title="解决思路"></a>解决思路</h5><ul>
 <li><p>选用中间格式数据<strong>mathml</strong>，能让mathjax和word同时支持</p>
 </li>
-<li><p>将完整内容的html内容提取出公式部分，提取策略和mathjax识别公式的策略一样，指定同样的行内公式选择符，参考<a href="https://docs.mathjax.org/en/v2.7-latest/options/preprocessors/tex2jax.html" target="_blank" rel="noopener">https://docs.mathjax.org/en/v2.7-latest/options/preprocessors/tex2jax.html</a></p>
-<p><img src="https://cdn.meishakeji.com/md/lexiang/202011131607mathjax%E6%8C%87%E5%AE%9A%E8%A1%8C%E5%86%85%E5%85%AC%E5%BC%8F%E9%80%89%E6%8B%A9%E7%AC%A6.jpg" alt></p>
+<li><p>将完整内容的html内容提取出公式部分，提取策略和mathjax识别公式的策略一样，指定同样的行内公式选择符，参考<a href="https://docs.mathjax.org/en/v2.7-latest/options/preprocessors/tex2jax.html">https://docs.mathjax.org/en/v2.7-latest/options/preprocessors/tex2jax.html</a></p>
+<p><img src="https://cdn.meishakeji.com/md/lexiang/202011131607mathjax%E6%8C%87%E5%AE%9A%E8%A1%8C%E5%86%85%E5%85%AC%E5%BC%8F%E9%80%89%E6%8B%A9%E7%AC%A6.jpg"></p>
 </li>
 </ul>
 <h5 id="实例演示"><a href="#实例演示" class="headerlink" title="实例演示"></a>实例演示</h5><ul>
 <li><p>题目源数据</p>
 <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span><span class="tag">&lt;<span class="name">span</span>&gt;</span>\(a^2 + b^2 = c^2\)<span class="tag">&lt;/<span class="name">span</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span><span class="tag">&lt;<span class="name">span</span>&gt;</span>\(v(t) = v_0 + \frac&#123;1&#125;&#123;2&#125;at^2\)<span class="tag">&lt;/<span class="name">span</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span><span class="tag">&lt;<span class="name">span</span>&gt;</span>\(\gamma = \frac&#123;1&#125;&#123;\sqrt&#123;1 - v^2/c^2&#125;&#125;\)<span class="tag">&lt;/<span class="name">span</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span><span class="tag">&lt;<span class="name">span</span>&gt;</span>\(\exists x \forall y (Rxy \equiv Ryx)\)<span class="tag">&lt;/<span class="name">span</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span><span class="tag">&lt;<span class="name">span</span>&gt;</span>\(\int_&#123;0&#125;^&#123;1&#125; x dx = \left[ \frac&#123;1&#125;&#123;2&#125;x^2 \right]_&#123;0&#125;^&#123;1&#125; = \frac&#123;1&#125;&#123;2&#125;\)<span class="tag">&lt;/<span class="name">span</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span><span class="tag">&lt;<span class="name">span</span>&gt;</span>\(e^x = \sum_&#123;n=0&#125;^\infty \frac&#123;x^n&#125;&#123;n!&#125; = \lim_&#123;n\rightarrow\infty&#125; (1+x/n)^n\)<span class="tag">&lt;/<span class="name">span</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+
 </li>
-</ul>
-<ul>
 <li><p>加载mathjax生成完整的html文档</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">xmlns</span>=<span class="string">"http://www.w3.org/1999/xhtml"</span> <span class="attr">lang</span>=<span class="string">""</span> <span class="attr">xml:lang</span>=<span class="string">""</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"utf-8"</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"generator"</span> <span class="attr">content</span>=<span class="string">"pandoc"</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"viewport"</span> <span class="attr">content</span>=<span class="string">"width=device-width, initial-scale=1.0, user-scalable=yes"</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>Pandoc math demos<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">style</span>&gt;</span></span><br><span class="line">        code&#123;white-space: pre-wrap;&#125;</span><br><span class="line">        span.smallcaps&#123;font-variant: small-caps;&#125;</span><br><span class="line">        span.underline&#123;text-decoration: underline;&#125;</span><br><span class="line">        div.column&#123;display: inline-block; vertical-align: top; width: 50%;&#125;</span><br><span class="line">    <span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-AMS_CHTML-full"</span> <span class="attr">type</span>=<span class="string">"text/javascript"</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!--[if lt IE 9]&gt;</span></span><br><span class="line"><span class="comment">    &lt;script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"&gt;&lt;/script&gt;</span></span><br><span class="line"><span class="comment">    &lt;![endif]--&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">header</span> <span class="attr">id</span>=<span class="string">"title-block-header"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">h1</span> <span class="attr">class</span>=<span class="string">"title"</span>&gt;</span>Pandoc math demos<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">header</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span><span class="tag">&lt;<span class="name">span</span>&gt;</span>\(a^2 + b^2 = c^2\)<span class="tag">&lt;/<span class="name">span</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span><span class="tag">&lt;<span class="name">span</span>&gt;</span>\(v(t) = v_0 + \frac&#123;1&#125;&#123;2&#125;at^2\)<span class="tag">&lt;/<span class="name">span</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span><span class="tag">&lt;<span class="name">span</span>&gt;</span>\(\gamma = \frac&#123;1&#125;&#123;\sqrt&#123;1 - v^2/c^2&#125;&#125;\)<span class="tag">&lt;/<span class="name">span</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span><span class="tag">&lt;<span class="name">span</span>&gt;</span>\(\exists x \forall y (Rxy \equiv Ryx)\)<span class="tag">&lt;/<span class="name">span</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span><span class="tag">&lt;<span class="name">span</span>&gt;</span>\(\int_&#123;0&#125;^&#123;1&#125; x dx = \left[ \frac&#123;1&#125;&#123;2&#125;x^2 \right]_&#123;0&#125;^&#123;1&#125; = \frac&#123;1&#125;&#123;2&#125;\)<span class="tag">&lt;/<span class="name">span</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span><span class="tag">&lt;<span class="name">span</span>&gt;</span>\(e^x = \sum_&#123;n=0&#125;^\infty \frac&#123;x^n&#125;&#123;n!&#125; = \lim_&#123;n\rightarrow\infty&#125; (1+x/n)^n\)<span class="tag">&lt;/<span class="name">span</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">xmlns</span>=<span class="string">&quot;http://www.w3.org/1999/xhtml&quot;</span> <span class="attr">lang</span>=<span class="string">&quot;&quot;</span> <span class="attr">xml:lang</span>=<span class="string">&quot;&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">&quot;utf-8&quot;</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">&quot;generator&quot;</span> <span class="attr">content</span>=<span class="string">&quot;pandoc&quot;</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">&quot;viewport&quot;</span> <span class="attr">content</span>=<span class="string">&quot;width=device-width, initial-scale=1.0, user-scalable=yes&quot;</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>Pandoc math demos<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">style</span>&gt;</span><span class="language-css"></span></span><br><span class="line"><span class="language-css">        <span class="selector-tag">code</span>&#123;<span class="attribute">white-space</span>: pre-wrap;&#125;</span></span><br><span class="line"><span class="language-css">        <span class="selector-tag">span</span><span class="selector-class">.smallcaps</span>&#123;<span class="attribute">font-variant</span>: small-caps;&#125;</span></span><br><span class="line"><span class="language-css">        <span class="selector-tag">span</span><span class="selector-class">.underline</span>&#123;<span class="attribute">text-decoration</span>: underline;&#125;</span></span><br><span class="line"><span class="language-css">        <span class="selector-tag">div</span><span class="selector-class">.column</span>&#123;<span class="attribute">display</span>: inline-block; <span class="attribute">vertical-align</span>: top; <span class="attribute">width</span>: <span class="number">50%</span>;&#125;</span></span><br><span class="line"><span class="language-css">    </span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">&quot;https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-AMS_CHTML-full&quot;</span> <span class="attr">type</span>=<span class="string">&quot;text/javascript&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!--[if lt IE 9]&gt;</span></span><br><span class="line"><span class="comment">    &lt;script src=&quot;//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js&quot;&gt;&lt;/script&gt;</span></span><br><span class="line"><span class="comment">    &lt;![endif]--&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">header</span> <span class="attr">id</span>=<span class="string">&quot;title-block-header&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">h1</span> <span class="attr">class</span>=<span class="string">&quot;title&quot;</span>&gt;</span>Pandoc math demos<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">header</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span><span class="tag">&lt;<span class="name">span</span>&gt;</span>\(a^2 + b^2 = c^2\)<span class="tag">&lt;/<span class="name">span</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span><span class="tag">&lt;<span class="name">span</span>&gt;</span>\(v(t) = v_0 + \frac&#123;1&#125;&#123;2&#125;at^2\)<span class="tag">&lt;/<span class="name">span</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span><span class="tag">&lt;<span class="name">span</span>&gt;</span>\(\gamma = \frac&#123;1&#125;&#123;\sqrt&#123;1 - v^2/c^2&#125;&#125;\)<span class="tag">&lt;/<span class="name">span</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span><span class="tag">&lt;<span class="name">span</span>&gt;</span>\(\exists x \forall y (Rxy \equiv Ryx)\)<span class="tag">&lt;/<span class="name">span</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span><span class="tag">&lt;<span class="name">span</span>&gt;</span>\(\int_&#123;0&#125;^&#123;1&#125; x dx = \left[ \frac&#123;1&#125;&#123;2&#125;x^2 \right]_&#123;0&#125;^&#123;1&#125; = \frac&#123;1&#125;&#123;2&#125;\)<span class="tag">&lt;/<span class="name">span</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span><span class="tag">&lt;<span class="name">span</span>&gt;</span>\(e^x = \sum_&#123;n=0&#125;^\infty \frac&#123;x^n&#125;&#123;n!&#125; = \lim_&#123;n\rightarrow\infty&#125; (1+x/n)^n\)<span class="tag">&lt;/<span class="name">span</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
 <p>浏览器上的效果</p>
 <p><img src="https://cdn.meishakeji.com/md/lexiang/202011131524%E6%B5%8F%E8%A7%88%E5%99%A8%E5%85%AC%E5%BC%8F%E6%95%88%E6%9E%9C.jpg" alt="浏览器效果"></p>
 </li>
 <li><p>使用mathjax把html中的公式部分替换为mml</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">xmlns</span>=<span class="string">"http://www.w3.org/1999/xhtml"</span> <span class="attr">lang</span>=<span class="string">""</span> <span class="attr">xml:lang</span>=<span class="string">""</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"utf-8"</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"generator"</span> <span class="attr">content</span>=<span class="string">"pandoc"</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"viewport"</span> <span class="attr">content</span>=<span class="string">"width=device-width, initial-scale=1.0, user-scalable=yes"</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>Pandoc math demos<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">style</span>&gt;</span></span><br><span class="line">        code&#123;white-space: pre-wrap;&#125;</span><br><span class="line">        span.smallcaps&#123;font-variant: small-caps;&#125;</span><br><span class="line">        span.underline&#123;text-decoration: underline;&#125;</span><br><span class="line">        div.column&#123;display: inline-block; vertical-align: top; width: 50%;&#125;</span><br><span class="line">    <span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-AMS_CHTML-full"</span> <span class="attr">type</span>=<span class="string">"text/javascript"</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!--[if lt IE 9]&gt;</span></span><br><span class="line"><span class="comment">    &lt;script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"&gt;&lt;/script&gt;</span></span><br><span class="line"><span class="comment">    &lt;![endif]--&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">header</span> <span class="attr">id</span>=<span class="string">"title-block-header"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">h1</span> <span class="attr">class</span>=<span class="string">"title"</span>&gt;</span>Pandoc math demos<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">header</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span><span class="tag">&lt;<span class="name">span</span>&gt;</span><span class="tag">&lt;<span class="name">math</span> <span class="attr">xmlns</span>=<span class="string">"http://www.w3.org/1998/Math/MathML"</span>&gt;</span><span class="tag">&lt;<span class="name">msup</span>&gt;</span><span class="tag">&lt;<span class="name">mi</span>&gt;</span>a<span class="tag">&lt;/<span class="name">mi</span>&gt;</span><span class="tag">&lt;<span class="name">mn</span>&gt;</span>2<span class="tag">&lt;/<span class="name">mn</span>&gt;</span><span class="tag">&lt;/<span class="name">msup</span>&gt;</span><span class="tag">&lt;<span class="name">mo</span>&gt;</span>+<span class="tag">&lt;/<span class="name">mo</span>&gt;</span><span class="tag">&lt;<span class="name">msup</span>&gt;</span><span class="tag">&lt;<span class="name">mi</span>&gt;</span>b<span class="tag">&lt;/<span class="name">mi</span>&gt;</span><span class="tag">&lt;<span class="name">mn</span>&gt;</span>2<span class="tag">&lt;/<span class="name">mn</span>&gt;</span><span class="tag">&lt;/<span class="name">msup</span>&gt;</span><span class="tag">&lt;<span class="name">mo</span>&gt;</span>=<span class="tag">&lt;/<span class="name">mo</span>&gt;</span><span class="tag">&lt;<span class="name">msup</span>&gt;</span><span class="tag">&lt;<span class="name">mi</span>&gt;</span>c<span class="tag">&lt;/<span class="name">mi</span>&gt;</span><span class="tag">&lt;<span class="name">mn</span>&gt;</span>2<span class="tag">&lt;/<span class="name">mn</span>&gt;</span><span class="tag">&lt;/<span class="name">msup</span>&gt;</span><span class="tag">&lt;/<span class="name">math</span>&gt;</span><span class="tag">&lt;/<span class="name">span</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span><span class="tag">&lt;<span class="name">span</span>&gt;</span><span class="tag">&lt;<span class="name">math</span> <span class="attr">xmlns</span>=<span class="string">"http://www.w3.org/1998/Math/MathML"</span>&gt;</span><span class="tag">&lt;<span class="name">mi</span>&gt;</span>v<span class="tag">&lt;/<span class="name">mi</span>&gt;</span><span class="tag">&lt;<span class="name">mo</span>&gt;</span>(<span class="tag">&lt;/<span class="name">mo</span>&gt;</span><span class="tag">&lt;<span class="name">mi</span>&gt;</span>t<span class="tag">&lt;/<span class="name">mi</span>&gt;</span><span class="tag">&lt;<span class="name">mo</span>&gt;</span>)<span class="tag">&lt;/<span class="name">mo</span>&gt;</span><span class="tag">&lt;<span class="name">mo</span>&gt;</span>=<span class="tag">&lt;/<span class="name">mo</span>&gt;</span><span class="tag">&lt;<span class="name">msub</span>&gt;</span><span class="tag">&lt;<span class="name">mi</span>&gt;</span>v<span class="tag">&lt;/<span class="name">mi</span>&gt;</span><span class="tag">&lt;<span class="name">mn</span>&gt;</span>0<span class="tag">&lt;/<span class="name">mn</span>&gt;</span><span class="tag">&lt;/<span class="name">msub</span>&gt;</span><span class="tag">&lt;<span class="name">mo</span>&gt;</span>+<span class="tag">&lt;/<span class="name">mo</span>&gt;</span><span class="tag">&lt;<span class="name">mfrac</span>&gt;</span><span class="tag">&lt;<span class="name">mn</span>&gt;</span>1<span class="tag">&lt;/<span class="name">mn</span>&gt;</span><span class="tag">&lt;<span class="name">mn</span>&gt;</span>2<span class="tag">&lt;/<span class="name">mn</span>&gt;</span><span class="tag">&lt;/<span class="name">mfrac</span>&gt;</span><span class="tag">&lt;<span class="name">mi</span>&gt;</span>a<span class="tag">&lt;/<span class="name">mi</span>&gt;</span><span class="tag">&lt;<span class="name">msup</span>&gt;</span><span class="tag">&lt;<span class="name">mi</span>&gt;</span>t<span class="tag">&lt;/<span class="name">mi</span>&gt;</span><span class="tag">&lt;<span class="name">mn</span>&gt;</span>2<span class="tag">&lt;/<span class="name">mn</span>&gt;</span><span class="tag">&lt;/<span class="name">msup</span>&gt;</span><span class="tag">&lt;/<span class="name">math</span>&gt;</span><span class="tag">&lt;/<span class="name">span</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span><span class="tag">&lt;<span class="name">span</span>&gt;</span><span class="tag">&lt;<span class="name">math</span> <span class="attr">xmlns</span>=<span class="string">"http://www.w3.org/1998/Math/MathML"</span>&gt;</span><span class="tag">&lt;<span class="name">mi</span>&gt;</span><span class="symbol">&amp;#x3B3;</span><span class="tag">&lt;/<span class="name">mi</span>&gt;</span><span class="tag">&lt;<span class="name">mo</span>&gt;</span>=<span class="tag">&lt;/<span class="name">mo</span>&gt;</span><span class="tag">&lt;<span class="name">mfrac</span>&gt;</span><span class="tag">&lt;<span class="name">mn</span>&gt;</span>1<span class="tag">&lt;/<span class="name">mn</span>&gt;</span><span class="tag">&lt;<span class="name">msqrt</span>&gt;</span><span class="tag">&lt;<span class="name">mn</span>&gt;</span>1<span class="tag">&lt;/<span class="name">mn</span>&gt;</span><span class="tag">&lt;<span class="name">mo</span>&gt;</span>-<span class="tag">&lt;/<span class="name">mo</span>&gt;</span><span class="tag">&lt;<span class="name">msup</span>&gt;</span><span class="tag">&lt;<span class="name">mi</span>&gt;</span>v<span class="tag">&lt;/<span class="name">mi</span>&gt;</span><span class="tag">&lt;<span class="name">mn</span>&gt;</span>2<span class="tag">&lt;/<span class="name">mn</span>&gt;</span><span class="tag">&lt;/<span class="name">msup</span>&gt;</span><span class="tag">&lt;<span class="name">mo</span>&gt;</span>/<span class="tag">&lt;/<span class="name">mo</span>&gt;</span><span class="tag">&lt;<span class="name">msup</span>&gt;</span><span class="tag">&lt;<span class="name">mi</span>&gt;</span>c<span class="tag">&lt;/<span class="name">mi</span>&gt;</span><span class="tag">&lt;<span class="name">mn</span>&gt;</span>2<span class="tag">&lt;/<span class="name">mn</span>&gt;</span><span class="tag">&lt;/<span class="name">msup</span>&gt;</span><span class="tag">&lt;/<span class="name">msqrt</span>&gt;</span><span class="tag">&lt;/<span class="name">mfrac</span>&gt;</span><span class="tag">&lt;/<span class="name">math</span>&gt;</span><span class="tag">&lt;/<span class="name">span</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span><span class="tag">&lt;<span class="name">span</span>&gt;</span><span class="tag">&lt;<span class="name">math</span> <span class="attr">xmlns</span>=<span class="string">"http://www.w3.org/1998/Math/MathML"</span>&gt;</span><span class="tag">&lt;<span class="name">mo</span>&gt;</span><span class="symbol">&amp;#x2203;</span><span class="tag">&lt;/<span class="name">mo</span>&gt;</span><span class="tag">&lt;<span class="name">mi</span>&gt;</span>x<span class="tag">&lt;/<span class="name">mi</span>&gt;</span><span class="tag">&lt;<span class="name">mo</span>&gt;</span><span class="symbol">&amp;#x2200;</span><span class="tag">&lt;/<span class="name">mo</span>&gt;</span><span class="tag">&lt;<span class="name">mi</span>&gt;</span>y<span class="tag">&lt;/<span class="name">mi</span>&gt;</span><span class="tag">&lt;<span class="name">mo</span>&gt;</span>(<span class="tag">&lt;/<span class="name">mo</span>&gt;</span><span class="tag">&lt;<span class="name">mi</span>&gt;</span>R<span class="tag">&lt;/<span class="name">mi</span>&gt;</span><span class="tag">&lt;<span class="name">mi</span>&gt;</span>x<span class="tag">&lt;/<span class="name">mi</span>&gt;</span><span class="tag">&lt;<span class="name">mi</span>&gt;</span>y<span class="tag">&lt;/<span class="name">mi</span>&gt;</span><span class="tag">&lt;<span class="name">mo</span>&gt;</span><span class="symbol">&amp;#x2261;</span><span class="tag">&lt;/<span class="name">mo</span>&gt;</span><span class="tag">&lt;<span class="name">mi</span>&gt;</span>R<span class="tag">&lt;/<span class="name">mi</span>&gt;</span><span class="tag">&lt;<span class="name">mi</span>&gt;</span>y<span class="tag">&lt;/<span class="name">mi</span>&gt;</span><span class="tag">&lt;<span class="name">mi</span>&gt;</span>x<span class="tag">&lt;/<span class="name">mi</span>&gt;</span><span class="tag">&lt;<span class="name">mo</span>&gt;</span>)<span class="tag">&lt;/<span class="name">mo</span>&gt;</span><span class="tag">&lt;/<span class="name">math</span>&gt;</span><span class="tag">&lt;/<span class="name">span</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span><span class="tag">&lt;<span class="name">span</span>&gt;</span><span class="tag">&lt;<span class="name">math</span> <span class="attr">xmlns</span>=<span class="string">"http://www.w3.org/1998/Math/MathML"</span>&gt;</span><span class="tag">&lt;<span class="name">msubsup</span>&gt;</span><span class="tag">&lt;<span class="name">mo</span>&gt;</span><span class="symbol">&amp;#x222B;</span><span class="tag">&lt;/<span class="name">mo</span>&gt;</span><span class="tag">&lt;<span class="name">mn</span>&gt;</span>0<span class="tag">&lt;/<span class="name">mn</span>&gt;</span><span class="tag">&lt;<span class="name">mn</span>&gt;</span>1<span class="tag">&lt;/<span class="name">mn</span>&gt;</span><span class="tag">&lt;/<span class="name">msubsup</span>&gt;</span><span class="tag">&lt;<span class="name">mi</span>&gt;</span>x<span class="tag">&lt;/<span class="name">mi</span>&gt;</span><span class="tag">&lt;<span class="name">mi</span>&gt;</span>d<span class="tag">&lt;/<span class="name">mi</span>&gt;</span><span class="tag">&lt;<span class="name">mi</span>&gt;</span>x<span class="tag">&lt;/<span class="name">mi</span>&gt;</span><span class="tag">&lt;<span class="name">mo</span>&gt;</span>=<span class="tag">&lt;/<span class="name">mo</span>&gt;</span><span class="tag">&lt;<span class="name">msubsup</span>&gt;</span><span class="tag">&lt;<span class="name">mfenced</span> <span class="attr">open</span>=<span class="string">"["</span> <span class="attr">close</span>=<span class="string">"]"</span>&gt;</span><span class="tag">&lt;<span class="name">mrow</span>&gt;</span><span class="tag">&lt;<span class="name">mfrac</span>&gt;</span><span class="tag">&lt;<span class="name">mn</span>&gt;</span>1<span class="tag">&lt;/<span class="name">mn</span>&gt;</span><span class="tag">&lt;<span class="name">mn</span>&gt;</span>2<span class="tag">&lt;/<span class="name">mn</span>&gt;</span><span class="tag">&lt;/<span class="name">mfrac</span>&gt;</span><span class="tag">&lt;<span class="name">msup</span>&gt;</span><span class="tag">&lt;<span class="name">mi</span>&gt;</span>x<span class="tag">&lt;/<span class="name">mi</span>&gt;</span><span class="tag">&lt;<span class="name">mn</span>&gt;</span>2<span class="tag">&lt;/<span class="name">mn</span>&gt;</span><span class="tag">&lt;/<span class="name">msup</span>&gt;</span><span class="tag">&lt;/<span class="name">mrow</span>&gt;</span><span class="tag">&lt;/<span class="name">mfenced</span>&gt;</span><span class="tag">&lt;<span class="name">mn</span>&gt;</span>0<span class="tag">&lt;/<span class="name">mn</span>&gt;</span><span class="tag">&lt;<span class="name">mn</span>&gt;</span>1<span class="tag">&lt;/<span class="name">mn</span>&gt;</span><span class="tag">&lt;/<span class="name">msubsup</span>&gt;</span><span class="tag">&lt;<span class="name">mo</span>&gt;</span>=<span class="tag">&lt;/<span class="name">mo</span>&gt;</span><span class="tag">&lt;<span class="name">mfrac</span>&gt;</span><span class="tag">&lt;<span class="name">mn</span>&gt;</span>1<span class="tag">&lt;/<span class="name">mn</span>&gt;</span><span class="tag">&lt;<span class="name">mn</span>&gt;</span>2<span class="tag">&lt;/<span class="name">mn</span>&gt;</span><span class="tag">&lt;/<span class="name">mfrac</span>&gt;</span><span class="tag">&lt;/<span class="name">math</span>&gt;</span><span class="tag">&lt;/<span class="name">span</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span><span class="tag">&lt;<span class="name">span</span>&gt;</span><span class="tag">&lt;<span class="name">math</span> <span class="attr">xmlns</span>=<span class="string">"http://www.w3.org/1998/Math/MathML"</span>&gt;</span><span class="tag">&lt;<span class="name">msup</span>&gt;</span><span class="tag">&lt;<span class="name">mi</span>&gt;</span>e<span class="tag">&lt;/<span class="name">mi</span>&gt;</span><span class="tag">&lt;<span class="name">mi</span>&gt;</span>x<span class="tag">&lt;/<span class="name">mi</span>&gt;</span><span class="tag">&lt;/<span class="name">msup</span>&gt;</span><span class="tag">&lt;<span class="name">mo</span>&gt;</span>=<span class="tag">&lt;/<span class="name">mo</span>&gt;</span><span class="tag">&lt;<span class="name">munderover</span>&gt;</span><span class="tag">&lt;<span class="name">mo</span>&gt;</span><span class="symbol">&amp;#x2211;</span><span class="tag">&lt;/<span class="name">mo</span>&gt;</span><span class="tag">&lt;<span class="name">mrow</span>&gt;</span><span class="tag">&lt;<span class="name">mi</span>&gt;</span>n<span class="tag">&lt;/<span class="name">mi</span>&gt;</span><span class="tag">&lt;<span class="name">mo</span>&gt;</span>=<span class="tag">&lt;/<span class="name">mo</span>&gt;</span><span class="tag">&lt;<span class="name">mn</span>&gt;</span>0<span class="tag">&lt;/<span class="name">mn</span>&gt;</span><span class="tag">&lt;/<span class="name">mrow</span>&gt;</span><span class="tag">&lt;<span class="name">mo</span>&gt;</span><span class="symbol">&amp;#x221E;</span><span class="tag">&lt;/<span class="name">mo</span>&gt;</span><span class="tag">&lt;/<span class="name">munderover</span>&gt;</span><span class="tag">&lt;<span class="name">mfrac</span>&gt;</span><span class="tag">&lt;<span class="name">msup</span>&gt;</span><span class="tag">&lt;<span class="name">mi</span>&gt;</span>x<span class="tag">&lt;/<span class="name">mi</span>&gt;</span><span class="tag">&lt;<span class="name">mi</span>&gt;</span>n<span class="tag">&lt;/<span class="name">mi</span>&gt;</span><span class="tag">&lt;/<span class="name">msup</span>&gt;</span><span class="tag">&lt;<span class="name">mrow</span>&gt;</span><span class="tag">&lt;<span class="name">mi</span>&gt;</span>n<span class="tag">&lt;/<span class="name">mi</span>&gt;</span><span class="tag">&lt;<span class="name">mo</span>&gt;</span>!<span class="tag">&lt;/<span class="name">mo</span>&gt;</span><span class="tag">&lt;/<span class="name">mrow</span>&gt;</span><span class="tag">&lt;/<span class="name">mfrac</span>&gt;</span><span class="tag">&lt;<span class="name">mo</span>&gt;</span>=<span class="tag">&lt;/<span class="name">mo</span>&gt;</span><span class="tag">&lt;<span class="name">munder</span>&gt;</span><span class="tag">&lt;<span class="name">mi</span>&gt;</span>lim<span class="tag">&lt;/<span class="name">mi</span>&gt;</span><span class="tag">&lt;<span class="name">mrow</span>&gt;</span><span class="tag">&lt;<span class="name">mi</span>&gt;</span>n<span class="tag">&lt;/<span class="name">mi</span>&gt;</span><span class="tag">&lt;<span class="name">mo</span>&gt;</span><span class="symbol">&amp;#x2192;</span><span class="tag">&lt;/<span class="name">mo</span>&gt;</span><span class="tag">&lt;<span class="name">mo</span>&gt;</span><span class="symbol">&amp;#x221E;</span><span class="tag">&lt;/<span class="name">mo</span>&gt;</span><span class="tag">&lt;/<span class="name">mrow</span>&gt;</span><span class="tag">&lt;/<span class="name">munder</span>&gt;</span><span class="tag">&lt;<span class="name">mo</span>&gt;</span>(<span class="tag">&lt;/<span class="name">mo</span>&gt;</span><span class="tag">&lt;<span class="name">mn</span>&gt;</span>1<span class="tag">&lt;/<span class="name">mn</span>&gt;</span><span class="tag">&lt;<span class="name">mo</span>&gt;</span>+<span class="tag">&lt;/<span class="name">mo</span>&gt;</span><span class="tag">&lt;<span class="name">mi</span>&gt;</span>x<span class="tag">&lt;/<span class="name">mi</span>&gt;</span><span class="tag">&lt;<span class="name">mo</span>&gt;</span>/<span class="tag">&lt;/<span class="name">mo</span>&gt;</span><span class="tag">&lt;<span class="name">mi</span>&gt;</span>n<span class="tag">&lt;/<span class="name">mi</span>&gt;</span><span class="tag">&lt;<span class="name">msup</span>&gt;</span><span class="tag">&lt;<span class="name">mo</span>&gt;</span>)<span class="tag">&lt;/<span class="name">mo</span>&gt;</span><span class="tag">&lt;<span class="name">mi</span>&gt;</span>n<span class="tag">&lt;/<span class="name">mi</span>&gt;</span><span class="tag">&lt;/<span class="name">msup</span>&gt;</span><span class="tag">&lt;/<span class="name">math</span>&gt;</span><span class="tag">&lt;/<span class="name">span</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">xmlns</span>=<span class="string">&quot;http://www.w3.org/1999/xhtml&quot;</span> <span class="attr">lang</span>=<span class="string">&quot;&quot;</span> <span class="attr">xml:lang</span>=<span class="string">&quot;&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">&quot;utf-8&quot;</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">&quot;generator&quot;</span> <span class="attr">content</span>=<span class="string">&quot;pandoc&quot;</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">&quot;viewport&quot;</span> <span class="attr">content</span>=<span class="string">&quot;width=device-width, initial-scale=1.0, user-scalable=yes&quot;</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>Pandoc math demos<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">style</span>&gt;</span><span class="language-css"></span></span><br><span class="line"><span class="language-css">        <span class="selector-tag">code</span>&#123;<span class="attribute">white-space</span>: pre-wrap;&#125;</span></span><br><span class="line"><span class="language-css">        <span class="selector-tag">span</span><span class="selector-class">.smallcaps</span>&#123;<span class="attribute">font-variant</span>: small-caps;&#125;</span></span><br><span class="line"><span class="language-css">        <span class="selector-tag">span</span><span class="selector-class">.underline</span>&#123;<span class="attribute">text-decoration</span>: underline;&#125;</span></span><br><span class="line"><span class="language-css">        <span class="selector-tag">div</span><span class="selector-class">.column</span>&#123;<span class="attribute">display</span>: inline-block; <span class="attribute">vertical-align</span>: top; <span class="attribute">width</span>: <span class="number">50%</span>;&#125;</span></span><br><span class="line"><span class="language-css">    </span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">&quot;https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-AMS_CHTML-full&quot;</span> <span class="attr">type</span>=<span class="string">&quot;text/javascript&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!--[if lt IE 9]&gt;</span></span><br><span class="line"><span class="comment">    &lt;script src=&quot;//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js&quot;&gt;&lt;/script&gt;</span></span><br><span class="line"><span class="comment">    &lt;![endif]--&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">header</span> <span class="attr">id</span>=<span class="string">&quot;title-block-header&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">h1</span> <span class="attr">class</span>=<span class="string">&quot;title&quot;</span>&gt;</span>Pandoc math demos<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">header</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span><span class="tag">&lt;<span class="name">span</span>&gt;</span><span class="tag">&lt;<span class="name">math</span> <span class="attr">xmlns</span>=<span class="string">&quot;http://www.w3.org/1998/Math/MathML&quot;</span>&gt;</span><span class="tag">&lt;<span class="name">msup</span>&gt;</span><span class="tag">&lt;<span class="name">mi</span>&gt;</span>a<span class="tag">&lt;/<span class="name">mi</span>&gt;</span><span class="tag">&lt;<span class="name">mn</span>&gt;</span>2<span class="tag">&lt;/<span class="name">mn</span>&gt;</span><span class="tag">&lt;/<span class="name">msup</span>&gt;</span><span class="tag">&lt;<span class="name">mo</span>&gt;</span>+<span class="tag">&lt;/<span class="name">mo</span>&gt;</span><span class="tag">&lt;<span class="name">msup</span>&gt;</span><span class="tag">&lt;<span class="name">mi</span>&gt;</span>b<span class="tag">&lt;/<span class="name">mi</span>&gt;</span><span class="tag">&lt;<span class="name">mn</span>&gt;</span>2<span class="tag">&lt;/<span class="name">mn</span>&gt;</span><span class="tag">&lt;/<span class="name">msup</span>&gt;</span><span class="tag">&lt;<span class="name">mo</span>&gt;</span>=<span class="tag">&lt;/<span class="name">mo</span>&gt;</span><span class="tag">&lt;<span class="name">msup</span>&gt;</span><span class="tag">&lt;<span class="name">mi</span>&gt;</span>c<span class="tag">&lt;/<span class="name">mi</span>&gt;</span><span class="tag">&lt;<span class="name">mn</span>&gt;</span>2<span class="tag">&lt;/<span class="name">mn</span>&gt;</span><span class="tag">&lt;/<span class="name">msup</span>&gt;</span><span class="tag">&lt;/<span class="name">math</span>&gt;</span><span class="tag">&lt;/<span class="name">span</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span><span class="tag">&lt;<span class="name">span</span>&gt;</span><span class="tag">&lt;<span class="name">math</span> <span class="attr">xmlns</span>=<span class="string">&quot;http://www.w3.org/1998/Math/MathML&quot;</span>&gt;</span><span class="tag">&lt;<span class="name">mi</span>&gt;</span>v<span class="tag">&lt;/<span class="name">mi</span>&gt;</span><span class="tag">&lt;<span class="name">mo</span>&gt;</span>(<span class="tag">&lt;/<span class="name">mo</span>&gt;</span><span class="tag">&lt;<span class="name">mi</span>&gt;</span>t<span class="tag">&lt;/<span class="name">mi</span>&gt;</span><span class="tag">&lt;<span class="name">mo</span>&gt;</span>)<span class="tag">&lt;/<span class="name">mo</span>&gt;</span><span class="tag">&lt;<span class="name">mo</span>&gt;</span>=<span class="tag">&lt;/<span class="name">mo</span>&gt;</span><span class="tag">&lt;<span class="name">msub</span>&gt;</span><span class="tag">&lt;<span class="name">mi</span>&gt;</span>v<span class="tag">&lt;/<span class="name">mi</span>&gt;</span><span class="tag">&lt;<span class="name">mn</span>&gt;</span>0<span class="tag">&lt;/<span class="name">mn</span>&gt;</span><span class="tag">&lt;/<span class="name">msub</span>&gt;</span><span class="tag">&lt;<span class="name">mo</span>&gt;</span>+<span class="tag">&lt;/<span class="name">mo</span>&gt;</span><span class="tag">&lt;<span class="name">mfrac</span>&gt;</span><span class="tag">&lt;<span class="name">mn</span>&gt;</span>1<span class="tag">&lt;/<span class="name">mn</span>&gt;</span><span class="tag">&lt;<span class="name">mn</span>&gt;</span>2<span class="tag">&lt;/<span class="name">mn</span>&gt;</span><span class="tag">&lt;/<span class="name">mfrac</span>&gt;</span><span class="tag">&lt;<span class="name">mi</span>&gt;</span>a<span class="tag">&lt;/<span class="name">mi</span>&gt;</span><span class="tag">&lt;<span class="name">msup</span>&gt;</span><span class="tag">&lt;<span class="name">mi</span>&gt;</span>t<span class="tag">&lt;/<span class="name">mi</span>&gt;</span><span class="tag">&lt;<span class="name">mn</span>&gt;</span>2<span class="tag">&lt;/<span class="name">mn</span>&gt;</span><span class="tag">&lt;/<span class="name">msup</span>&gt;</span><span class="tag">&lt;/<span class="name">math</span>&gt;</span><span class="tag">&lt;/<span class="name">span</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span><span class="tag">&lt;<span class="name">span</span>&gt;</span><span class="tag">&lt;<span class="name">math</span> <span class="attr">xmlns</span>=<span class="string">&quot;http://www.w3.org/1998/Math/MathML&quot;</span>&gt;</span><span class="tag">&lt;<span class="name">mi</span>&gt;</span><span class="symbol">&amp;#x3B3;</span><span class="tag">&lt;/<span class="name">mi</span>&gt;</span><span class="tag">&lt;<span class="name">mo</span>&gt;</span>=<span class="tag">&lt;/<span class="name">mo</span>&gt;</span><span class="tag">&lt;<span class="name">mfrac</span>&gt;</span><span class="tag">&lt;<span class="name">mn</span>&gt;</span>1<span class="tag">&lt;/<span class="name">mn</span>&gt;</span><span class="tag">&lt;<span class="name">msqrt</span>&gt;</span><span class="tag">&lt;<span class="name">mn</span>&gt;</span>1<span class="tag">&lt;/<span class="name">mn</span>&gt;</span><span class="tag">&lt;<span class="name">mo</span>&gt;</span>-<span class="tag">&lt;/<span class="name">mo</span>&gt;</span><span class="tag">&lt;<span class="name">msup</span>&gt;</span><span class="tag">&lt;<span class="name">mi</span>&gt;</span>v<span class="tag">&lt;/<span class="name">mi</span>&gt;</span><span class="tag">&lt;<span class="name">mn</span>&gt;</span>2<span class="tag">&lt;/<span class="name">mn</span>&gt;</span><span class="tag">&lt;/<span class="name">msup</span>&gt;</span><span class="tag">&lt;<span class="name">mo</span>&gt;</span>/<span class="tag">&lt;/<span class="name">mo</span>&gt;</span><span class="tag">&lt;<span class="name">msup</span>&gt;</span><span class="tag">&lt;<span class="name">mi</span>&gt;</span>c<span class="tag">&lt;/<span class="name">mi</span>&gt;</span><span class="tag">&lt;<span class="name">mn</span>&gt;</span>2<span class="tag">&lt;/<span class="name">mn</span>&gt;</span><span class="tag">&lt;/<span class="name">msup</span>&gt;</span><span class="tag">&lt;/<span class="name">msqrt</span>&gt;</span><span class="tag">&lt;/<span class="name">mfrac</span>&gt;</span><span class="tag">&lt;/<span class="name">math</span>&gt;</span><span class="tag">&lt;/<span class="name">span</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span><span class="tag">&lt;<span class="name">span</span>&gt;</span><span class="tag">&lt;<span class="name">math</span> <span class="attr">xmlns</span>=<span class="string">&quot;http://www.w3.org/1998/Math/MathML&quot;</span>&gt;</span><span class="tag">&lt;<span class="name">mo</span>&gt;</span><span class="symbol">&amp;#x2203;</span><span class="tag">&lt;/<span class="name">mo</span>&gt;</span><span class="tag">&lt;<span class="name">mi</span>&gt;</span>x<span class="tag">&lt;/<span class="name">mi</span>&gt;</span><span class="tag">&lt;<span class="name">mo</span>&gt;</span><span class="symbol">&amp;#x2200;</span><span class="tag">&lt;/<span class="name">mo</span>&gt;</span><span class="tag">&lt;<span class="name">mi</span>&gt;</span>y<span class="tag">&lt;/<span class="name">mi</span>&gt;</span><span class="tag">&lt;<span class="name">mo</span>&gt;</span>(<span class="tag">&lt;/<span class="name">mo</span>&gt;</span><span class="tag">&lt;<span class="name">mi</span>&gt;</span>R<span class="tag">&lt;/<span class="name">mi</span>&gt;</span><span class="tag">&lt;<span class="name">mi</span>&gt;</span>x<span class="tag">&lt;/<span class="name">mi</span>&gt;</span><span class="tag">&lt;<span class="name">mi</span>&gt;</span>y<span class="tag">&lt;/<span class="name">mi</span>&gt;</span><span class="tag">&lt;<span class="name">mo</span>&gt;</span><span class="symbol">&amp;#x2261;</span><span class="tag">&lt;/<span class="name">mo</span>&gt;</span><span class="tag">&lt;<span class="name">mi</span>&gt;</span>R<span class="tag">&lt;/<span class="name">mi</span>&gt;</span><span class="tag">&lt;<span class="name">mi</span>&gt;</span>y<span class="tag">&lt;/<span class="name">mi</span>&gt;</span><span class="tag">&lt;<span class="name">mi</span>&gt;</span>x<span class="tag">&lt;/<span class="name">mi</span>&gt;</span><span class="tag">&lt;<span class="name">mo</span>&gt;</span>)<span class="tag">&lt;/<span class="name">mo</span>&gt;</span><span class="tag">&lt;/<span class="name">math</span>&gt;</span><span class="tag">&lt;/<span class="name">span</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span><span class="tag">&lt;<span class="name">span</span>&gt;</span><span class="tag">&lt;<span class="name">math</span> <span class="attr">xmlns</span>=<span class="string">&quot;http://www.w3.org/1998/Math/MathML&quot;</span>&gt;</span><span class="tag">&lt;<span class="name">msubsup</span>&gt;</span><span class="tag">&lt;<span class="name">mo</span>&gt;</span><span class="symbol">&amp;#x222B;</span><span class="tag">&lt;/<span class="name">mo</span>&gt;</span><span class="tag">&lt;<span class="name">mn</span>&gt;</span>0<span class="tag">&lt;/<span class="name">mn</span>&gt;</span><span class="tag">&lt;<span class="name">mn</span>&gt;</span>1<span class="tag">&lt;/<span class="name">mn</span>&gt;</span><span class="tag">&lt;/<span class="name">msubsup</span>&gt;</span><span class="tag">&lt;<span class="name">mi</span>&gt;</span>x<span class="tag">&lt;/<span class="name">mi</span>&gt;</span><span class="tag">&lt;<span class="name">mi</span>&gt;</span>d<span class="tag">&lt;/<span class="name">mi</span>&gt;</span><span class="tag">&lt;<span class="name">mi</span>&gt;</span>x<span class="tag">&lt;/<span class="name">mi</span>&gt;</span><span class="tag">&lt;<span class="name">mo</span>&gt;</span>=<span class="tag">&lt;/<span class="name">mo</span>&gt;</span><span class="tag">&lt;<span class="name">msubsup</span>&gt;</span><span class="tag">&lt;<span class="name">mfenced</span> <span class="attr">open</span>=<span class="string">&quot;[&quot;</span> <span class="attr">close</span>=<span class="string">&quot;]&quot;</span>&gt;</span><span class="tag">&lt;<span class="name">mrow</span>&gt;</span><span class="tag">&lt;<span class="name">mfrac</span>&gt;</span><span class="tag">&lt;<span class="name">mn</span>&gt;</span>1<span class="tag">&lt;/<span class="name">mn</span>&gt;</span><span class="tag">&lt;<span class="name">mn</span>&gt;</span>2<span class="tag">&lt;/<span class="name">mn</span>&gt;</span><span class="tag">&lt;/<span class="name">mfrac</span>&gt;</span><span class="tag">&lt;<span class="name">msup</span>&gt;</span><span class="tag">&lt;<span class="name">mi</span>&gt;</span>x<span class="tag">&lt;/<span class="name">mi</span>&gt;</span><span class="tag">&lt;<span class="name">mn</span>&gt;</span>2<span class="tag">&lt;/<span class="name">mn</span>&gt;</span><span class="tag">&lt;/<span class="name">msup</span>&gt;</span><span class="tag">&lt;/<span class="name">mrow</span>&gt;</span><span class="tag">&lt;/<span class="name">mfenced</span>&gt;</span><span class="tag">&lt;<span class="name">mn</span>&gt;</span>0<span class="tag">&lt;/<span class="name">mn</span>&gt;</span><span class="tag">&lt;<span class="name">mn</span>&gt;</span>1<span class="tag">&lt;/<span class="name">mn</span>&gt;</span><span class="tag">&lt;/<span class="name">msubsup</span>&gt;</span><span class="tag">&lt;<span class="name">mo</span>&gt;</span>=<span class="tag">&lt;/<span class="name">mo</span>&gt;</span><span class="tag">&lt;<span class="name">mfrac</span>&gt;</span><span class="tag">&lt;<span class="name">mn</span>&gt;</span>1<span class="tag">&lt;/<span class="name">mn</span>&gt;</span><span class="tag">&lt;<span class="name">mn</span>&gt;</span>2<span class="tag">&lt;/<span class="name">mn</span>&gt;</span><span class="tag">&lt;/<span class="name">mfrac</span>&gt;</span><span class="tag">&lt;/<span class="name">math</span>&gt;</span><span class="tag">&lt;/<span class="name">span</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span><span class="tag">&lt;<span class="name">span</span>&gt;</span><span class="tag">&lt;<span class="name">math</span> <span class="attr">xmlns</span>=<span class="string">&quot;http://www.w3.org/1998/Math/MathML&quot;</span>&gt;</span><span class="tag">&lt;<span class="name">msup</span>&gt;</span><span class="tag">&lt;<span class="name">mi</span>&gt;</span>e<span class="tag">&lt;/<span class="name">mi</span>&gt;</span><span class="tag">&lt;<span class="name">mi</span>&gt;</span>x<span class="tag">&lt;/<span class="name">mi</span>&gt;</span><span class="tag">&lt;/<span class="name">msup</span>&gt;</span><span class="tag">&lt;<span class="name">mo</span>&gt;</span>=<span class="tag">&lt;/<span class="name">mo</span>&gt;</span><span class="tag">&lt;<span class="name">munderover</span>&gt;</span><span class="tag">&lt;<span class="name">mo</span>&gt;</span><span class="symbol">&amp;#x2211;</span><span class="tag">&lt;/<span class="name">mo</span>&gt;</span><span class="tag">&lt;<span class="name">mrow</span>&gt;</span><span class="tag">&lt;<span class="name">mi</span>&gt;</span>n<span class="tag">&lt;/<span class="name">mi</span>&gt;</span><span class="tag">&lt;<span class="name">mo</span>&gt;</span>=<span class="tag">&lt;/<span class="name">mo</span>&gt;</span><span class="tag">&lt;<span class="name">mn</span>&gt;</span>0<span class="tag">&lt;/<span class="name">mn</span>&gt;</span><span class="tag">&lt;/<span class="name">mrow</span>&gt;</span><span class="tag">&lt;<span class="name">mo</span>&gt;</span><span class="symbol">&amp;#x221E;</span><span class="tag">&lt;/<span class="name">mo</span>&gt;</span><span class="tag">&lt;/<span class="name">munderover</span>&gt;</span><span class="tag">&lt;<span class="name">mfrac</span>&gt;</span><span class="tag">&lt;<span class="name">msup</span>&gt;</span><span class="tag">&lt;<span class="name">mi</span>&gt;</span>x<span class="tag">&lt;/<span class="name">mi</span>&gt;</span><span class="tag">&lt;<span class="name">mi</span>&gt;</span>n<span class="tag">&lt;/<span class="name">mi</span>&gt;</span><span class="tag">&lt;/<span class="name">msup</span>&gt;</span><span class="tag">&lt;<span class="name">mrow</span>&gt;</span><span class="tag">&lt;<span class="name">mi</span>&gt;</span>n<span class="tag">&lt;/<span class="name">mi</span>&gt;</span><span class="tag">&lt;<span class="name">mo</span>&gt;</span>!<span class="tag">&lt;/<span class="name">mo</span>&gt;</span><span class="tag">&lt;/<span class="name">mrow</span>&gt;</span><span class="tag">&lt;/<span class="name">mfrac</span>&gt;</span><span class="tag">&lt;<span class="name">mo</span>&gt;</span>=<span class="tag">&lt;/<span class="name">mo</span>&gt;</span><span class="tag">&lt;<span class="name">munder</span>&gt;</span><span class="tag">&lt;<span class="name">mi</span>&gt;</span>lim<span class="tag">&lt;/<span class="name">mi</span>&gt;</span><span class="tag">&lt;<span class="name">mrow</span>&gt;</span><span class="tag">&lt;<span class="name">mi</span>&gt;</span>n<span class="tag">&lt;/<span class="name">mi</span>&gt;</span><span class="tag">&lt;<span class="name">mo</span>&gt;</span><span class="symbol">&amp;#x2192;</span><span class="tag">&lt;/<span class="name">mo</span>&gt;</span><span class="tag">&lt;<span class="name">mo</span>&gt;</span><span class="symbol">&amp;#x221E;</span><span class="tag">&lt;/<span class="name">mo</span>&gt;</span><span class="tag">&lt;/<span class="name">mrow</span>&gt;</span><span class="tag">&lt;/<span class="name">munder</span>&gt;</span><span class="tag">&lt;<span class="name">mo</span>&gt;</span>(<span class="tag">&lt;/<span class="name">mo</span>&gt;</span><span class="tag">&lt;<span class="name">mn</span>&gt;</span>1<span class="tag">&lt;/<span class="name">mn</span>&gt;</span><span class="tag">&lt;<span class="name">mo</span>&gt;</span>+<span class="tag">&lt;/<span class="name">mo</span>&gt;</span><span class="tag">&lt;<span class="name">mi</span>&gt;</span>x<span class="tag">&lt;/<span class="name">mi</span>&gt;</span><span class="tag">&lt;<span class="name">mo</span>&gt;</span>/<span class="tag">&lt;/<span class="name">mo</span>&gt;</span><span class="tag">&lt;<span class="name">mi</span>&gt;</span>n<span class="tag">&lt;/<span class="name">mi</span>&gt;</span><span class="tag">&lt;<span class="name">msup</span>&gt;</span><span class="tag">&lt;<span class="name">mo</span>&gt;</span>)<span class="tag">&lt;/<span class="name">mo</span>&gt;</span><span class="tag">&lt;<span class="name">mi</span>&gt;</span>n<span class="tag">&lt;/<span class="name">mi</span>&gt;</span><span class="tag">&lt;/<span class="name">msup</span>&gt;</span><span class="tag">&lt;/<span class="name">math</span>&gt;</span><span class="tag">&lt;/<span class="name">span</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
 </li>
-</ul>
-<ul>
 <li><p>使用pandoc把html转换为word</p>
-<p><img src="https://cdn.meishakeji.com/md/lexiang/202011131546word%E5%85%AC%E5%BC%8F%E5%B1%95%E7%A4%BA.jpg" alt></p>
+<p><img src="https://cdn.meishakeji.com/md/lexiang/202011131546word%E5%85%AC%E5%BC%8F%E5%B1%95%E7%A4%BA.jpg"></p>
 </li>
 </ul>
 
@@ -500,11 +502,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">HTTP/2 HTTP/1.1 HTTP/3.0</a>
+                <a href="javascript:void(0)" class="js-tag color3">Go</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Go</a>
+                <a href="javascript:void(0)" class="js-tag color5">HTTP/2 HTTP/1.1 HTTP/3.0</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -520,10 +522,6 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Latex 文件转换 docx</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">lumen</a>
               </li>
              
@@ -533,6 +531,10 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">thrift</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Latex 文件转换 docx</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -549,6 +551,30 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Linux</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">反射</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">reflection</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">底层</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">变量</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">引用</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">优化</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -576,15 +602,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">反射</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">reflection</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">底层</a>
+                <a href="javascript:void(0)" class="js-tag color3">Reactor</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -600,23 +618,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">变量</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">引用</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">优化</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">跳跃表</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Reactor</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -625,6 +627,34 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">性能优化</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">阿里云</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">sts</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">推荐系统</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">NLP</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">CF-IDF</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">canal</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">ES</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -664,11 +694,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">canal</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">ES</a>
+                <a href="javascript:void(0)" class="js-tag color4">线段树</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -676,7 +702,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">线段树</a>
+                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -693,66 +719,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">world</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">阿里云</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">sts</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">推荐系统</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">NLP</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">CF-IDF</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">acm</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">树</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">字典树</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">前缀树</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">二进制</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">位运算</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">macro</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">model</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">数据库</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -788,6 +754,46 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">macro</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">model</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">数据库</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">acm</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">树</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">字典树</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">前缀树</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">二进制</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">位运算</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">底层分析</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">事务</a>
               </li>
              
@@ -797,10 +803,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Python</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">底层分析</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -820,15 +822,15 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">ACID</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">sysbench</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">压力测试</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">ACID</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -840,6 +842,14 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">UUID</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">MySQL</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">架构</a>
               </li>
              
@@ -848,11 +858,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">UUID</a>
+                <a href="javascript:void(0)" class="js-tag color5">日志服务</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">MySQL</a>
+                <a href="javascript:void(0)" class="js-tag color4">SLS</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -892,14 +902,6 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">日志服务</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">SLS</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">大数据</a>
               </li>
              
@@ -924,6 +926,10 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">熔断</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">容器</a>
               </li>
              
@@ -933,10 +939,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">基本计算器</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">熔断</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1000,7 +1002,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">边框识别 答题卡 试卷 考试</a>
+                <a href="javascript:void(0)" class="js-tag color5">机器学习</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1020,11 +1022,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">缓存</a>
+                <a href="javascript:void(0)" class="js-tag color5">边框识别 答题卡 试卷 考试</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">机器学习</a>
+                <a href="javascript:void(0)" class="js-tag color3">缓存</a>
               </li>
              
               <li class="article-tag-list-item">

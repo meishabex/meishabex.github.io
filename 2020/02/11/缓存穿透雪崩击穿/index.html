@@ -211,11 +211,10 @@
 <li><p>二级缓存。A1为原始缓存，A2为拷贝缓存，A1缓存失效时间设置为短期，A2设置为长期，当A1失效时，A1加锁只有 1 个线程获取到锁,这个线程查询数据库并更新到到 A1 缓存和 A2 缓存中,  其他线程从A2获取数据返回</p>
 </li>
 <li><p>互斥锁: 在缓存失效的时候，创建分布式锁成功后，再进行查询数据库并回设缓存；加锁失败则重试整个get缓存的方法</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getRedis</span><span class="params">($key)</span> </span>&#123;</span><br><span class="line">       <span class="comment">// 从缓存读取数据</span></span><br><span class="line">       $result = Redis::get($key);</span><br><span class="line">       <span class="keyword">if</span> (<span class="keyword">empty</span>($result)) &#123; <span class="comment">//setex set(key, value, exTime); 60s, 第二次成功</span></span><br><span class="line">           <span class="keyword">if</span> (Redis::setnx($key. <span class="string">':lock'</span>, <span class="number">1</span>, <span class="number">10</span>)) &#123; <span class="comment">//第二次失败</span></span><br><span class="line">               <span class="comment">//加锁成功，从DB获取数据库后写入缓存;</span></span><br><span class="line">               $result = getDataFromDB();</span><br><span class="line">               Redis::set($key, $result);       </span><br><span class="line">               Redis::del($key. <span class="string">':lock'</span>);<span class="comment">// 释放锁</span></span><br><span class="line">           &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">               usleep(<span class="number">5000</span>);</span><br><span class="line">               <span class="keyword">return</span>  Redis::get($key);</span><br><span class="line">           &#125;</span><br><span class="line">       &#125;</span><br><span class="line">       <span class="keyword">return</span> $result;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getRedis</span>(<span class="params"><span class="variable">$key</span></span>) </span>&#123;</span><br><span class="line">       <span class="comment">// 从缓存读取数据</span></span><br><span class="line">       <span class="variable">$result</span> = <span class="title class_">Redis</span>::<span class="title function_ invoke__">get</span>(<span class="variable">$key</span>);</span><br><span class="line">       <span class="keyword">if</span> (<span class="keyword">empty</span>(<span class="variable">$result</span>)) &#123; <span class="comment">//setex set(key, value, exTime); 60s, 第二次成功</span></span><br><span class="line">           <span class="keyword">if</span> (<span class="title class_">Redis</span>::<span class="title function_ invoke__">setnx</span>(<span class="variable">$key</span>. <span class="string">&#x27;:lock&#x27;</span>, <span class="number">1</span>, <span class="number">10</span>)) &#123; <span class="comment">//第二次失败</span></span><br><span class="line">               <span class="comment">//加锁成功，从DB获取数据库后写入缓存;</span></span><br><span class="line">               <span class="variable">$result</span> = <span class="title function_ invoke__">getDataFromDB</span>();</span><br><span class="line">               <span class="title class_">Redis</span>::<span class="title function_ invoke__">set</span>(<span class="variable">$key</span>, <span class="variable">$result</span>);       </span><br><span class="line">               <span class="title class_">Redis</span>::<span class="title function_ invoke__">del</span>(<span class="variable">$key</span>. <span class="string">&#x27;:lock&#x27;</span>);<span class="comment">// 释放锁</span></span><br><span class="line">           &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">               <span class="title function_ invoke__">usleep</span>(<span class="number">5000</span>);</span><br><span class="line">               <span class="keyword">return</span>  <span class="title class_">Redis</span>::<span class="title function_ invoke__">get</span>(<span class="variable">$key</span>);</span><br><span class="line">           &#125;</span><br><span class="line">       &#125;</span><br><span class="line">       <span class="keyword">return</span> <span class="variable">$result</span>;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>提前互斥锁: 在value内部设置小于真实过期的时间的超时值timeout1。当从cache读取到timeout1发现它已经过期时候，马上延长timeout1并重新设置到cache。然后再从数据库加载数据并设置到cache中</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getRedis</span><span class="params">($key, $timeout = <span class="number">60</span>)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 从缓存读取数据</span></span><br><span class="line">        $result = Redis::get($key);</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">empty</span>($result)) &#123;</span><br><span class="line">            <span class="keyword">if</span> (Redis::setnx($key. <span class="string">':lock'</span>, <span class="number">1</span>, <span class="number">3</span> * <span class="number">60</span>)) &#123;</span><br><span class="line">                <span class="comment">//加锁成功，从DB获取数据库后写入缓存;</span></span><br><span class="line">                $result = getDataFromDB();</span><br><span class="line">                Redis::set($key, $result);       </span><br><span class="line">                Redis::del($key. <span class="string">':lock'</span>);<span class="comment">// 释放锁</span></span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                usleep(<span class="number">5000</span>);</span><br><span class="line">                <span class="keyword">return</span>  Redis::get($key);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> ($result[<span class="string">'timeout'</span>] &lt;= time()) &#123;  </span><br><span class="line">        	<span class="keyword">if</span> (Redis::setnx($key. <span class="string">':lock'</span>, <span class="number">1</span>, <span class="number">3</span> * <span class="number">60</span>)) &#123;  </span><br><span class="line">            <span class="comment">//延长timeout并重新保存  </span></span><br><span class="line">            $result[<span class="string">'timeout'</span>] += <span class="number">3</span> * <span class="number">60</span> * <span class="number">1000</span>;  </span><br><span class="line">            Redis::set(key, $result, $timeout * <span class="number">2</span>);  </span><br><span class="line">  </span><br><span class="line">            <span class="comment">//加锁成功，从DB获取数据库后写入缓存;</span></span><br><span class="line">             $result = getDataFromDB();</span><br><span class="line">             $result[<span class="string">'timeout'</span>] = $timeout;</span><br><span class="line">             Redis::set($key, $result);       </span><br><span class="line">             Redis::del($key. <span class="string">':lock'</span>);<span class="comment">// 释放锁</span></span><br><span class="line">        	&#125; <span class="keyword">else</span> &#123;  </span><br><span class="line">             	usleep(<span class="number">5000</span>);</span><br><span class="line">               <span class="keyword">return</span>  Redis::get($key);</span><br><span class="line">           &#125;  </span><br><span class="line">    	&#125; </span><br><span class="line">        <span class="keyword">return</span> $result;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-</li>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getRedis</span>(<span class="params"><span class="variable">$key</span>, <span class="variable">$timeout</span> = <span class="number">60</span></span>) </span>&#123;</span><br><span class="line">        <span class="comment">// 从缓存读取数据</span></span><br><span class="line">        <span class="variable">$result</span> = <span class="title class_">Redis</span>::<span class="title function_ invoke__">get</span>(<span class="variable">$key</span>);</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">empty</span>(<span class="variable">$result</span>)) &#123;</span><br><span class="line">            <span class="keyword">if</span> (<span class="title class_">Redis</span>::<span class="title function_ invoke__">setnx</span>(<span class="variable">$key</span>. <span class="string">&#x27;:lock&#x27;</span>, <span class="number">1</span>, <span class="number">3</span> * <span class="number">60</span>)) &#123;</span><br><span class="line">                <span class="comment">//加锁成功，从DB获取数据库后写入缓存;</span></span><br><span class="line">                <span class="variable">$result</span> = <span class="title function_ invoke__">getDataFromDB</span>();</span><br><span class="line">                <span class="title class_">Redis</span>::<span class="title function_ invoke__">set</span>(<span class="variable">$key</span>, <span class="variable">$result</span>);       </span><br><span class="line">                <span class="title class_">Redis</span>::<span class="title function_ invoke__">del</span>(<span class="variable">$key</span>. <span class="string">&#x27;:lock&#x27;</span>);<span class="comment">// 释放锁</span></span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="title function_ invoke__">usleep</span>(<span class="number">5000</span>);</span><br><span class="line">                <span class="keyword">return</span>  <span class="title class_">Redis</span>::<span class="title function_ invoke__">get</span>(<span class="variable">$key</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (<span class="variable">$result</span>[<span class="string">&#x27;timeout&#x27;</span>] &lt;= <span class="title function_ invoke__">time</span>()) &#123;  </span><br><span class="line">        	<span class="keyword">if</span> (<span class="title class_">Redis</span>::<span class="title function_ invoke__">setnx</span>(<span class="variable">$key</span>. <span class="string">&#x27;:lock&#x27;</span>, <span class="number">1</span>, <span class="number">3</span> * <span class="number">60</span>)) &#123;  </span><br><span class="line">            <span class="comment">//延长timeout并重新保存  </span></span><br><span class="line">            <span class="variable">$result</span>[<span class="string">&#x27;timeout&#x27;</span>] += <span class="number">3</span> * <span class="number">60</span> * <span class="number">1000</span>;  </span><br><span class="line">            <span class="title class_">Redis</span>::<span class="title function_ invoke__">set</span>(key, <span class="variable">$result</span>, <span class="variable">$timeout</span> * <span class="number">2</span>);  </span><br><span class="line">  </span><br><span class="line">            <span class="comment">//加锁成功，从DB获取数据库后写入缓存;</span></span><br><span class="line">             <span class="variable">$result</span> = <span class="title function_ invoke__">getDataFromDB</span>();</span><br><span class="line">             <span class="variable">$result</span>[<span class="string">&#x27;timeout&#x27;</span>] = <span class="variable">$timeout</span>;</span><br><span class="line">             <span class="title class_">Redis</span>::<span class="title function_ invoke__">set</span>(<span class="variable">$key</span>, <span class="variable">$result</span>);       </span><br><span class="line">             <span class="title class_">Redis</span>::<span class="title function_ invoke__">del</span>(<span class="variable">$key</span>. <span class="string">&#x27;:lock&#x27;</span>);<span class="comment">// 释放锁</span></span><br><span class="line">        	&#125; <span class="keyword">else</span> &#123;  </span><br><span class="line">             	<span class="title function_ invoke__">usleep</span>(<span class="number">5000</span>);</span><br><span class="line">               <span class="keyword">return</span>  <span class="title class_">Redis</span>::<span class="title function_ invoke__">get</span>(<span class="variable">$key</span>);</span><br><span class="line">           &#125;  </span><br><span class="line">    	&#125; </span><br><span class="line">        <span class="keyword">return</span> <span class="variable">$result</span>;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></li>
 </ol>
 
           
@@ -501,11 +500,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">HTTP/2 HTTP/1.1 HTTP/3.0</a>
+                <a href="javascript:void(0)" class="js-tag color3">Go</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Go</a>
+                <a href="javascript:void(0)" class="js-tag color5">HTTP/2 HTTP/1.1 HTTP/3.0</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -521,10 +520,6 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Latex 文件转换 docx</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">lumen</a>
               </li>
              
@@ -534,6 +529,10 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">thrift</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Latex 文件转换 docx</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -550,6 +549,30 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Linux</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">反射</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">reflection</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">底层</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">变量</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">引用</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">优化</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -577,15 +600,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">反射</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">reflection</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">底层</a>
+                <a href="javascript:void(0)" class="js-tag color3">Reactor</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -601,23 +616,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">变量</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">引用</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">优化</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">跳跃表</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Reactor</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -626,6 +625,34 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">性能优化</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">阿里云</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">sts</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">推荐系统</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">NLP</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">CF-IDF</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">canal</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">ES</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -665,11 +692,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">canal</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">ES</a>
+                <a href="javascript:void(0)" class="js-tag color4">线段树</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -677,7 +700,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">线段树</a>
+                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -694,66 +717,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">world</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">阿里云</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">sts</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">推荐系统</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">NLP</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">CF-IDF</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">acm</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">树</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">字典树</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">前缀树</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">二进制</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">位运算</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">macro</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">model</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">数据库</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -789,6 +752,46 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">macro</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">model</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">数据库</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">acm</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">树</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">字典树</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">前缀树</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">二进制</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">位运算</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">底层分析</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">事务</a>
               </li>
              
@@ -798,10 +801,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Python</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">底层分析</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -821,15 +820,15 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">ACID</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">sysbench</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">压力测试</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">ACID</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -841,6 +840,14 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">UUID</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">MySQL</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">架构</a>
               </li>
              
@@ -849,11 +856,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">UUID</a>
+                <a href="javascript:void(0)" class="js-tag color5">日志服务</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">MySQL</a>
+                <a href="javascript:void(0)" class="js-tag color4">SLS</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -893,14 +900,6 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">日志服务</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">SLS</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">大数据</a>
               </li>
              
@@ -925,6 +924,10 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">熔断</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">容器</a>
               </li>
              
@@ -934,10 +937,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">基本计算器</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">熔断</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1001,7 +1000,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">边框识别 答题卡 试卷 考试</a>
+                <a href="javascript:void(0)" class="js-tag color5">机器学习</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1021,11 +1020,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">缓存</a>
+                <a href="javascript:void(0)" class="js-tag color5">边框识别 答题卡 试卷 考试</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">机器学习</a>
+                <a href="javascript:void(0)" class="js-tag color3">缓存</a>
               </li>
              
               <li class="article-tag-list-item">

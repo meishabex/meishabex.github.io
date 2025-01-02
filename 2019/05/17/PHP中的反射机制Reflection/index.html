@@ -191,77 +191,94 @@
 <li>类的修饰，是否为final或者abstract</li>
 </ol>
 <h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><p>假设我们现在有一个这样的类：</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Student</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> $name;</span><br><span class="line">    <span class="keyword">protected</span> $age;</span><br><span class="line">    <span class="keyword">private</span> $sex;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">($name, $age, $sex)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;setName($name);</span><br><span class="line">        <span class="keyword">$this</span>-&gt;setAge($age);</span><br><span class="line">        <span class="keyword">$this</span>-&gt;setSex($sex);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">setName</span><span class="params">($name)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;name = $name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">protected</span> <span class="function"><span class="keyword">function</span> <span class="title">setAge</span><span class="params">($age)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;age = $age;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="function"><span class="keyword">function</span> <span class="title">setSex</span><span class="params">($sex)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;sex = $sex;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Student</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="variable">$name</span>;</span><br><span class="line">    <span class="keyword">protected</span> <span class="variable">$age</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="variable">$sex</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span>(<span class="params"><span class="variable">$name</span>, <span class="variable">$age</span>, <span class="variable">$sex</span></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">setName</span>(<span class="variable">$name</span>);</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">setAge</span>(<span class="variable">$age</span>);</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">setSex</span>(<span class="variable">$sex</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">setName</span>(<span class="params"><span class="variable">$name</span></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;name = <span class="variable">$name</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">protected</span> <span class="function"><span class="keyword">function</span> <span class="title">setAge</span>(<span class="params"><span class="variable">$age</span></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;age = <span class="variable">$age</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="function"><span class="keyword">function</span> <span class="title">setSex</span>(<span class="params"><span class="variable">$sex</span></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;sex = <span class="variable">$sex</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>调用反射导出接口：</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">\ReflectionClass::export(Student::class);</span><br></pre></td></tr></table></figure>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title class_">\ReflectionClass</span>::<span class="title function_ invoke__">export</span>(<span class="title class_">Student</span>::<span class="variable language_">class</span>);</span><br></pre></td></tr></table></figure>
+
 <p>导出结果：</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">Class</span> [ &lt;<span class="title">user</span>&gt; <span class="title">class</span> <span class="title">Student</span> ] </span>&#123;</span><br><span class="line">  @@ /path/reflection.php <span class="number">8</span><span class="number">-35</span></span><br><span class="line"></span><br><span class="line">  - Constants [<span class="number">0</span>] &#123;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  - <span class="keyword">Static</span> properties [<span class="number">0</span>] &#123;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  - <span class="keyword">Static</span> methods [<span class="number">0</span>] &#123;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  - Properties [<span class="number">3</span>] &#123;</span><br><span class="line">    Property [ &lt;<span class="keyword">default</span>&gt; <span class="keyword">public</span> $name ]</span><br><span class="line">    Property [ &lt;<span class="keyword">default</span>&gt; <span class="keyword">protected</span> $age ]</span><br><span class="line">    Property [ &lt;<span class="keyword">default</span>&gt; <span class="keyword">private</span> $sex ]</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  - Methods [<span class="number">4</span>] &#123;</span><br><span class="line">    Method [ &lt;user, ctor&gt; <span class="keyword">public</span> method __construct ] &#123;</span><br><span class="line">      @@ /path/reflection.php <span class="number">14</span> - <span class="number">19</span></span><br><span class="line"></span><br><span class="line">      - Parameters [<span class="number">3</span>] &#123;</span><br><span class="line">        Parameter <span class="comment">#0 [ &lt;required&gt; $name ]</span></span><br><span class="line">        Parameter <span class="comment">#1 [ &lt;required&gt; $age ]</span></span><br><span class="line">        Parameter <span class="comment">#2 [ &lt;required&gt; $sex ]</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    Method [ &lt;user&gt; <span class="keyword">public</span> method setName ] &#123;</span><br><span class="line">      @@ /path/reflection.php <span class="number">21</span> - <span class="number">24</span></span><br><span class="line"></span><br><span class="line">      - Parameters [<span class="number">1</span>] &#123;</span><br><span class="line">        Parameter <span class="comment">#0 [ &lt;required&gt; $name ]</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    Method [ &lt;user&gt; <span class="keyword">protected</span> method setAge ] &#123;</span><br><span class="line">      @@ /path/reflection.php <span class="number">26</span> - <span class="number">29</span></span><br><span class="line"></span><br><span class="line">      - Parameters [<span class="number">1</span>] &#123;</span><br><span class="line">        Parameter <span class="comment">#0 [ &lt;required&gt; $age ]</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    Method [ &lt;user&gt; <span class="keyword">private</span> method setSex ] &#123;</span><br><span class="line">      @@ /path/reflection.php <span class="number">31</span> - <span class="number">34</span></span><br><span class="line"></span><br><span class="line">      - Parameters [<span class="number">1</span>] &#123;</span><br><span class="line">        Parameter <span class="comment">#0 [ &lt;required&gt; $sex ]</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="获取对象属性列表"><a href="#获取对象属性列表" class="headerlink" title="获取对象属性列表"></a>获取对象属性列表</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$student = <span class="keyword">new</span> Student(<span class="string">'woodylan'</span>, <span class="number">18</span>, <span class="number">1</span>);</span><br><span class="line">$reflect = <span class="keyword">new</span> ReflectionObject($student);</span><br><span class="line">$props = $reflect-&gt;getProperties();</span><br><span class="line"><span class="keyword">foreach</span> ($props <span class="keyword">as</span> $prop) &#123;</span><br><span class="line">    <span class="keyword">print</span> $prop-&gt;getName() . <span class="string">"\n"</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line">Class [ &lt;user&gt; <span class="class"><span class="keyword">class</span> <span class="title">Student</span> ] </span>&#123;</span><br><span class="line">  @@ /path/reflection.php <span class="number">8</span>-<span class="number">35</span></span><br><span class="line"></span><br><span class="line">  - Constants [<span class="number">0</span>] &#123;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  - Static properties [<span class="number">0</span>] &#123;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  - Static methods [<span class="number">0</span>] &#123;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  - Properties [<span class="number">3</span>] &#123;</span><br><span class="line">    Property [ &lt;<span class="keyword">default</span>&gt; <span class="keyword">public</span> <span class="variable">$name</span> ]</span><br><span class="line">    Property [ &lt;<span class="keyword">default</span>&gt; <span class="keyword">protected</span> <span class="variable">$age</span> ]</span><br><span class="line">    Property [ &lt;<span class="keyword">default</span>&gt; <span class="keyword">private</span> <span class="variable">$sex</span> ]</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  - Methods [<span class="number">4</span>] &#123;</span><br><span class="line">    Method [ &lt;user, ctor&gt; <span class="keyword">public</span> method __construct ] &#123;</span><br><span class="line">      @@ /path/reflection.php <span class="number">14</span> - <span class="number">19</span></span><br><span class="line"></span><br><span class="line">      - Parameters [<span class="number">3</span>] &#123;</span><br><span class="line">        Parameter <span class="comment">#0 [ &lt;required&gt; $name ]</span></span><br><span class="line">        Parameter <span class="comment">#1 [ &lt;required&gt; $age ]</span></span><br><span class="line">        Parameter <span class="comment">#2 [ &lt;required&gt; $sex ]</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    Method [ &lt;user&gt; <span class="keyword">public</span> method setName ] &#123;</span><br><span class="line">      @@ /path/reflection.php <span class="number">21</span> - <span class="number">24</span></span><br><span class="line"></span><br><span class="line">      - Parameters [<span class="number">1</span>] &#123;</span><br><span class="line">        Parameter <span class="comment">#0 [ &lt;required&gt; $name ]</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    Method [ &lt;user&gt; <span class="keyword">protected</span> method setAge ] &#123;</span><br><span class="line">      @@ /path/reflection.php <span class="number">26</span> - <span class="number">29</span></span><br><span class="line"></span><br><span class="line">      - Parameters [<span class="number">1</span>] &#123;</span><br><span class="line">        Parameter <span class="comment">#0 [ &lt;required&gt; $age ]</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    Method [ &lt;user&gt; <span class="keyword">private</span> method setSex ] &#123;</span><br><span class="line">      @@ /path/reflection.php <span class="number">31</span> - <span class="number">34</span></span><br><span class="line"></span><br><span class="line">      - Parameters [<span class="number">1</span>] &#123;</span><br><span class="line">        Parameter <span class="comment">#0 [ &lt;required&gt; $sex ]</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="获取对象属性列表"><a href="#获取对象属性列表" class="headerlink" title="获取对象属性列表"></a>获取对象属性列表</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$student</span> = <span class="keyword">new</span> <span class="title class_">Student</span>(<span class="string">&#x27;woodylan&#x27;</span>, <span class="number">18</span>, <span class="number">1</span>);</span><br><span class="line"><span class="variable">$reflect</span> = <span class="keyword">new</span> <span class="title class_">ReflectionObject</span>(<span class="variable">$student</span>);</span><br><span class="line"><span class="variable">$props</span> = <span class="variable">$reflect</span>-&gt;<span class="title function_ invoke__">getProperties</span>();</span><br><span class="line"><span class="keyword">foreach</span> (<span class="variable">$props</span> <span class="keyword">as</span> <span class="variable">$prop</span>) &#123;</span><br><span class="line">    <span class="keyword">print</span> <span class="variable">$prop</span>-&gt;<span class="title function_ invoke__">getName</span>() . <span class="string">&quot;\n&quot;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>输出：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">name</span><br><span class="line">age</span><br><span class="line">sex</span><br></pre></td></tr></table></figure>
-<h3 id="获取对象方法列表"><a href="#获取对象方法列表" class="headerlink" title="获取对象方法列表"></a>获取对象方法列表</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$methods = $reflect-&gt;getMethods();</span><br><span class="line"><span class="keyword">foreach</span> ($methods <span class="keyword">as</span> $prop) &#123;</span><br><span class="line">    <span class="keyword">print</span> $prop-&gt;getName() . <span class="string">"\n"</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">name</span><br><span class="line">age</span><br><span class="line">sex</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="获取对象方法列表"><a href="#获取对象方法列表" class="headerlink" title="获取对象方法列表"></a>获取对象方法列表</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$methods</span> = <span class="variable">$reflect</span>-&gt;<span class="title function_ invoke__">getMethods</span>();</span><br><span class="line"><span class="keyword">foreach</span> (<span class="variable">$methods</span> <span class="keyword">as</span> <span class="variable">$prop</span>) &#123;</span><br><span class="line">    <span class="keyword">print</span> <span class="variable">$prop</span>-&gt;<span class="title function_ invoke__">getName</span>() . <span class="string">&quot;\n&quot;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>输出：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">__construct</span><br><span class="line">setName</span><br><span class="line">setAge</span><br><span class="line">setSex</span><br></pre></td></tr></table></figure>
-<h3 id="反射获取类的原型"><a href="#反射获取类的原型" class="headerlink" title="反射获取类的原型"></a>反射获取类的原型</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">$reflection = <span class="keyword">new</span> ReflectionClass(Student::class);</span><br><span class="line">$className = $reflection-&gt;getName();</span><br><span class="line">$methods = [];</span><br><span class="line">$properties = [];</span><br><span class="line"></span><br><span class="line"><span class="keyword">foreach</span> ($reflection-&gt;getProperties() <span class="keyword">as</span> $value) &#123;</span><br><span class="line">    $properties[$value-&gt;getName()] = $value;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">foreach</span> ($reflection-&gt;getMethods() <span class="keyword">as</span> $value) &#123;</span><br><span class="line">    $methods[$value-&gt;getName()] = $value;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">echo</span> <span class="string">"class &#123;$className&#125;\n&#123;\n"</span>;</span><br><span class="line">is_array($properties) &amp;&amp; ksort($properties);</span><br><span class="line"><span class="keyword">foreach</span> ($properties <span class="keyword">as</span> $key =&gt; $value) &#123;</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">"\t"</span>;</span><br><span class="line">    <span class="keyword">echo</span> $value-&gt;isPublic() ? <span class="string">' public'</span> : <span class="string">''</span>, $value-&gt;isPrivate() ? <span class="string">' private'</span> : <span class="string">''</span>,</span><br><span class="line">    $value-&gt;isProtected() ? <span class="string">' protected'</span> : <span class="string">''</span>,</span><br><span class="line">    $value-&gt;isStatic() ? <span class="string">' static'</span> : <span class="string">''</span>;</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">"\t&#123;$key&#125;\n"</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">echo</span> <span class="string">"\n"</span>;</span><br><span class="line"><span class="keyword">if</span> (is_array($methods)) ksort($methods);</span><br><span class="line"><span class="keyword">foreach</span> ($methods <span class="keyword">as</span> $key =&gt; $value) &#123;</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">"\tfunction &#123;$key&#125;()&#123;&#125;\n"</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">echo</span> <span class="string">"&#125;\n"</span>;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">__construct</span><br><span class="line">setName</span><br><span class="line">setAge</span><br><span class="line">setSex</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="反射获取类的原型"><a href="#反射获取类的原型" class="headerlink" title="反射获取类的原型"></a>反射获取类的原型</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$reflection</span> = <span class="keyword">new</span> <span class="title class_">ReflectionClass</span>(<span class="title class_">Student</span>::<span class="variable language_">class</span>);</span><br><span class="line"><span class="variable">$className</span> = <span class="variable">$reflection</span>-&gt;<span class="title function_ invoke__">getName</span>();</span><br><span class="line"><span class="variable">$methods</span> = [];</span><br><span class="line"><span class="variable">$properties</span> = [];</span><br><span class="line"></span><br><span class="line"><span class="keyword">foreach</span> (<span class="variable">$reflection</span>-&gt;<span class="title function_ invoke__">getProperties</span>() <span class="keyword">as</span> <span class="variable">$value</span>) &#123;</span><br><span class="line">    <span class="variable">$properties</span>[<span class="variable">$value</span>-&gt;<span class="title function_ invoke__">getName</span>()] = <span class="variable">$value</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">foreach</span> (<span class="variable">$reflection</span>-&gt;<span class="title function_ invoke__">getMethods</span>() <span class="keyword">as</span> <span class="variable">$value</span>) &#123;</span><br><span class="line">    <span class="variable">$methods</span>[<span class="variable">$value</span>-&gt;<span class="title function_ invoke__">getName</span>()] = <span class="variable">$value</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">echo</span> <span class="string">&quot;class <span class="subst">&#123;$className&#125;</span>\n&#123;\n&quot;</span>;</span><br><span class="line"><span class="title function_ invoke__">is_array</span>(<span class="variable">$properties</span>) &amp;&amp; <span class="title function_ invoke__">ksort</span>(<span class="variable">$properties</span>);</span><br><span class="line"><span class="keyword">foreach</span> (<span class="variable">$properties</span> <span class="keyword">as</span> <span class="variable">$key</span> =&gt; <span class="variable">$value</span>) &#123;</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">&quot;\t&quot;</span>;</span><br><span class="line">    <span class="keyword">echo</span> <span class="variable">$value</span>-&gt;<span class="title function_ invoke__">isPublic</span>() ? <span class="string">&#x27; public&#x27;</span> : <span class="string">&#x27;&#x27;</span>, <span class="variable">$value</span>-&gt;<span class="title function_ invoke__">isPrivate</span>() ? <span class="string">&#x27; private&#x27;</span> : <span class="string">&#x27;&#x27;</span>,</span><br><span class="line">    <span class="variable">$value</span>-&gt;<span class="title function_ invoke__">isProtected</span>() ? <span class="string">&#x27; protected&#x27;</span> : <span class="string">&#x27;&#x27;</span>,</span><br><span class="line">    <span class="variable">$value</span>-&gt;<span class="title function_ invoke__">isStatic</span>() ? <span class="string">&#x27; static&#x27;</span> : <span class="string">&#x27;&#x27;</span>;</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">&quot;\t<span class="subst">&#123;$key&#125;</span>\n&quot;</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">echo</span> <span class="string">&quot;\n&quot;</span>;</span><br><span class="line"><span class="keyword">if</span> (<span class="title function_ invoke__">is_array</span>(<span class="variable">$methods</span>)) <span class="title function_ invoke__">ksort</span>(<span class="variable">$methods</span>);</span><br><span class="line"><span class="keyword">foreach</span> (<span class="variable">$methods</span> <span class="keyword">as</span> <span class="variable">$key</span> =&gt; <span class="variable">$value</span>) &#123;</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">&quot;\tfunction <span class="subst">&#123;$key&#125;</span>()&#123;&#125;\n&quot;</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">echo</span> <span class="string">&quot;&#125;\n&quot;</span>;</span><br></pre></td></tr></table></figure>
+
 <p>输出：</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Student</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">	<span class="keyword">protected</span>   age</span><br><span class="line">	<span class="keyword">public</span>		name</span><br><span class="line">	<span class="keyword">private</span>     sex</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">()</span></span>&#123;&#125;</span><br><span class="line">	<span class="function"><span class="keyword">function</span> <span class="title">setAge</span><span class="params">()</span></span>&#123;&#125;</span><br><span class="line">	<span class="function"><span class="keyword">function</span> <span class="title">setName</span><span class="params">()</span></span>&#123;&#125;</span><br><span class="line">	<span class="function"><span class="keyword">function</span> <span class="title">setSex</span><span class="params">()</span></span>&#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Student</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">	<span class="keyword">protected</span>   age</span><br><span class="line">	<span class="keyword">public</span>		name</span><br><span class="line">	<span class="keyword">private</span>     sex</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">function</span> <span class="title">__construct</span>(<span class="params"></span>)</span>&#123;&#125;</span><br><span class="line">	<span class="function"><span class="keyword">function</span> <span class="title">setAge</span>(<span class="params"></span>)</span>&#123;&#125;</span><br><span class="line">	<span class="function"><span class="keyword">function</span> <span class="title">setName</span>(<span class="params"></span>)</span>&#123;&#125;</span><br><span class="line">	<span class="function"><span class="keyword">function</span> <span class="title">setSex</span>(<span class="params"></span>)</span>&#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
 <h3 id="其它API"><a href="#其它API" class="headerlink" title="其它API"></a>其它API</h3><p>反射不仅可以用于类和对象，还可以用于函数、扩展模块、异常等，官方提供了一系列的API方法，以下列举部分。</p>
-<p>文档地址：<a href="http://php.net/manual/zh/book.reflection.php" target="_blank" rel="noopener">http://php.net/manual/zh/book.reflection.php</a></p>
+<p>文档地址：<a href="http://php.net/manual/zh/book.reflection.php">http://php.net/manual/zh/book.reflection.php</a></p>
 <blockquote>
 <ul>
-<li><a href="http://php.net/manual/zh/reflectionclass.construct.php" target="_blank" rel="noopener">ReflectionClass::__construct</a> — 初始化 ReflectionClass 类</li>
-<li><a href="http://php.net/manual/zh/reflectionclass.export.php" target="_blank" rel="noopener">ReflectionClass::export</a> — 导出一个类</li>
-<li><a href="http://php.net/manual/zh/reflectionclass.getconstant.php" target="_blank" rel="noopener">ReflectionClass::getConstant</a> — 获取定义过的一个常量</li>
-<li><a href="http://php.net/manual/zh/reflectionclass.getconstants.php" target="_blank" rel="noopener">ReflectionClass::getConstants</a> — 获取一组常量</li>
-<li><a href="http://php.net/manual/zh/reflectionclass.getconstructor.php" target="_blank" rel="noopener">ReflectionClass::getConstructor</a> — 获取类的构造函数</li>
-<li><a href="http://php.net/manual/zh/reflectionclass.getdefaultproperties.php" target="_blank" rel="noopener">ReflectionClass::getDefaultProperties</a> — 获取默认属性</li>
-<li><a href="http://php.net/manual/zh/reflectionclass.getdoccomment.php" target="_blank" rel="noopener">ReflectionClass::getDocComment</a> — 获取文档注释</li>
-<li><a href="http://php.net/manual/zh/reflectionclass.getendline.php" target="_blank" rel="noopener">ReflectionClass::getEndLine</a> — 获取最后一行的行数</li>
-<li><a href="http://php.net/manual/zh/reflectionclass.getextension.php" target="_blank" rel="noopener">ReflectionClass::getExtension</a> — 根据已定义的类获取所在扩展的 ReflectionExtension 对象</li>
-<li><a href="http://php.net/manual/zh/reflectionclass.getextensionname.php" target="_blank" rel="noopener">ReflectionClass::getExtensionName</a> — 获取定义的类所在的扩展的名称</li>
-<li><a href="http://php.net/manual/zh/reflectionclass.getfilename.php" target="_blank" rel="noopener">ReflectionClass::getFileName</a> — 获取定义类的文件名</li>
-<li><a href="http://php.net/manual/zh/reflectionclass.getinterfacenames.php" target="_blank" rel="noopener">ReflectionClass::getInterfaceNames</a> — 获取接口（interface）名称</li>
-<li><a href="http://php.net/manual/zh/reflectionclass.getinterfaces.php" target="_blank" rel="noopener">ReflectionClass::getInterfaces</a> — 获取接口</li>
-<li><a href="http://php.net/manual/zh/reflectionclass.getmethod.php" target="_blank" rel="noopener">ReflectionClass::getMethod</a> — 获取一个类方法的 ReflectionMethod。</li>
-<li><a href="http://php.net/manual/zh/reflectionclass.getmethods.php" target="_blank" rel="noopener">ReflectionClass::getMethods</a> — 获取方法的数组</li>
-<li><a href="http://php.net/manual/zh/reflectionclass.getmodifiers.php" target="_blank" rel="noopener">ReflectionClass::getModifiers</a> — 获取类的修饰符</li>
-<li><a href="http://php.net/manual/zh/reflectionclass.getname.php" target="_blank" rel="noopener">ReflectionClass::getName</a> — 获取类名</li>
-<li><a href="http://php.net/manual/zh/reflectionclass.getnamespacename.php" target="_blank" rel="noopener">ReflectionClass::getNamespaceName</a> — 获取命名空间的名称</li>
-<li><a href="http://php.net/manual/zh/reflectionclass.getparentclass.php" target="_blank" rel="noopener">ReflectionClass::getParentClass</a> — 获取父类</li>
-<li><a href="http://php.net/manual/zh/reflectionclass.getproperties.php" target="_blank" rel="noopener">ReflectionClass::getProperties</a> — 获取一组属性</li>
-<li><a href="http://php.net/manual/zh/reflectionclass.getproperty.php" target="_blank" rel="noopener">ReflectionClass::getProperty</a> — 获取类的一个属性的 ReflectionProperty</li>
-<li><a href="http://php.net/manual/zh/reflectionclass.getreflectionconstant.php" target="_blank" rel="noopener">ReflectionClass::getReflectionConstant</a> — Gets a ReflectionClassConstant for a class’s constant</li>
-<li><a href="http://php.net/manual/zh/reflectionclass.getreflectionconstants.php" target="_blank" rel="noopener">ReflectionClass::getReflectionConstants</a> — Gets class constants</li>
-<li><a href="http://php.net/manual/zh/reflectionclass.getshortname.php" target="_blank" rel="noopener">ReflectionClass::getShortName</a> — 获取短名</li>
-<li><a href="http://php.net/manual/zh/reflectionclass.getstartline.php" target="_blank" rel="noopener">ReflectionClass::getStartLine</a> — 获取起始行号</li>
-<li><a href="http://php.net/manual/zh/reflectionclass.getstaticproperties.php" target="_blank" rel="noopener">ReflectionClass::getStaticProperties</a> — 获取静态（static）属性</li>
-<li><a href="http://php.net/manual/zh/reflectionclass.getstaticpropertyvalue.php" target="_blank" rel="noopener">ReflectionClass::getStaticPropertyValue</a> — 获取静态（static）属性的值</li>
-<li><a href="http://php.net/manual/zh/reflectionclass.gettraitaliases.php" target="_blank" rel="noopener">ReflectionClass::getTraitAliases</a> — 返回 trait 别名的一个数组</li>
-<li><a href="http://php.net/manual/zh/reflectionclass.gettraitnames.php" target="_blank" rel="noopener">ReflectionClass::getTraitNames</a> — 返回这个类所使用 traits 的名称的数组</li>
-<li><a href="http://php.net/manual/zh/reflectionclass.gettraits.php" target="_blank" rel="noopener">ReflectionClass::getTraits</a> — 返回这个类所使用的 traits 数组</li>
-<li><a href="http://php.net/manual/zh/reflectionclass.hasconstant.php" target="_blank" rel="noopener">ReflectionClass::hasConstant</a> — 检查常量是否已经定义</li>
-<li><a href="http://php.net/manual/zh/reflectionclass.hasmethod.php" target="_blank" rel="noopener">ReflectionClass::hasMethod</a> — 检查方法是否已定义</li>
-<li><a href="http://php.net/manual/zh/reflectionclass.hasproperty.php" target="_blank" rel="noopener">ReflectionClass::hasProperty</a> — 检查属性是否已定义</li>
-<li><a href="http://php.net/manual/zh/reflectionclass.implementsinterface.php" target="_blank" rel="noopener">ReflectionClass::implementsInterface</a> — 接口的实现</li>
-<li><a href="http://php.net/manual/zh/reflectionclass.innamespace.php" target="_blank" rel="noopener">ReflectionClass::inNamespace</a> — 检查是否位于命名空间中</li>
-<li><a href="http://php.net/manual/zh/reflectionclass.isabstract.php" target="_blank" rel="noopener">ReflectionClass::isAbstract</a> — 检查类是否是抽象类（abstract）</li>
-<li><a href="http://php.net/manual/zh/reflectionclass.isanonymous.php" target="_blank" rel="noopener">ReflectionClass::isAnonymous</a> — 检查类是否是匿名类</li>
-<li><a href="http://php.net/manual/zh/reflectionclass.iscloneable.php" target="_blank" rel="noopener">ReflectionClass::isCloneable</a> — 返回了一个类是否可复制</li>
-<li><a href="http://php.net/manual/zh/reflectionclass.isfinal.php" target="_blank" rel="noopener">ReflectionClass::isFinal</a> — 检查类是否声明为 final</li>
-<li><a href="http://php.net/manual/zh/reflectionclass.isinstance.php" target="_blank" rel="noopener">ReflectionClass::isInstance</a> — 检查类的实例</li>
-<li><a href="http://php.net/manual/zh/reflectionclass.isinstantiable.php" target="_blank" rel="noopener">ReflectionClass::isInstantiable</a> — 检查类是否可实例化</li>
-<li><a href="http://php.net/manual/zh/reflectionclass.isinterface.php" target="_blank" rel="noopener">ReflectionClass::isInterface</a> — 检查类是否是一个接口（interface）</li>
-<li><a href="http://php.net/manual/zh/reflectionclass.isinternal.php" target="_blank" rel="noopener">ReflectionClass::isInternal</a> — 检查类是否由扩展或核心在内部定义</li>
-<li><a href="http://php.net/manual/zh/reflectionclass.isiterable.php" target="_blank" rel="noopener">ReflectionClass::isIterable</a> — Check whether this class is iterable</li>
-<li><a href="http://php.net/manual/zh/reflectionclass.isiterateable.php" target="_blank" rel="noopener">ReflectionClass::isIterateable</a> — 检查是否可迭代（iterateable）</li>
-<li><a href="http://php.net/manual/zh/reflectionclass.issubclassof.php" target="_blank" rel="noopener">ReflectionClass::isSubclassOf</a> — 检查是否为一个子类</li>
-<li><a href="http://php.net/manual/zh/reflectionclass.istrait.php" target="_blank" rel="noopener">ReflectionClass::isTrait</a> — 返回了是否为一个 trait</li>
-<li><a href="http://php.net/manual/zh/reflectionclass.isuserdefined.php" target="_blank" rel="noopener">ReflectionClass::isUserDefined</a> — 检查是否由用户定义的</li>
-<li><a href="http://php.net/manual/zh/reflectionclass.newinstance.php" target="_blank" rel="noopener">ReflectionClass::newInstance</a> — 从指定的参数创建一个新的类实例</li>
-<li><a href="http://php.net/manual/zh/reflectionclass.newinstanceargs.php" target="_blank" rel="noopener">ReflectionClass::newInstanceArgs</a> — 从给出的参数创建一个新的类实例。</li>
-<li><a href="http://php.net/manual/zh/reflectionclass.newinstancewithoutconstructor.php" target="_blank" rel="noopener">ReflectionClass::newInstanceWithoutConstructor</a> — 创建一个新的类实例而不调用它的构造函数</li>
-<li><a href="http://php.net/manual/zh/reflectionclass.setstaticpropertyvalue.php" target="_blank" rel="noopener">ReflectionClass::setStaticPropertyValue</a> — 设置静态属性的值</li>
-<li><a href="http://php.net/manual/zh/reflectionclass.tostring.php" target="_blank" rel="noopener">ReflectionClass::__toString</a> — 返回 ReflectionClass 对象字符串的表示形式。</li>
+<li><a href="http://php.net/manual/zh/reflectionclass.construct.php">ReflectionClass::__construct</a> — 初始化 ReflectionClass 类</li>
+<li><a href="http://php.net/manual/zh/reflectionclass.export.php">ReflectionClass::export</a> — 导出一个类</li>
+<li><a href="http://php.net/manual/zh/reflectionclass.getconstant.php">ReflectionClass::getConstant</a> — 获取定义过的一个常量</li>
+<li><a href="http://php.net/manual/zh/reflectionclass.getconstants.php">ReflectionClass::getConstants</a> — 获取一组常量</li>
+<li><a href="http://php.net/manual/zh/reflectionclass.getconstructor.php">ReflectionClass::getConstructor</a> — 获取类的构造函数</li>
+<li><a href="http://php.net/manual/zh/reflectionclass.getdefaultproperties.php">ReflectionClass::getDefaultProperties</a> — 获取默认属性</li>
+<li><a href="http://php.net/manual/zh/reflectionclass.getdoccomment.php">ReflectionClass::getDocComment</a> — 获取文档注释</li>
+<li><a href="http://php.net/manual/zh/reflectionclass.getendline.php">ReflectionClass::getEndLine</a> — 获取最后一行的行数</li>
+<li><a href="http://php.net/manual/zh/reflectionclass.getextension.php">ReflectionClass::getExtension</a> — 根据已定义的类获取所在扩展的 ReflectionExtension 对象</li>
+<li><a href="http://php.net/manual/zh/reflectionclass.getextensionname.php">ReflectionClass::getExtensionName</a> — 获取定义的类所在的扩展的名称</li>
+<li><a href="http://php.net/manual/zh/reflectionclass.getfilename.php">ReflectionClass::getFileName</a> — 获取定义类的文件名</li>
+<li><a href="http://php.net/manual/zh/reflectionclass.getinterfacenames.php">ReflectionClass::getInterfaceNames</a> — 获取接口（interface）名称</li>
+<li><a href="http://php.net/manual/zh/reflectionclass.getinterfaces.php">ReflectionClass::getInterfaces</a> — 获取接口</li>
+<li><a href="http://php.net/manual/zh/reflectionclass.getmethod.php">ReflectionClass::getMethod</a> — 获取一个类方法的 ReflectionMethod。</li>
+<li><a href="http://php.net/manual/zh/reflectionclass.getmethods.php">ReflectionClass::getMethods</a> — 获取方法的数组</li>
+<li><a href="http://php.net/manual/zh/reflectionclass.getmodifiers.php">ReflectionClass::getModifiers</a> — 获取类的修饰符</li>
+<li><a href="http://php.net/manual/zh/reflectionclass.getname.php">ReflectionClass::getName</a> — 获取类名</li>
+<li><a href="http://php.net/manual/zh/reflectionclass.getnamespacename.php">ReflectionClass::getNamespaceName</a> — 获取命名空间的名称</li>
+<li><a href="http://php.net/manual/zh/reflectionclass.getparentclass.php">ReflectionClass::getParentClass</a> — 获取父类</li>
+<li><a href="http://php.net/manual/zh/reflectionclass.getproperties.php">ReflectionClass::getProperties</a> — 获取一组属性</li>
+<li><a href="http://php.net/manual/zh/reflectionclass.getproperty.php">ReflectionClass::getProperty</a> — 获取类的一个属性的 ReflectionProperty</li>
+<li><a href="http://php.net/manual/zh/reflectionclass.getreflectionconstant.php">ReflectionClass::getReflectionConstant</a> — Gets a ReflectionClassConstant for a class’s constant</li>
+<li><a href="http://php.net/manual/zh/reflectionclass.getreflectionconstants.php">ReflectionClass::getReflectionConstants</a> — Gets class constants</li>
+<li><a href="http://php.net/manual/zh/reflectionclass.getshortname.php">ReflectionClass::getShortName</a> — 获取短名</li>
+<li><a href="http://php.net/manual/zh/reflectionclass.getstartline.php">ReflectionClass::getStartLine</a> — 获取起始行号</li>
+<li><a href="http://php.net/manual/zh/reflectionclass.getstaticproperties.php">ReflectionClass::getStaticProperties</a> — 获取静态（static）属性</li>
+<li><a href="http://php.net/manual/zh/reflectionclass.getstaticpropertyvalue.php">ReflectionClass::getStaticPropertyValue</a> — 获取静态（static）属性的值</li>
+<li><a href="http://php.net/manual/zh/reflectionclass.gettraitaliases.php">ReflectionClass::getTraitAliases</a> — 返回 trait 别名的一个数组</li>
+<li><a href="http://php.net/manual/zh/reflectionclass.gettraitnames.php">ReflectionClass::getTraitNames</a> — 返回这个类所使用 traits 的名称的数组</li>
+<li><a href="http://php.net/manual/zh/reflectionclass.gettraits.php">ReflectionClass::getTraits</a> — 返回这个类所使用的 traits 数组</li>
+<li><a href="http://php.net/manual/zh/reflectionclass.hasconstant.php">ReflectionClass::hasConstant</a> — 检查常量是否已经定义</li>
+<li><a href="http://php.net/manual/zh/reflectionclass.hasmethod.php">ReflectionClass::hasMethod</a> — 检查方法是否已定义</li>
+<li><a href="http://php.net/manual/zh/reflectionclass.hasproperty.php">ReflectionClass::hasProperty</a> — 检查属性是否已定义</li>
+<li><a href="http://php.net/manual/zh/reflectionclass.implementsinterface.php">ReflectionClass::implementsInterface</a> — 接口的实现</li>
+<li><a href="http://php.net/manual/zh/reflectionclass.innamespace.php">ReflectionClass::inNamespace</a> — 检查是否位于命名空间中</li>
+<li><a href="http://php.net/manual/zh/reflectionclass.isabstract.php">ReflectionClass::isAbstract</a> — 检查类是否是抽象类（abstract）</li>
+<li><a href="http://php.net/manual/zh/reflectionclass.isanonymous.php">ReflectionClass::isAnonymous</a> — 检查类是否是匿名类</li>
+<li><a href="http://php.net/manual/zh/reflectionclass.iscloneable.php">ReflectionClass::isCloneable</a> — 返回了一个类是否可复制</li>
+<li><a href="http://php.net/manual/zh/reflectionclass.isfinal.php">ReflectionClass::isFinal</a> — 检查类是否声明为 final</li>
+<li><a href="http://php.net/manual/zh/reflectionclass.isinstance.php">ReflectionClass::isInstance</a> — 检查类的实例</li>
+<li><a href="http://php.net/manual/zh/reflectionclass.isinstantiable.php">ReflectionClass::isInstantiable</a> — 检查类是否可实例化</li>
+<li><a href="http://php.net/manual/zh/reflectionclass.isinterface.php">ReflectionClass::isInterface</a> — 检查类是否是一个接口（interface）</li>
+<li><a href="http://php.net/manual/zh/reflectionclass.isinternal.php">ReflectionClass::isInternal</a> — 检查类是否由扩展或核心在内部定义</li>
+<li><a href="http://php.net/manual/zh/reflectionclass.isiterable.php">ReflectionClass::isIterable</a> — Check whether this class is iterable</li>
+<li><a href="http://php.net/manual/zh/reflectionclass.isiterateable.php">ReflectionClass::isIterateable</a> — 检查是否可迭代（iterateable）</li>
+<li><a href="http://php.net/manual/zh/reflectionclass.issubclassof.php">ReflectionClass::isSubclassOf</a> — 检查是否为一个子类</li>
+<li><a href="http://php.net/manual/zh/reflectionclass.istrait.php">ReflectionClass::isTrait</a> — 返回了是否为一个 trait</li>
+<li><a href="http://php.net/manual/zh/reflectionclass.isuserdefined.php">ReflectionClass::isUserDefined</a> — 检查是否由用户定义的</li>
+<li><a href="http://php.net/manual/zh/reflectionclass.newinstance.php">ReflectionClass::newInstance</a> — 从指定的参数创建一个新的类实例</li>
+<li><a href="http://php.net/manual/zh/reflectionclass.newinstanceargs.php">ReflectionClass::newInstanceArgs</a> — 从给出的参数创建一个新的类实例。</li>
+<li><a href="http://php.net/manual/zh/reflectionclass.newinstancewithoutconstructor.php">ReflectionClass::newInstanceWithoutConstructor</a> — 创建一个新的类实例而不调用它的构造函数</li>
+<li><a href="http://php.net/manual/zh/reflectionclass.setstaticpropertyvalue.php">ReflectionClass::setStaticPropertyValue</a> — 设置静态属性的值</li>
+<li><a href="http://php.net/manual/zh/reflectionclass.tostring.php">ReflectionClass::__toString</a> — 返回 ReflectionClass 对象字符串的表示形式。</li>
 </ul>
 </blockquote>
 
@@ -548,11 +565,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">HTTP/2 HTTP/1.1 HTTP/3.0</a>
+                <a href="javascript:void(0)" class="js-tag color3">Go</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Go</a>
+                <a href="javascript:void(0)" class="js-tag color5">HTTP/2 HTTP/1.1 HTTP/3.0</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -568,10 +585,6 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Latex 文件转换 docx</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">lumen</a>
               </li>
              
@@ -581,6 +594,10 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">thrift</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Latex 文件转换 docx</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -597,6 +614,30 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Linux</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">反射</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">reflection</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">底层</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">变量</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">引用</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">优化</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -624,15 +665,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">反射</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">reflection</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">底层</a>
+                <a href="javascript:void(0)" class="js-tag color3">Reactor</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -648,23 +681,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">变量</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">引用</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">优化</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">跳跃表</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Reactor</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -673,6 +690,34 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">性能优化</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">阿里云</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">sts</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">推荐系统</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">NLP</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">CF-IDF</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">canal</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">ES</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -712,11 +757,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">canal</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">ES</a>
+                <a href="javascript:void(0)" class="js-tag color4">线段树</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -724,7 +765,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">线段树</a>
+                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -741,66 +782,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">world</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">阿里云</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">sts</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">推荐系统</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">NLP</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">CF-IDF</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">acm</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">树</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">字典树</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">前缀树</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">二进制</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">位运算</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">macro</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">model</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">数据库</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -836,6 +817,46 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">macro</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">model</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">数据库</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">acm</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">树</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">字典树</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">前缀树</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">二进制</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">位运算</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">底层分析</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">事务</a>
               </li>
              
@@ -845,10 +866,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Python</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">底层分析</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -868,15 +885,15 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">ACID</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">sysbench</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">压力测试</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">ACID</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -888,6 +905,14 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">UUID</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">MySQL</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">架构</a>
               </li>
              
@@ -896,11 +921,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">UUID</a>
+                <a href="javascript:void(0)" class="js-tag color5">日志服务</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">MySQL</a>
+                <a href="javascript:void(0)" class="js-tag color4">SLS</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -940,14 +965,6 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">日志服务</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">SLS</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">大数据</a>
               </li>
              
@@ -972,6 +989,10 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">熔断</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">容器</a>
               </li>
              
@@ -981,10 +1002,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">基本计算器</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">熔断</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1048,7 +1065,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">边框识别 答题卡 试卷 考试</a>
+                <a href="javascript:void(0)" class="js-tag color5">机器学习</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1068,11 +1085,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">缓存</a>
+                <a href="javascript:void(0)" class="js-tag color5">边框识别 答题卡 试卷 考试</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">机器学习</a>
+                <a href="javascript:void(0)" class="js-tag color3">缓存</a>
               </li>
              
               <li class="article-tag-list-item">

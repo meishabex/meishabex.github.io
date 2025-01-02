@@ -187,13 +187,14 @@
 <p>​    同时，希望数学不好的同学对此也不必有恐惧心理。因为作者也不是对此特别熟悉，会结合个人的学习过程和实例，尽可能简单的介绍HMM、Viterbi，以及它们与中文分词三者之间的关系。</p>
 <p>同时，希望数学不好的同学对此也不必有恐惧心理。因为作者也不是对此特别熟悉，会结合个人的学习过程和实例，尽可能简单的介绍HMM、Viterbi，以及它们与中文分词三者之间的关系。</p>
 <h1 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h1><p>在正式介绍HMM之前，我们有必要先了解马尔可夫过程和马尔可夫链。</p>
-<h2 id="Markov-process-马尔可夫过程"><a href="#Markov-process-马尔可夫过程" class="headerlink" title="Markov process(马尔可夫过程)"></a>Markov process(马尔可夫过程)</h2><p><strong>一个性质：</strong>当一个<a href="https://zh.wikipedia.org/wiki/随机过程" target="_blank" rel="noopener">随机过程</a>在给定现在状态及所有过去状态情况下，其未来状态的条件<a href="https://zh.wikipedia.org/wiki/概率分布" target="_blank" rel="noopener">概率分布</a>仅依赖于当前状态；换句话说，在给定现在状态时，它与过去状态（即该过程的历史路径）是<a href="https://zh.wikipedia.org/wiki/条件独立" target="_blank" rel="noopener">条件独立</a>的，那么此<a href="https://zh.wikipedia.org/wiki/随机过程" target="_blank" rel="noopener">随机过程</a>即具有<strong>马尔可夫性质</strong></p>
+<h2 id="Markov-process-马尔可夫过程"><a href="#Markov-process-马尔可夫过程" class="headerlink" title="Markov process(马尔可夫过程)"></a>Markov process(马尔可夫过程)</h2><p><strong>一个性质：</strong>当一个<a href="https://zh.wikipedia.org/wiki/%E9%9A%8F%E6%9C%BA%E8%BF%87%E7%A8%8B">随机过程</a>在给定现在状态及所有过去状态情况下，其未来状态的条件<a href="https://zh.wikipedia.org/wiki/%E6%A6%82%E7%8E%87%E5%88%86%E5%B8%83">概率分布</a>仅依赖于当前状态；换句话说，在给定现在状态时，它与过去状态（即该过程的历史路径）是<a href="https://zh.wikipedia.org/wiki/%E6%9D%A1%E4%BB%B6%E7%8B%AC%E7%AB%8B">条件独立</a>的，那么此<a href="https://zh.wikipedia.org/wiki/%E9%9A%8F%E6%9C%BA%E8%BF%87%E7%A8%8B">随机过程</a>即具有<strong>马尔可夫性质</strong></p>
 <p><strong>一个定义：</strong>满足马尔可夫性质的过程称为马尔可夫过程</p>
 <h2 id="DTMC-离散马尔可夫链"><a href="#DTMC-离散马尔可夫链" class="headerlink" title="DTMC(离散马尔可夫链)"></a>DTMC(离散马尔可夫链)</h2><p><strong>一个定义：</strong>时间和状态都是离散的马尔可夫过程。</p>
 <p><strong>一个重要特性：</strong>已知系统当前状态，则未来的演变不依赖于过去的演变。</p>
-<p><strong>一个泛化描述：</strong>假设，当前时间是T，则T+1等于某个值的概率，仅与T相关，而与[0, T-1]中的所有值都无关（<strong>一阶马尔可夫链</strong>）。<br>$$<br>P \left{ X_{n+1}=i_{n+1}\ |\ X_0,X_1,…,X_n=i_n} = P{X_{n+1}\ |\ X_n = i_n \right}<br>$$<br><strong>一个矩阵：</strong>这个是其实是n步转移概率矩阵，详细讲解较为复杂，可以自行百度，不影响后文理解。<br>$$<br>P\ =\ \left[ \begin{array}{ccc}<br>P_{11} &amp; P_{12} &amp; … &amp; P_{1n} &amp; … \<br>P_{21} &amp; P_{22} &amp; … &amp; P_{2n} &amp; … \<br>P_{31} &amp; P_{32} &amp; … &amp; P_{3n} &amp; …<br>\end{array} \right ]<br>$$<br>如此，先记住什么是马尔可夫过程和DTMC，后续再了解什么是HMM(隐马尔可夫模型)就容易了。</p>
+<p><strong>一个泛化描述：</strong>假设，当前时间是T，则T+1等于某个值的概率，仅与T相关，而与[0, T-1]中的所有值都无关（<strong>一阶马尔可夫链</strong>）。<br>$$<br>P \left{ X_{n+1}&#x3D;i_{n+1}\ |\ X_0,X_1,…,X_n&#x3D;i_n} &#x3D; P{X_{n+1}\ |\ X_n &#x3D; i_n \right}<br>$$<br><strong>一个矩阵：</strong>这个是其实是n步转移概率矩阵，详细讲解较为复杂，可以自行百度，不影响后文理解。<br>$$<br>P\ &#x3D;\ \left[ \begin{array}{ccc}<br>P_{11} &amp; P_{12} &amp; … &amp; P_{1n} &amp; … \<br>P_{21} &amp; P_{22} &amp; … &amp; P_{2n} &amp; … \<br>P_{31} &amp; P_{32} &amp; … &amp; P_{3n} &amp; …<br>\end{array} \right ]<br>$$<br>如此，先记住什么是马尔可夫过程和DTMC，后续再了解什么是HMM(隐马尔可夫模型)就容易了。</p>
 <h2 id="HMM-隐马尔可夫模型"><a href="#HMM-隐马尔可夫模型" class="headerlink" title="HMM(隐马尔可夫模型)"></a>HMM(隐马尔可夫模型)</h2><p>在正式介绍之前，我们先由一个句子作为实例。我们直接给定一个文本，按HMM给这个文本分词。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&quot;我爱梅沙&quot;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&quot;我爱梅沙&quot;</span><br></pre></td></tr></table></figure>
+
 <p>接下来我们按照HMM的过程进行分析。</p>
 <ol>
 <li><p>对于句子中的字，我们定义起包含四种状态（隐含状态空间S）：</p>
@@ -204,25 +205,24 @@
 <li>S——single。表示单字成词</li>
 </ol>
 </li>
-<li><p>我们定义句子中，所有的字共同组成了一个观测值集合（观察状态），即：O = { 我, 爱, 梅, 沙 }​。</p>
+<li><p>我们定义句子中，所有的字共同组成了一个观测值集合（观察状态），即：O &#x3D; { 我, 爱, 梅, 沙 }​。</p>
 </li>
-<li><p>当我们看到一个字（观察状态）时，它是BMES中某一个的概率，组成一个初始的概率矩阵（矩阵值已经基于<strong>海量文本统计求得</strong>）。对于任何字，转移到BMES中的概率都是一致的，因此该矩阵是1x4的概率矩阵（π向量/初始概率矩阵），在这里，矩阵如下：</p>
- <figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"B"</span>: <span class="number">-0.26268660809250016</span>,</span><br><span class="line">  <span class="attr">"E"</span>: <span class="number">-3.14e+100</span>,</span><br><span class="line">  <span class="attr">"M"</span>: <span class="number">-3.14e+100</span>,</span><br><span class="line">  <span class="attr">"S"</span>: <span class="number">-1.4652633398537678</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<li><p>当我们看到一个字（观察状态）时，它是BMES中某一个的概率，组成一个初始的概率矩阵（矩阵值已经基于<strong>海量文本统计求得</strong>）。对于任何字，转移到BMES中的概率都是一致的，因此该矩阵是1x4的概率矩阵（π向量&#x2F;初始概率矩阵），在这里，矩阵如下：</p>
+ <figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;B&quot;</span><span class="punctuation">:</span> <span class="number">-0.26268660809250016</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;E&quot;</span><span class="punctuation">:</span> <span class="number">-3.14e+100</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;M&quot;</span><span class="punctuation">:</span> <span class="number">-3.14e+100</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;S&quot;</span><span class="punctuation">:</span> <span class="number">-1.4652633398537678</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
 </li>
 <li><p>已经存在一个概率矩阵，是当前字分别为BMES时，下一个字为BMES的概率（4x4的状态转移概率矩阵，矩阵中的值已经基于<strong>海量文本统计求得</strong>），即：$\left[ \begin{array}{ccc}<br> A_{bb} &amp; A_{bm} &amp; A_{be} &amp; A_{bs}\ A_{mb} &amp; A_{mm} &amp; A_{me} &amp; A_{ms}\ A_{eb} &amp; A_{em} &amp; A_{ee} &amp; A_{es}\ A_{sb} &amp; A_{sm} &amp; A_{se} &amp; A_{ss}\<br> \end{array} \right ]$，实际，这里很多情况概率为0，因此，实际矩阵如下：</p>
- <figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"B"</span>: &#123;</span><br><span class="line">    <span class="attr">"E"</span>: <span class="number">-0.510825623765990</span>,</span><br><span class="line">    <span class="attr">"M"</span>: <span class="number">-0.916290731874155</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">"E"</span>: &#123;</span><br><span class="line">    <span class="attr">"B"</span>: <span class="number">-0.5897149736854513</span>,</span><br><span class="line">    <span class="attr">"S"</span>: <span class="number">-0.8085250474669937</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">"M"</span>: &#123;</span><br><span class="line">    <span class="attr">"E"</span>: <span class="number">-0.33344856811948514</span>,</span><br><span class="line">    <span class="attr">"M"</span>: <span class="number">-1.2603623820268226</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">"S"</span>: &#123;</span><br><span class="line">    <span class="attr">"B"</span>: <span class="number">-0.7211965654669841</span>,</span><br><span class="line">    <span class="attr">"S"</span>: <span class="number">-0.6658631448798212</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+ <figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;B&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;E&quot;</span><span class="punctuation">:</span> <span class="number">-0.510825623765990</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;M&quot;</span><span class="punctuation">:</span> <span class="number">-0.916290731874155</span></span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;E&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;B&quot;</span><span class="punctuation">:</span> <span class="number">-0.5897149736854513</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;S&quot;</span><span class="punctuation">:</span> <span class="number">-0.8085250474669937</span></span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;M&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;E&quot;</span><span class="punctuation">:</span> <span class="number">-0.33344856811948514</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;M&quot;</span><span class="punctuation">:</span> <span class="number">-1.2603623820268226</span></span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;S&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;B&quot;</span><span class="punctuation">:</span> <span class="number">-0.7211965654669841</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;S&quot;</span><span class="punctuation">:</span> <span class="number">-0.6658631448798212</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
 </li>
-<li><p>已经存在一个概率矩阵，每个字分别为BMES各个状态时的概率（发射概率矩阵/混淆矩阵，矩阵中的值已经基于<strong>海量文本统计求得</strong>），即：{ B~ij~ | i ∈ [0x4E00, 9FA5] , j ∈ (B, M, E, S) }，在这里，发射矩阵如下：</p>
- <figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"B"</span>: &#123;</span><br><span class="line">        <span class="attr">"我"</span>: <span class="number">1.4614045662995514</span>,</span><br><span class="line">        <span class="attr">"爱"</span>: <span class="number">1.968025153941063</span>,</span><br><span class="line">        <span class="attr">"梅"</span>: <span class="number">2.237194588185915</span>,</span><br><span class="line">        <span class="attr">"沙"</span>: <span class="number">1.983966134924789</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">"E"</span>: &#123;</span><br><span class="line">        <span class="attr">"我"</span>: <span class="number">2.8844153800921876e+101</span>,</span><br><span class="line">        <span class="attr">"爱"</span>: <span class="number">2.5467388205842573e+101</span>,</span><br><span class="line">        <span class="attr">"梅"</span>: <span class="number">2.5483227218706336e+101</span>,</span><br><span class="line">        <span class="attr">"沙"</span>: <span class="number">2.6413544826999272e+101</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">"M"</span>: &#123;</span><br><span class="line">        <span class="attr">"我"</span>: <span class="number">2.6778005616524882e+101</span>,</span><br><span class="line">        <span class="attr">"爱"</span>: <span class="number">2.2547330469174095e+101</span>,</span><br><span class="line">        <span class="attr">"梅"</span>: <span class="number">2.5528428570784386e+101</span>,</span><br><span class="line">        <span class="attr">"沙"</span>: <span class="number">2.321741847245321e+101</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">"S"</span>: &#123;</span><br><span class="line">        <span class="attr">"我"</span>: <span class="number">6.611019698336738</span>,</span><br><span class="line">        <span class="attr">"爱"</span>: <span class="number">11.146923368528606</span>,</span><br><span class="line">        <span class="attr">"梅"</span>: <span class="number">14.546547456418994</span>,</span><br><span class="line">        <span class="attr">"沙"</span>: <span class="number">13.526900849382743</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
+<li><p>已经存在一个概率矩阵，每个字分别为BMES各个状态时的概率（发射概率矩阵&#x2F;混淆矩阵，矩阵中的值已经基于<strong>海量文本统计求得</strong>），即：{ B<del>ij</del> | i ∈ [0x4E00, 9FA5] , j ∈ (B, M, E, S) }，在这里，发射矩阵如下：</p>
+ <figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;B&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;我&quot;</span><span class="punctuation">:</span> <span class="number">1.4614045662995514</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;爱&quot;</span><span class="punctuation">:</span> <span class="number">1.968025153941063</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;梅&quot;</span><span class="punctuation">:</span> <span class="number">2.237194588185915</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;沙&quot;</span><span class="punctuation">:</span> <span class="number">1.983966134924789</span></span><br><span class="line">    <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;E&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;我&quot;</span><span class="punctuation">:</span> <span class="number">2.8844153800921876e+101</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;爱&quot;</span><span class="punctuation">:</span> <span class="number">2.5467388205842573e+101</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;梅&quot;</span><span class="punctuation">:</span> <span class="number">2.5483227218706336e+101</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;沙&quot;</span><span class="punctuation">:</span> <span class="number">2.6413544826999272e+101</span></span><br><span class="line">    <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;M&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;我&quot;</span><span class="punctuation">:</span> <span class="number">2.6778005616524882e+101</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;爱&quot;</span><span class="punctuation">:</span> <span class="number">2.2547330469174095e+101</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;梅&quot;</span><span class="punctuation">:</span> <span class="number">2.5528428570784386e+101</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;沙&quot;</span><span class="punctuation">:</span> <span class="number">2.321741847245321e+101</span></span><br><span class="line">    <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;S&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;我&quot;</span><span class="punctuation">:</span> <span class="number">6.611019698336738</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;爱&quot;</span><span class="punctuation">:</span> <span class="number">11.146923368528606</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;梅&quot;</span><span class="punctuation">:</span> <span class="number">14.546547456418994</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;沙&quot;</span><span class="punctuation">:</span> <span class="number">13.526900849382743</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure></li>
 </ol>
 <p>如此，我们得到了HMM的五元组$(S, O, \Pi, A, B)$（两组状态集合和三组概率集合）：</p>
 <ol>
 <li>隐状态S：由马尔科夫过程描述，是隐状态集合</li>
-<li>观察状态O：是显示/直接观测而得的状态集合</li>
+<li>观察状态O：是显示&#x2F;直接观测而得的状态集合</li>
 <li>(隐)状态转移矩阵A：隐状态之间相互转移的概率矩阵</li>
 <li>初始化概率向量$\Pi(\pi_i)$：每个观察状态，初始时分别为各个隐状态的概率集合。是一个1xN（N是隐状态空间大小）的矩阵</li>
-<li>混淆矩阵/发射概率矩阵B：每个观察状态转移至各个隐状态的概率集合（发射概率）</li>
+<li>混淆矩阵&#x2F;发射概率矩阵B：每个观察状态转移至各个隐状态的概率集合（发射概率）</li>
 </ol>
 <p>确定好模型各个部分，接下来就可以按步骤处理。大致思路是</p>
 <ol>
@@ -235,8 +235,8 @@
 <p>  这涉及到计算机中的<strong>下溢</strong>问题，对于一般运算，下溢带来的误差并不明显，但在中文分词中，字库非常大 [0x4E00, 9FA5]，而概率总是属于区间[0, 1]的，这时，一点点的下溢问题，都有可能导致整个模型计算错误。因此，<strong>推荐使用对数处理实际应用中的高精度概率计算问题</strong>。通过简单查看对数函数图像，我们即可理解为什么存储的概率都是负数了。但<strong>为什么是对数而不是其他函数？</strong>个人认为主要因素有以下两点，但或许未能描述清楚，欢迎同学补充：</p>
 <ol>
 <li><p>浮点数乘除运算可以转为对数和差运算，减少溢出精度和误差累积：</p>
-<p>$\log_{\alpha }MN\ =\ \log_{\alpha }!M+\log_{\alpha }!N$</p>
-<p>$\log_{\alpha }\frac{M}{N}\ =\ \log_{\alpha }!M -\log_{\alpha }!N$</p>
+<p>$\log_{\alpha }MN\ &#x3D;\ \log_{\alpha }!M+\log_{\alpha }!N$</p>
+<p>$\log_{\alpha }\frac{M}{N}\ &#x3D;\ \log_{\alpha }!M -\log_{\alpha }!N$</p>
 </li>
 <li><p>对数是无限趋近于0的，对于无限小的概率也能表示</p>
 </li>
@@ -244,10 +244,13 @@
 </li>
 </ol>
 </blockquote>
-<h3 id="计算初始状态"><a href="#计算初始状态" class="headerlink" title="计算初始状态"></a>计算初始状态</h3><p>按照上述HMM五元组，结合该公式 $a_i(j) = \pi(j)b_{jk_i}, i \in N, j \in (B, E, M, S), k \in (我, 爱, 梅, 沙)$，计算即可得。</p>
-<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"B"</span>: &#123;</span><br><span class="line">        <span class="attr">"我"</span>:<span class="number">1.1851974272161176</span>,</span><br><span class="line">        <span class="attr">"爱"</span>:<span class="number">1.9983762718297673</span>,</span><br><span class="line">        <span class="attr">"梅"</span>:<span class="number">2.388164278255412</span>,</span><br><span class="line">        <span class="attr">"沙"</span>:<span class="number">2.5132210235744683</span> </span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">"E"</span>:&#123;</span><br><span class="line">        <span class="attr">"我"</span>:<span class="number">1.4167147493671037e+101</span>,</span><br><span class="line">        <span class="attr">"爱"</span>:<span class="number">2.388740537292971e+101</span>,</span><br><span class="line">        <span class="attr">"梅"</span>:<span class="number">2.854670014651611e+101</span>,</span><br><span class="line">        <span class="attr">"沙"</span>:<span class="number">3.004155434998415e+101</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">"M"</span>:&#123;</span><br><span class="line">        <span class="attr">"我"</span>:<span class="number">1.4167147493671037e+101</span>,</span><br><span class="line">        <span class="attr">"爱"</span>:<span class="number">2.388740537292971e+101</span>,</span><br><span class="line">        <span class="attr">"梅"</span>:<span class="number">2.854670014651611e+101</span>,</span><br><span class="line">        <span class="attr">"沙"</span>:<span class="number">3.004155434998415e+101</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">"S"</span>:&#123;</span><br><span class="line">        <span class="attr">"我"</span>:<span class="number">6.611019698336738</span>,</span><br><span class="line">        <span class="attr">"爱"</span>:<span class="number">11.146923368528606</span>,</span><br><span class="line">        <span class="attr">"梅"</span>:<span class="number">13.321157069582242</span>,</span><br><span class="line">        <span class="attr">"沙"</span>:<span class="number">14.018722376196262</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="计算状态转移概率矩阵"><a href="#计算状态转移概率矩阵" class="headerlink" title="计算状态转移概率矩阵"></a>计算状态转移概率矩阵</h3><p>得到上述初始状态后，可以结合前文所述的HMM五元组，迭代求得如下关系图中所有弧的概率。t次迭代公式如下（这其实也可以泛化为马尔可夫n步转移矩阵迭代公式）。<br>$$<br>P_{t}(s)\ =\ b_{so_{t}}\sum_{i=1}^{n}{a_{t}(s)a_{i}},\ s\in(B, E,M,S),\ n = t - 1<br>$$</p>
-<p>将弧的概率作为权值，寻找最大权值路径，即可求得。由于计算过程过于复杂，在这里不列出。经过代码测试，案例分词结果为『我/爱梅沙』。</p>
+<h3 id="计算初始状态"><a href="#计算初始状态" class="headerlink" title="计算初始状态"></a>计算初始状态</h3><p>按照上述HMM五元组，结合该公式 $a_i(j) &#x3D; \pi(j)b_{jk_i}, i \in N, j \in (B, E, M, S), k \in (我, 爱, 梅, 沙)$，计算即可得。</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;B&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;我&quot;</span><span class="punctuation">:</span><span class="number">1.1851974272161176</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;爱&quot;</span><span class="punctuation">:</span><span class="number">1.9983762718297673</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;梅&quot;</span><span class="punctuation">:</span><span class="number">2.388164278255412</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;沙&quot;</span><span class="punctuation">:</span><span class="number">2.5132210235744683</span> </span><br><span class="line">    <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;E&quot;</span><span class="punctuation">:</span><span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;我&quot;</span><span class="punctuation">:</span><span class="number">1.4167147493671037e+101</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;爱&quot;</span><span class="punctuation">:</span><span class="number">2.388740537292971e+101</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;梅&quot;</span><span class="punctuation">:</span><span class="number">2.854670014651611e+101</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;沙&quot;</span><span class="punctuation">:</span><span class="number">3.004155434998415e+101</span></span><br><span class="line">    <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;M&quot;</span><span class="punctuation">:</span><span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;我&quot;</span><span class="punctuation">:</span><span class="number">1.4167147493671037e+101</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;爱&quot;</span><span class="punctuation">:</span><span class="number">2.388740537292971e+101</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;梅&quot;</span><span class="punctuation">:</span><span class="number">2.854670014651611e+101</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;沙&quot;</span><span class="punctuation">:</span><span class="number">3.004155434998415e+101</span></span><br><span class="line">    <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;S&quot;</span><span class="punctuation">:</span><span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;我&quot;</span><span class="punctuation">:</span><span class="number">6.611019698336738</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;爱&quot;</span><span class="punctuation">:</span><span class="number">11.146923368528606</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;梅&quot;</span><span class="punctuation">:</span><span class="number">13.321157069582242</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;沙&quot;</span><span class="punctuation">:</span><span class="number">14.018722376196262</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="计算状态转移概率矩阵"><a href="#计算状态转移概率矩阵" class="headerlink" title="计算状态转移概率矩阵"></a>计算状态转移概率矩阵</h3><p>得到上述初始状态后，可以结合前文所述的HMM五元组，迭代求得如下关系图中所有弧的概率。t次迭代公式如下（这其实也可以泛化为马尔可夫n步转移矩阵迭代公式）。<br>$$<br>P_{t}(s)\ &#x3D;\ b_{so_{t}}\sum_{i&#x3D;1}^{n}{a_{t}(s)a_{i}},\ s\in(B, E,M,S),\ n &#x3D; t - 1<br>$$</p>
+<p>将弧的概率作为权值，寻找最大权值路径，即可求得。由于计算过程过于复杂，在这里不列出。经过代码测试，案例分词结果为『我&#x2F;爱梅沙』。</p>
 <pre class="mermaid">graph LR
 wb[我/B]
 ws[我/S]
@@ -284,13 +287,13 @@ as --> mb</pre>
 <p>  不是所有预测性问题都能使用HMM解决。实际上，HMM有三个重要假设（个人理解，三个假设即为满足这三个假设的问题，都可以使用HMM解决）。</p>
 <ol>
 <li><p>马尔可夫假设——即上文所述<strong>一阶马尔可夫链</strong>，当前为某状态的概率仅与上一次的状态有关，而与更早的状态无关</p>
-<p>$P{X_{n+1}=i_{n+1}\ |\ X_0,X_1,…,X_n=i_n} = P{X_{n+1}\ |\ X_n = i_n}$</p>
+<p>$P{X_{n+1}&#x3D;i_{n+1}\ |\ X_0,X_1,…,X_n&#x3D;i_n} &#x3D; P{X_{n+1}\ |\ X_n &#x3D; i_n}$</p>
 </li>
-<li><p>不动性假设——状态与时间/时序无关</p>
-<p>$P(X_{i+1}|X_i)\ =\ P(X_{j+1} | X_j)，对于任意i, j成立$</p>
+<li><p>不动性假设——状态与时间&#x2F;时序无关</p>
+<p>$P(X_{i+1}|X_i)\ &#x3D;\ P(X_{j+1} | X_j)，对于任意i, j成立$</p>
 </li>
 <li><p>输出独立性假设——输出状态仅与当前状态有关，即当前输入状态得到确定的输出状态，这个过程不随更早的输入、输出或时间而被改变</p>
-<p>$P(O_1,…,O_T | X_1, …, X_T) = \Pi(O_T\ |\ X_T)$</p>
+<p>$P(O_1,…,O_T | X_1, …, X_T) &#x3D; \Pi(O_T\ |\ X_T)$</p>
 </li>
 </ol>
 </blockquote>
@@ -304,25 +307,25 @@ as --> mb</pre>
 <p>  <strong>关于Viterbi算法</strong></p>
 <p>  很多人都用隐马尔科夫模型来回答viterbi算法，其实<strong>viterbi算法只是解决隐马第三个问题</strong>（求观察序列的最可能的标注序列）的一种实现方式。这个问题可以用于viterbi算法实现，<strong>也可以用其他方式实现</strong>（如穷举法）；而viterbi算法可以用于解决隐马第三问题，也可以用于解决其他问题。所以千万<strong>不要把viterbi算法和隐马尔科夫模型等价</strong>了。</p>
 <p>  viterbi算法其实就是<strong>多步骤每步多选择模型的最优选择</strong>问题，其在每一步的所有选择都保存了前续所有步骤到当前步骤当前选择的最小总代价（或者最大价值）以及当前代价的情况下前继步骤的选择。依次计算完所有步骤后，通过回溯的方法找到最优选择路径。<strong>符合这个模型的都可以用viterbi算法解决，隐马模型的第三问题刚好符合这个模型，所以才采用了viterbi算法</strong>。</p>
-<p>  ——引用<a href="https://www.zhihu.com/question/20136144" target="_blank" rel="noopener">知乎回答[4]</a></p>
+<p>  ——引用<a href="https://www.zhihu.com/question/20136144">知乎回答[4]</a></p>
 </blockquote>
 <blockquote>
 <p>  <strong>为什么是Viterbi而不是拓扑排序？</strong></p>
 <p>  个人理解是：拓扑排序解决的是单源点到多汇点的路径选择问题，而HMM中的网络结构是多源的——初始显状态空间，此时每种情况都是一个起点，因此，拓扑排序对于HMM的计算是不适用的。但我也认为这个解释不够合适，欢迎各位优秀同学纠正。</p>
 <p>  此外，看到<strong>带权、有向无环图</strong>两个关键字，很容易让人联想到AOE网。我们要明确，AOE网描述的是<strong>单源点；单汇点；</strong>带权；有向无环图。AOE网的关键路径选择过程在这里是不适用的，二者不可混淆。</p>
 </blockquote>
-<h2 id="结巴分词"><a href="#结巴分词" class="headerlink" title="结巴分词"></a>结巴分词</h2><p>通过上文所述，相信大家对未登录词的解析方式有了一定概念，更多的信息推荐直接阅读文末参考文献<strong>[1]</strong>。当然，这只是对于未登录词的常见处理方式。实际上，我们能获取很庞大的词典（ictclas提供包含3000万词的免费词库），也能基于已有数据和HMM统计一份自己的词典。对于结巴分词，会首先基于<strong>词典文件</strong>构造<strong>前缀词典</strong>；分词时，基于前缀词典<strong>完全切分</strong>句子，再以每个词的<strong>成词概率为权值</strong>，构造<strong>DAG(有向无环图)</strong>；最后，用<strong>动态规划</strong>的办法从后向前遍历，查找<strong>最大权值路径</strong>。其中，未登录词的成词概率基于HMM模型，采用Viterbi算法计算。</p>
+<h2 id="结巴分词"><a href="#结巴分词" class="headerlink" title="结巴分词"></a>结巴分词</h2><p>通过上文所述，相信大家对未登录词的解析方式有了一定概念，更多的信息推荐直接阅读文末参考文献**[1]<strong>。当然，这只是对于未登录词的常见处理方式。实际上，我们能获取很庞大的词典（ictclas提供包含3000万词的免费词库），也能基于已有数据和HMM统计一份自己的词典。对于结巴分词，会首先基于</strong>词典文件<strong>构造</strong>前缀词典<strong>；分词时，基于前缀词典</strong>完全切分<strong>句子，再以每个词的</strong>成词概率为权值<strong>，构造</strong>DAG(有向无环图)<strong>；最后，用</strong>动态规划<strong>的办法从后向前遍历，查找</strong>最大权值路径**。其中，未登录词的成词概率基于HMM模型，采用Viterbi算法计算。</p>
 <p>关于这个基本过程，其实结巴分词的README文件中有描述。但对于不了解HMM的同学而言，看到『对于未登录词，采用了基于汉字成词能力的 HMM 模型，使用了 Viterbi 算法』这句话可能会比较懵逼。结合上文所述，再回归到结巴分词的README文件中关于算法的说明及其具体代码中，思路可能会清晰很多。</p>
 <p>此外，结巴分词关于<strong>DAG采用十字链表法</strong>（将每个词看做一条弧，词的<strong>起始字的位置为弧尾，结束字位置为弧头</strong>）。在结巴分词中，可以找到getDAG方法，尝试打印其返回值有助于更深刻了解这一存储结构和后续遍历过程。</p>
 <blockquote>
-<p>  引用<a href="https://github.com/fxsjy/jieba/blob/master/README.md#算法" target="_blank" rel="noopener">https://github.com/fxsjy/jieba/blob/master/README.md#算法</a></p>
+<p>  引用<a href="https://github.com/fxsjy/jieba/blob/master/README.md#%E7%AE%97%E6%B3%95">https://github.com/fxsjy/jieba/blob/master/README.md#算法</a></p>
 <ul>
 <li>基于前缀词典实现高效的词图扫描，生成句子中汉字所有可能成词情况所构成的有向无环图 (DAG)</li>
 <li>采用了动态规划查找最大概率路径, 找出基于词频的最大切分组合</li>
 <li>对于未登录词，采用了基于汉字成词能力的 HMM 模型，使用了 Viterbi 算法</li>
 </ul>
 </blockquote>
-<p>在上文，我们提及，关于隐含状态、隐含状态概率矩阵已经通过统计得到。实际上，除此之外，还有很多参数都是如此。具体可以参见<a href="https://github.com/fxsjy/jieba/issues/7" target="_blank" rel="noopener">结巴分词 issue#7 数据是如何生成的</a>。需要注意的是，该issue的回答是2012年。于2013年(latest update)，作者还更新出了big版词典。即目前数据来源比 issue #7 中作者回复的数据来源更全面。</p>
+<p>在上文，我们提及，关于隐含状态、隐含状态概率矩阵已经通过统计得到。实际上，除此之外，还有很多参数都是如此。具体可以参见<a href="https://github.com/fxsjy/jieba/issues/7">结巴分词 issue#7 数据是如何生成的</a>。需要注意的是，该issue的回答是2012年。于2013年(latest update)，作者还更新出了big版词典。即目前数据来源比 issue #7 中作者回复的数据来源更全面。</p>
 <h3 id="垂直领域优化"><a href="#垂直领域优化" class="headerlink" title="垂直领域优化"></a>垂直领域优化</h3><p>在了解了HMM和结巴分词的基本过程后，我们可以明白，尽管结巴分词提供了HMM算法的实现，用于实现对未登录词的解析，但为了在生产环境中实现更高的Precision和Recall，我们有必要获取垂直领域的词库，并统计相应词频，并修改分词规则。以期提高对垂直领域（尤其是仅该领域特有的文本特性，如数学、物理、计算机编程等）文本处理的精确度。</p>
 <h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>对于HMM在分词中的应用，个人理解为这是从概率统计的思路，简化中文分词问题。在学习过程中，我们不能认为是无理由或随机选择了HMM实现对中文未登录词的处理，这很容易导致后续学习的思路混乱。更合理的，可能是因为中文文本的特性与HMM的三个假设恰好符合，因此，选择了HMM。也即，是否有其他方法解决呢？也有，比如LSTM[1]。</p>
 <p>通过了解历史，我们可以知道，最初的自然语言处理是基于语法规则的（这也是为什么最早的时候，我们使用翻译工具都十分不通顺，几乎是简单地词到词的映射），随着计算机性能的提升和相关技术发展，基于概率统计的系统性能更理想。但我们不能因为『实践证明基于手工规则的分词系统在评测中不敌基于统计学习的分词系统』，就认为基于语法规则的系统是毫无前途的。实际上，目前有许多文献资料都有提及，未来如果要实现更精确的自然语言处理，<strong>基于语法规则与基于概率统计的方法相结合是必然的趋势</strong>（虽然没有具体样例，但是个人有印象，有系统使用语法规则对基于概率统计的分析结果做进一步纠错的处理方式，有兴趣的同学可以做进一步了解）。同时，个人建议感兴趣的同学，了解基本语言发展历史和中文分词的发展历程，有助于加深关于分词系统或其它NLP系统的原理和发展趋势，具体可以参见[2-3]。</p>
@@ -331,10 +334,10 @@ as --> mb</pre>
 <li>基于LSTM网络的序列标注中文分词法[J]. 计算机应用研究, 2017(5).</li>
 <li>郑捷. nlp汉语自然语言处理原理与实践[M]. 北京: 电子工业出版社, 2017.1</li>
 <li>黄昌宁, 赵海. 中文分词十年回顾[J]. 中文信息学报, 2007, 21(3):8-19.</li>
-<li><a href="https://www.zhihu.com/question/20136144" target="_blank" rel="noopener">https://www.zhihu.com/question/20136144</a></li>
-<li><a href="https://github.com/fxsjy/jieba" target="_blank" rel="noopener">https://github.com/fxsjy/jieba</a></li>
-<li><a href="http://www.52nlp.cn/hmm" target="_blank" rel="noopener">http://www.52nlp.cn/hmm</a></li>
-<li><a href="https://www.cnblogs.com/zhbzz2007/p/6092313.html" target="_blank" rel="noopener">https://www.cnblogs.com/zhbzz2007/p/6092313.html</a></li>
+<li><a href="https://www.zhihu.com/question/20136144">https://www.zhihu.com/question/20136144</a></li>
+<li><a href="https://github.com/fxsjy/jieba">https://github.com/fxsjy/jieba</a></li>
+<li><a href="http://www.52nlp.cn/hmm">http://www.52nlp.cn/hmm</a></li>
+<li><a href="https://www.cnblogs.com/zhbzz2007/p/6092313.html">https://www.cnblogs.com/zhbzz2007/p/6092313.html</a></li>
 </ol>
 
           
@@ -636,11 +639,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">HTTP/2 HTTP/1.1 HTTP/3.0</a>
+                <a href="javascript:void(0)" class="js-tag color3">Go</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Go</a>
+                <a href="javascript:void(0)" class="js-tag color5">HTTP/2 HTTP/1.1 HTTP/3.0</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -656,10 +659,6 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Latex 文件转换 docx</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">lumen</a>
               </li>
              
@@ -669,6 +668,10 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">thrift</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Latex 文件转换 docx</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -685,6 +688,30 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Linux</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">反射</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">reflection</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">底层</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">变量</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">引用</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">优化</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -712,15 +739,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">反射</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">reflection</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">底层</a>
+                <a href="javascript:void(0)" class="js-tag color3">Reactor</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -736,23 +755,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">变量</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">引用</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">优化</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">跳跃表</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Reactor</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -761,6 +764,34 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">性能优化</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">阿里云</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">sts</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">推荐系统</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">NLP</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">CF-IDF</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">canal</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">ES</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -800,11 +831,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">canal</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">ES</a>
+                <a href="javascript:void(0)" class="js-tag color4">线段树</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -812,7 +839,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">线段树</a>
+                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -829,66 +856,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">world</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">阿里云</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">sts</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">推荐系统</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">NLP</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">CF-IDF</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">acm</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">树</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">字典树</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">前缀树</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">二进制</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">位运算</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">macro</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">model</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">数据库</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -924,6 +891,46 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">macro</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">model</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">数据库</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">acm</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">树</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">字典树</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">前缀树</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">二进制</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">位运算</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">底层分析</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">事务</a>
               </li>
              
@@ -933,10 +940,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Python</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">底层分析</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -956,15 +959,15 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">ACID</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">sysbench</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">压力测试</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">ACID</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -976,6 +979,14 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">UUID</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">MySQL</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">架构</a>
               </li>
              
@@ -984,11 +995,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">UUID</a>
+                <a href="javascript:void(0)" class="js-tag color5">日志服务</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">MySQL</a>
+                <a href="javascript:void(0)" class="js-tag color4">SLS</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1028,14 +1039,6 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">日志服务</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">SLS</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">大数据</a>
               </li>
              
@@ -1060,6 +1063,10 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">熔断</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">容器</a>
               </li>
              
@@ -1069,10 +1076,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">基本计算器</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">熔断</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1136,7 +1139,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">边框识别 答题卡 试卷 考试</a>
+                <a href="javascript:void(0)" class="js-tag color5">机器学习</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1156,11 +1159,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">缓存</a>
+                <a href="javascript:void(0)" class="js-tag color5">边框识别 答题卡 试卷 考试</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">机器学习</a>
+                <a href="javascript:void(0)" class="js-tag color3">缓存</a>
               </li>
              
               <li class="article-tag-list-item">

@@ -9,19 +9,19 @@
   <link rel="dns-prefetch" href="https://bex.meishakeji.com">
   <title>HTTP3.0 | Meisha Bex</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="HTTP 2.0HTTP 2.0是在2015年推出，目前主流HTTP协议。HTTP 2.0多路复用解决了HTTP1.x的重复建立连接浪费时间问题。 TCL连接(三次握手)：  一去（SYN） 二回（SYN+ACK） 三去（ACK）  TCL连接时间 &#x3D; 1.5RTT HTTP交易时间：请求和返回 &#x3D; 1RTT TLS连接：连接时间 &#x3D; 1.5RTT  浏览器给服务器发送的Client Hello消">
+  <meta name="description" content="HTTP 2.0HTTP 2.0是在2015年推出，目前主流HTTP协议。HTTP 2.0多路复用解决了HTTP1.x的重复建立连接浪费时间问题。 TCL连接(三次握手)：  一去（SYN） 二回（SYN+ACK） 三去（ACK）  TCL连接时间 &#x3D; 1.5RTT HTTP交易时间：请求和返回 &#x3D; 1RTT TLS连接：连接时间 &#x3D; 1.5RTT  浏览器给服务器发">
 <meta property="og:type" content="article">
 <meta property="og:title" content="HTTP3.0">
 <meta property="og:url" content="https://bex.meishakeji.com/2020/12/04/HTTP3.0/index.html">
 <meta property="og:site_name" content="Meisha Bex">
-<meta property="og:description" content="HTTP 2.0HTTP 2.0是在2015年推出，目前主流HTTP协议。HTTP 2.0多路复用解决了HTTP1.x的重复建立连接浪费时间问题。 TCL连接(三次握手)：  一去（SYN） 二回（SYN+ACK） 三去（ACK）  TCL连接时间 &#x3D; 1.5RTT HTTP交易时间：请求和返回 &#x3D; 1RTT TLS连接：连接时间 &#x3D; 1.5RTT  浏览器给服务器发送的Client Hello消">
+<meta property="og:description" content="HTTP 2.0HTTP 2.0是在2015年推出，目前主流HTTP协议。HTTP 2.0多路复用解决了HTTP1.x的重复建立连接浪费时间问题。 TCL连接(三次握手)：  一去（SYN） 二回（SYN+ACK） 三去（ACK）  TCL连接时间 &#x3D; 1.5RTT HTTP交易时间：请求和返回 &#x3D; 1RTT TLS连接：连接时间 &#x3D; 1.5RTT  浏览器给服务器发">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://img-blog.csdnimg.cn/20190421234118101.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2dpdGh1Yl8zNzEzMDE4OA==,size_16,color_FFFFFF,t_70">
-<meta property="og:image" content="https://bex.meishakeji.com/2020/12/04/HTTP3.0/image-20201116220717723.png">
-<meta property="og:image" content="https://bex.meishakeji.com/2020/12/04/HTTP3.0/1.png">
-<meta property="og:image" content="https://bex.meishakeji.com/2020/12/04/HTTP3.0/2.gif">
-<meta property="og:image" content="https://bex.meishakeji.com/2020/12/04/HTTP3.0/3.png">
-<meta property="og:image" content="https://bex.meishakeji.com/2020/12/04/HTTP3.0/4.png">
+<meta property="og:image" content="https://bex.meishakeji.com/2020/12/04/HTTP3/image-20201116220717723.png">
+<meta property="og:image" content="https://bex.meishakeji.com/2020/12/04/HTTP3/1.png">
+<meta property="og:image" content="https://bex.meishakeji.com/2020/12/04/HTTP3/2.gif">
+<meta property="og:image" content="https://bex.meishakeji.com/2020/12/04/HTTP3/3.png">
+<meta property="og:image" content="https://bex.meishakeji.com/2020/12/04/HTTP3/4.png">
 <meta property="article:published_time" content="2020-12-04T10:00:00.000Z">
 <meta property="article:modified_time" content="2024-12-31T14:59:26.350Z">
 <meta property="article:author" content="Meisha Bex">
@@ -189,9 +189,9 @@
 <li>二回（SYN+ACK）</li>
 <li>三去（ACK）</li>
 </ul>
-<p>TCL连接时间 = 1.5RTT</p>
-<p><strong>HTTP交易时间</strong>：请求和返回 = 1RTT</p>
-<p><strong>TLS连接：</strong>连接时间 = 1.5RTT</p>
+<p>TCL连接时间 &#x3D; 1.5RTT</p>
+<p><strong>HTTP交易时间</strong>：请求和返回 &#x3D; 1RTT</p>
+<p><strong>TLS连接：</strong>连接时间 &#x3D; 1.5RTT</p>
 <ul>
 <li><p>浏览器给服务器发送的Client Hello消息（一去）</p>
 </li>
@@ -200,35 +200,38 @@
 <li><p>浏览器给服务器发送的Key Exchange消息（三去）</p>
 </li>
 </ul>
-<p><strong>HTTPS通信时间总和 = TCP连接时间 + TLS 连接时间 + HTTP交易时间 = 1.5 RTT + 1.5 RTT + 1 RTT = 4 RTT</strong></p>
+<p><strong>HTTPS通信时间总和 &#x3D; TCP连接时间 + TLS 连接时间 + HTTP交易时间 &#x3D; 1.5 RTT + 1.5 RTT + 1 RTT &#x3D; 4 RTT</strong></p>
 <p>HTTP2.0连接共享复用第一个连接的TCL和TLS连接，节省了3RTT。</p>
-<p><img src="https://img-blog.csdnimg.cn/20190421234118101.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2dpdGh1Yl8zNzEzMDE4OA==,size_16,color_FFFFFF,t_70" alt="img" style="zoom:87%;"></p>
+<img src="https://img-blog.csdnimg.cn/20190421234118101.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2dpdGh1Yl8zNzEzMDE4OA==,size_16,color_FFFFFF,t_70" alt="img" style="zoom:87%;">
+
 <p><strong>HTTP 2.0不足：</strong></p>
 <ul>
 <li>建立连接时间长(本质上是TCP的问题)</li>
 <li>队头阻塞问题（多个HTTP流使用同一个TCP连接，遵守同一个流量状态控制。只要第一个HTTP流丢包等待重传时遭遇到拥塞，剩下的HTTP流无法发出去）</li>
 <li>移动互联网领域表现不佳(弱网环境)</li>
 </ul>
-<h3 id="TCP-UDP协议"><a href="#TCP-UDP协议" class="headerlink" title="TCP/UDP协议"></a>TCP/UDP协议</h3><p><strong>TCP协议（Transmission Control Protocol）</strong><br>　　a.面向连接的传输控制协议. 在收发数据前，必须和对方建立可靠的连接<br>　　b.无差错的数据传输<br>　　c.按序传输（数据总是会按照发送的顺序到达）<br>　　d.未分段的数据流（可以在任意时刻以任意尺寸将数据发送出去）<br>　　<br><strong>UDP协议（User Data Protocol）</strong></p>
-<p>​    a. 非连接的用户数据报协议. 传输数据之前源端和终端不建立连接<br>   b. 有差错的数据传输.<br>   c. 不进行流量控制<br>   d. 不可靠，可能会丢包. 不维护连接状态</p>
+<h3 id="TCP-UDP协议"><a href="#TCP-UDP协议" class="headerlink" title="TCP&#x2F;UDP协议"></a>TCP&#x2F;UDP协议</h3><p><strong>TCP协议（Transmission Control Protocol）</strong><br>　　a.面向连接的传输控制协议. 在收发数据前，必须和对方建立可靠的连接<br>　　b.无差错的数据传输<br>　　c.按序传输（数据总是会按照发送的顺序到达）<br>　　d.未分段的数据流（可以在任意时刻以任意尺寸将数据发送出去）<br>　　<br><strong>UDP协议（User Data Protocol）</strong></p>
+<p>​	a. 非连接的用户数据报协议. 传输数据之前源端和终端不建立连接<br>   b. 有差错的数据传输.<br>   c. 不进行流量控制<br>   d. 不可靠，可能会丢包. 不维护连接状态</p>
 <h3 id="HTTP-3-0"><a href="#HTTP-3-0" class="headerlink" title="HTTP 3.0"></a>HTTP 3.0</h3><p><strong>HTTP 3.0弃用TCP协议，改用基于UDP协议的QUIC协议</strong>。</p>
 <blockquote>
-<p>QUIC（Quick UDP Internet Connection）是谷歌制定的一种基于UDP的低时延的互联网传输层协议，集成了TCP可靠传输机制、TLS安全加密、HTTP /2 流量复用技术。</p>
-<p><img src="/2020/12/04/HTTP3.0/image-20201116220717723.png" alt="image-20201116220717723的副本 2"></p>
+<p>QUIC（Quick UDP Internet Connection）是谷歌制定的一种基于UDP的低时延的互联网传输层协议，集成了TCP可靠传输机制、TLS安全加密、HTTP &#x2F;2 流量复用技术。</p>
+<p><img src="/2020/12/04/HTTP3/image-20201116220717723.png" alt="image-20201116220717723的副本 2"></p>
 </blockquote>
-<p><img src="/2020/12/04/HTTP3.0/1.png" alt="img"></p>
+<p><img src="/2020/12/04/HTTP3/1.png" alt="img"></p>
 <p>由于UDP不需要连接，不会带来附加的RTT时间，因此，基于QUIC协议的页面加载时间变成了2.5RTT。</p>
-<p>另外，完成QUIC交易的连接的SessionID会缓存在浏览器内存里，如果用户再次打开该页面，无需重新TLS连接，服务器直接根据SessionID在缓存里查找对应的加密参数，并完成加密。因此加载耗时=HTTP交易事件=1RTT</p>
-<p><img src="/2020/12/04/HTTP3.0/2.gif" alt="img"></p>
+<p>另外，完成QUIC交易的连接的SessionID会缓存在浏览器内存里，如果用户再次打开该页面，无需重新TLS连接，服务器直接根据SessionID在缓存里查找对应的加密参数，并完成加密。因此加载耗时&#x3D;HTTP交易事件&#x3D;1RTT</p>
+<p><img src="/2020/12/04/HTTP3/2.gif" alt="img"></p>
 <p><strong>QUIC协议可以实现在第一个包就可以包含有效的应用数据</strong></p>
-<p><img src="/2020/12/04/HTTP3.0/3.png" alt="img" style="zoom:60%;"></p>
+<img src="/2020/12/04/HTTP3/3.png" alt="img" style="zoom:60%;">
+
 <p>还解决HTTP 2.0不足队头阻塞问题，基于UDP协议实现的，在一条链接上可以有<strong>多个流</strong>，流与流之间是<strong>互不影响</strong>的，当一个流出现丢包影响范围非常小，从而解决队头阻塞问题。</p>
 <h4 id="QUIC协议"><a href="#QUIC协议" class="headerlink" title="QUIC协议"></a>QUIC协议</h4><p><strong>1. 首次连接</strong>：客户端和服务端的密钥协商和数据传输过程</p>
 <p><strong>2. 非首次连接</strong>：首次连接客户端会将config存储下来，后续再连接时可以直接使用</p>
 <p><strong>3. 前向安全问题</strong>：指密钥泄漏也不会让之前加密的数据被泄漏，影响的只有当前，对之前的数据无影响</p>
 <p><strong>4. 前向纠错</strong>：增加数据通讯可信度的方法，在单向通讯信道中，一旦错误被发现，其接收器将无权再请求传输</p>
 <p><strong>5. 连接迁移</strong>：TCP协议使用五元组来表示一条唯一的连接，QUIC协议基于UDP实现使用64位的随机数作为连接的ID，并使用该ID表示连接，网络切换不需要重连。</p>
-<p><img src="/2020/12/04/HTTP3.0/4.png" alt="img" style="zoom:67%;"></p>
+<img src="/2020/12/04/HTTP3/4.png" alt="img" style="zoom:67%;">
+
 
           
       
@@ -512,11 +515,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">HTTP/2 HTTP/1.1 HTTP/3.0</a>
+                <a href="javascript:void(0)" class="js-tag color3">Go</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Go</a>
+                <a href="javascript:void(0)" class="js-tag color5">HTTP/2 HTTP/1.1 HTTP/3.0</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -532,10 +535,6 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Latex 文件转换 docx</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">lumen</a>
               </li>
              
@@ -545,6 +544,10 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">thrift</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Latex 文件转换 docx</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -561,6 +564,30 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Linux</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">反射</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">reflection</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">底层</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">变量</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">引用</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">优化</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -588,15 +615,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">反射</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">reflection</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">底层</a>
+                <a href="javascript:void(0)" class="js-tag color3">Reactor</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -612,23 +631,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">变量</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">引用</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">优化</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">跳跃表</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Reactor</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -637,6 +640,34 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">性能优化</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">阿里云</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">sts</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">推荐系统</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">NLP</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">CF-IDF</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">canal</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">ES</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -676,11 +707,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">canal</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">ES</a>
+                <a href="javascript:void(0)" class="js-tag color4">线段树</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -688,7 +715,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">线段树</a>
+                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -705,66 +732,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">world</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">阿里云</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">sts</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">推荐系统</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">NLP</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">CF-IDF</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">acm</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">树</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">字典树</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">前缀树</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">二进制</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">位运算</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">macro</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">model</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">数据库</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -800,6 +767,46 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">macro</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">model</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">数据库</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">acm</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">树</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">字典树</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">前缀树</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">二进制</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">位运算</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">底层分析</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">事务</a>
               </li>
              
@@ -809,10 +816,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Python</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">底层分析</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -832,15 +835,15 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">ACID</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">sysbench</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">压力测试</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">ACID</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -852,6 +855,14 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">UUID</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">MySQL</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">架构</a>
               </li>
              
@@ -860,11 +871,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">UUID</a>
+                <a href="javascript:void(0)" class="js-tag color5">日志服务</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">MySQL</a>
+                <a href="javascript:void(0)" class="js-tag color4">SLS</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -904,14 +915,6 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">日志服务</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">SLS</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">大数据</a>
               </li>
              
@@ -936,6 +939,10 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">熔断</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">容器</a>
               </li>
              
@@ -945,10 +952,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">基本计算器</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">熔断</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1012,7 +1015,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">边框识别 答题卡 试卷 考试</a>
+                <a href="javascript:void(0)" class="js-tag color5">机器学习</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1032,11 +1035,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">缓存</a>
+                <a href="javascript:void(0)" class="js-tag color5">边框识别 答题卡 试卷 考试</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">机器学习</a>
+                <a href="javascript:void(0)" class="js-tag color3">缓存</a>
               </li>
              
               <li class="article-tag-list-item">

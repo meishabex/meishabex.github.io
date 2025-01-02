@@ -9,12 +9,12 @@
   <link rel="dns-prefetch" href="https://bex.meishakeji.com">
   <title>canal-mysql数据实时同步ES | Meisha Bex</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="一、什么是canal canal ，译意为水道&#x2F;管道&#x2F;沟渠，主要用途是基于 MySQL 数据库增量日志解析，提供增量数据订阅和消费   说白了就是，根据Mysql的binlog日志进行增量同步数据。要理解canal的原理，就要先了解mysql的主从复制原理  所有的create update delete操作都会进入MySQLmaster节点 master节点会生成binlog文件，每次操作mys">
+  <meta name="description" content="一、什么是canal **canal **，译意为水道&#x2F;管道&#x2F;沟渠，主要用途是基于 MySQL 数据库增量日志解析，提供增量数据订阅和消费   说白了就是，根据Mysql的binlog日志进行增量同步数据。要理解canal的原理，就要先了解mysql的主从复制原理  所有的create update delete操作都会进入MySQLmaster节点 master节点会生成bi">
 <meta property="og:type" content="article">
 <meta property="og:title" content="canal-mysql数据实时同步ES">
 <meta property="og:url" content="https://bex.meishakeji.com/2021/01/21/canal-mysql%E6%95%B0%E6%8D%AE%E5%AE%9E%E6%97%B6%E5%90%8C%E6%AD%A5ES/index.html">
 <meta property="og:site_name" content="Meisha Bex">
-<meta property="og:description" content="一、什么是canal canal ，译意为水道&#x2F;管道&#x2F;沟渠，主要用途是基于 MySQL 数据库增量日志解析，提供增量数据订阅和消费   说白了就是，根据Mysql的binlog日志进行增量同步数据。要理解canal的原理，就要先了解mysql的主从复制原理  所有的create update delete操作都会进入MySQLmaster节点 master节点会生成binlog文件，每次操作mys">
+<meta property="og:description" content="一、什么是canal **canal **，译意为水道&#x2F;管道&#x2F;沟渠，主要用途是基于 MySQL 数据库增量日志解析，提供增量数据订阅和消费   说白了就是，根据Mysql的binlog日志进行增量同步数据。要理解canal的原理，就要先了解mysql的主从复制原理  所有的create update delete操作都会进入MySQLmaster节点 master节点会生成bi">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://cdn.meishakeji.com/md/lexiang/20210304canal.jpg">
 <meta property="og:image" content="https://cdn.meishakeji.com/md/lexiang/20210112canal-deployer%E6%96%87%E4%BB%B6%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84.jpg">
@@ -186,7 +186,7 @@
           
           
             <h3 id="一、什么是canal"><a href="#一、什么是canal" class="headerlink" title="一、什么是canal"></a>一、什么是canal</h3><blockquote>
-<p><strong>canal </strong>，译意为水道/管道/沟渠，主要用途是基于 MySQL 数据库增量日志解析，提供增量数据订阅和消费</p>
+<p>**canal **，译意为水道&#x2F;管道&#x2F;沟渠，主要用途是基于 MySQL 数据库增量日志解析，提供增量数据订阅和消费</p>
 </blockquote>
 <p><img src="https://cdn.meishakeji.com/md/lexiang/20210304canal.jpg" alt="canal"></p>
 <p>说白了就是，根据Mysql的binlog日志进行增量同步数据。要理解canal的原理，就要先了解mysql的主从复制原理</p>
@@ -202,107 +202,95 @@
 <li>canal客户端通过TCP协议或MQ形式监听canal服务端，同步数据到ES</li>
 </ol>
 <h3 id="二、环境搭建"><a href="#二、环境搭建" class="headerlink" title="二、环境搭建"></a>二、环境搭建</h3><p>参考文档：</p>
-<p><a href="https://github.com/alibaba/canal/wiki/QuickStart" target="_blank" rel="noopener">canal服务端</a></p>
-<p><a href="https://github.com/alibaba/canal/wiki/Sync-ES" target="_blank" rel="noopener">canal客户端</a></p>
+<p><a href="https://github.com/alibaba/canal/wiki/QuickStart">canal服务端</a></p>
+<p><a href="https://github.com/alibaba/canal/wiki/Sync-ES">canal客户端</a></p>
 <p>软件版本：</p>
-<p><a href="https://github.com/alibaba/canal/releases/tag/canal-1.1.4" target="_blank" rel="noopener">canal1.1.4</a>、mysql5.6.33、elasticsearch6.4.2</p>
+<p><a href="https://github.com/alibaba/canal/releases/tag/canal-1.1.4">canal1.1.4</a>、mysql5.6.33、elasticsearch6.4.2</p>
 <p>操作步骤：</p>
 <ol>
 <li><p>部署安装canal.deployer</p>
 <ul>
 <li>解压后文件结构如下</li>
 </ul>
-<p><img src="https://cdn.meishakeji.com/md/lexiang/20210112canal-deployer%E6%96%87%E4%BB%B6%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84.jpg" alt></p>
+<p><img src="https://cdn.meishakeji.com/md/lexiang/20210112canal-deployer%E6%96%87%E4%BB%B6%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84.jpg"></p>
 <ul>
 <li>配置server（仅列出修改部分的内容 后面的配置文件也是）</li>
 </ul>
 <hr>
-<p>canal.admin.port = 11111</p>
-<p>canal.serverMode = tcp #canal-server运行模式，TCP模式表示直连客户端</p>
-<p>canal.destinations = user_order #指定创建的实例名称</p>
+<p>canal.admin.port &#x3D; 11111</p>
+<p>canal.serverMode &#x3D; tcp #canal-server运行模式，TCP模式表示直连客户端</p>
+<p>canal.destinations &#x3D; user_order #指定创建的实例名称</p>
 <hr>
-</li>
-</ol>
 <ul>
-<li><p>配置自定义user_order实例</p>
-<p>以提供的实例example为参考 cp -a example/ user_order &amp;&amp; vim user_order/instance.properties </p>
-</li>
+<li>配置自定义user_order实例</li>
 </ul>
+<p>以提供的实例example为参考 cp -a example&#x2F; user_order &amp;&amp; vim user_order&#x2F;instance.properties </p>
 <hr>
-<p>   canal.instance.master.address=172.18.16.1:3306 #指定要读取binlog的mysql的ip及端口</p>
-<p>   canal.instance.dbUsername=canal<br>   canal.instance.dbPassword=canal<br>   canal.instance.connectionCharset = UTF-8</p>
-<p>   canal.instance.filter.regex=meisha_order.tb_order #匹配库表白名单 只要指定库表的增量数据</p>
+<p>canal.instance.master.address&#x3D;172.18.16.1:3306 #指定要读取binlog的mysql的ip及端口</p>
+<p>canal.instance.dbUsername&#x3D;canal<br>canal.instance.dbPassword&#x3D;canal<br>canal.instance.connectionCharset &#x3D; UTF-8</p>
+<p>canal.instance.filter.regex&#x3D;meisha_order.tb_order #匹配库表白名单 只要指定库表的增量数据</p>
 <hr>
 <ul>
 <li>启动</li>
 </ul>
 <hr>
-<p>   sh bin/startup.sh </p>
+<p>sh bin&#x2F;startup.sh </p>
 <hr>
 <ul>
-<li><p>查看server日志</p>
-<p><img src="https://cdn.meishakeji.com/md/lexiang/20210114canalserver%E6%97%A5%E5%BF%971.jpg" alt></p>
-</li>
-<li><p>查看实例日志</p>
-<p><img src="https://cdn.meishakeji.com/md/lexiang/20210114canalserver%E6%97%A5%E5%BF%972.jpg" alt></p>
-</li>
+<li>查看server日志</li>
 </ul>
-<ol start="2">
+<p><img src="https://cdn.meishakeji.com/md/lexiang/20210114canalserver%E6%97%A5%E5%BF%971.jpg"></p>
+<ul>
+<li>查看实例日志</li>
+</ul>
+<p><img src="https://cdn.meishakeji.com/md/lexiang/20210114canalserver%E6%97%A5%E5%BF%972.jpg"></p>
+</li>
 <li><p>部署安装canal.adapter</p>
 <ul>
 <li><p>解压后文件结构如下</p>
-<p><img src="http://cdn.meishakeji.com/md/lexiang/20210114canaladpter%E6%96%87%E4%BB%B6%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84.jpg" alt></p>
+<p><img src="http://cdn.meishakeji.com/md/lexiang/20210114canaladpter%E6%96%87%E4%BB%B6%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84.jpg"></p>
 </li>
-<li><p>配置adapter conf/application.yml</p>
+<li><p>配置adapter conf&#x2F;application.yml</p>
 <hr>
 <p> mode: tcp</p>
 <p> canalServerHost: 127.0.0.1:11111 #指定前面配置的canal-server的地址和端口</p>
-<p>srcDataSources:</p>
-<pre><code>defaultDS:
-  url: jdbc:mysql://172.18.16.1:3306/meisha_order?useUnicode=true
-  username: canal
-  password: canal
-</code></pre></li>
-</ul>
+<p>srcDataSources:<br>defaultDS:<br>  url: jdbc:mysql:&#x2F;&#x2F;172.18.16.1:3306&#x2F;meisha_order?useUnicode&#x3D;true<br>  username: canal<br>  password: canal<br>outerAdapters:</p>
+<p>​	- name: logger</p>
+<p>​	- name:es</p>
+<p>​		hosts: 172.18.0.13:7200<br>​        properties:<br>​        	mode: rest</p>
+<pre><code>        cluster.name: ms-es
+</code></pre>
+<hr>
 </li>
-</ol>
-<pre><code>outerAdapters:
-
-​    - name: logger
-
-​    - name:es
-
-​        hosts: 172.18.0.13:7200
-​        properties:
-​            mode: rest
-
-            cluster.name: ms-es
-
----
-</code></pre><ul>
 <li><p>配置es</p>
 <hr>
-<p>cp conf/es/customer.yml   conf/es/order.yml &amp;&amp; vim conf/es/order.yml</p>
+<p>cp conf&#x2F;es&#x2F;customer.yml   conf&#x2F;es&#x2F;order.yml &amp;&amp; vim conf&#x2F;es&#x2F;order.yml</p>
 <hr>
 <hr>
-<p>dataSourceKey: defaultDS<br>destination: user_order<br>groupId: g1<br>esMapping:<br>  _index: test_meisha_order<br>_type: order_search<br>  _id: _id<br>sql: “select t.id as _id, t.channel_company_id, t.channel_user_id, t.flash_sale_activity_id, t.is_attend_group, t.status, t.flash_sale_reduce_amount, t.coupon_reduce_amount, t.general_coupon_reduce_amount, t.revise_amount, t.benefit_reduce_amount, t.paid_at, t.pay_agency from tb_order t”<br>  commitBatch: 3000</p>
-<hr>
+<p>dataSourceKey: defaultDS</p>
 </li>
 </ul>
-<ol start="3">
-<li><p>demo演示</p>
-<p>mysql/es初始状态</p>
-<p><img src="https://cdn.meishakeji.com/md/lexiang/20210118%E4%BF%AE%E6%94%B9%E5%89%8Dmysql%E6%88%AA%E5%9B%BE.jpg" alt></p>
-<p><img src="https://cdn.meishakeji.com/md/lexiang/20210118%E4%BF%AE%E6%94%B9%E5%89%8Des%E6%88%AA%E5%9B%BE.jpg" alt></p>
 </li>
 </ol>
-<p>   通过sql直接修改channel_user_id字段的值</p>
-   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">update meisha_order.tb_order set channel_user_id = &apos;0035451e98790957&apos; where id = &apos;1820103691417724&apos;;</span><br></pre></td></tr></table></figure>
-<p>   实时自动同步es</p>
+<p>destination: user_order<br>     groupId: g1<br>esMapping:<br>       _index: test_meisha_order<br>  _type: order_search<br>       _id: _id<br>  sql: “select t.id as _id, t.channel_company_id, t.channel_user_id, t.flash_sale_activity_id, t.is_attend_group, t.status, t.flash_sale_reduce_amount, t.coupon_reduce_amount, t.general_coupon_reduce_amount, t.revise_amount, t.benefit_reduce_amount, t.paid_at, t.pay_agency from tb_order t”<br>       commitBatch: 3000</p>
+<pre><code> ---
+ 
+</code></pre>
+<ol start="3">
+<li><p>demo演示</p>
+<p>mysql&#x2F;es初始状态</p>
+<p><img src="https://cdn.meishakeji.com/md/lexiang/20210118%E4%BF%AE%E6%94%B9%E5%89%8Dmysql%E6%88%AA%E5%9B%BE.jpg"></p>
+<p><img src="https://cdn.meishakeji.com/md/lexiang/20210118%E4%BF%AE%E6%94%B9%E5%89%8Des%E6%88%AA%E5%9B%BE.jpg"></p>
+<p>通过sql直接修改channel_user_id字段的值</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">update meisha_order.tb_order set channel_user_id = &#x27;0035451e98790957&#x27; where id = &#x27;1820103691417724&#x27;;</span><br></pre></td></tr></table></figure>
+
+<p>实时自动同步es</p>
 <hr>
-<p>   2021-01-18 15:09:48.987 [pool-3-thread-1] DEBUG c.a.otter.canal.client.adapter.es.service.ESSyncService - DML: {“data”:[{“id”:”1820103691417724”,”is_business”:0,”business_enterprise_id”:””,”user_id”:”8b714c3a869495ef”,”platform_company_id”:”e150aa75386543ff”,”campus_company_id”:”e150aa75386543ff”,”campus_serial”:”11”,”course_company_id”:”e150aa75386543ff”,”channel_company_id”:”e150aa75386543ff”,”channel_user_id”:”0035451e98790957”,”channel_user_phone_no”:”13580445178”,”invite_code”:””,”status”:30,”type”:3,”course_id”:”DCA8B9A1439D7CAB”,”sub_type”:”104”,”subject_id”:”326”,”end_time”:0,”begin_time”:0,”time_type”:0,”is_agreed”:1,”ip_address”:””,”origin_amount”:3,”order_amount”:3,”revise_amount”:0,”experience_revise_amount”:0,”privilege_revise_amount”:0,”agency_received_amount”:3,”balance_received_amount”:0,”agency_refund_amount”:0,”balance_refund_amount”:0,”fee”:0,”origin_balance_transfer_out_amount”:0,”origin_agency_transfer_out_amount”:0,”origin_balance_transfer_in_amount”:0,”origin_agency_transfer_in_amount”:0,”balance_real_transfer_out_amount”:0,”agency_real_transfer_out_amount”:0,”balance_real_transfer_in_amount”:0,”agency_real_transfer_in_amount”:0,”split_pay_times”:1,”pay_agency”:303,”business_pay_agency”:0,”payinfo_id”:”1820103701415236”,”transaction_id”:””,”pos_device_id”:”8F79351370B3360F”,”coupon_snapshot”:null,”privilege_snapshot”:null,”split_payment_snapshot”:null,”experience_snapshot”:null,”course_packages”:null,”remark”:””,”user_remark”:””,”activity”:””,”source”:””,”third_party_service”:””,”keywords”:”1820103691417724#18819464136#智能POS全日制课程#智能POS课程#张小#110101200001028333#DHJ132799#”,”way”:3,”expired_at”:1572605114,”paid_at”:1572603414,”business_full_settled_at”:0,”close_at”:0,”update_time”:1610615695,”create_time”:1572603314,”is_deleted”:0,”coupon_reduce_amount”:0,”benefit_reduce_amount”:0,”benefit_snapshot”:null,”cal_commission”:1,”reason_not_call_commission”:null,”contract_id”:””,”contract_snapshot”:null,”transfer_out_fee”:0,”origin_transfer_out_fee”:0,”agency_settle_amount”:0,”balance_settle_amount”:0,”settlement_status”:1,”reward_introducer”:0,”flash_sale_activity_id”:””,”flash_sale_reduce_amount”:0,”merchant_id”:”e150aa75386543ff”,”is_attend_group”:0,”group_reduce_amount”:0,”general_coupon_snapshot”:””,”general_coupon_reduce_amount”:0,”auto_launch_group”:0}],”database”:”meisha_order”,”destination”:”user_order”,”es”:1610953788000,”groupId”:null,”isDdl”:false,”old”:[{“channel_user_id”:”00fb425ba4b6433e”}],”pkNames”:[“id”],”sql”:””,”table”:”tb_order”,”ts”:1610953788975,”type”:”UPDATE”} </p>
+<p>2021-01-18 15:09:48.987 [pool-3-thread-1] DEBUG c.a.otter.canal.client.adapter.es.service.ESSyncService - DML: {“data”:[{“id”:”1820103691417724”,”is_business”:0,”business_enterprise_id”:””,”user_id”:”8b714c3a869495ef”,”platform_company_id”:”e150aa75386543ff”,”campus_company_id”:”e150aa75386543ff”,”campus_serial”:”11”,”course_company_id”:”e150aa75386543ff”,”channel_company_id”:”e150aa75386543ff”,”channel_user_id”:”0035451e98790957”,”channel_user_phone_no”:”13580445178”,”invite_code”:””,”status”:30,”type”:3,”course_id”:”DCA8B9A1439D7CAB”,”sub_type”:”104”,”subject_id”:”326”,”end_time”:0,”begin_time”:0,”time_type”:0,”is_agreed”:1,”ip_address”:””,”origin_amount”:3,”order_amount”:3,”revise_amount”:0,”experience_revise_amount”:0,”privilege_revise_amount”:0,”agency_received_amount”:3,”balance_received_amount”:0,”agency_refund_amount”:0,”balance_refund_amount”:0,”fee”:0,”origin_balance_transfer_out_amount”:0,”origin_agency_transfer_out_amount”:0,”origin_balance_transfer_in_amount”:0,”origin_agency_transfer_in_amount”:0,”balance_real_transfer_out_amount”:0,”agency_real_transfer_out_amount”:0,”balance_real_transfer_in_amount”:0,”agency_real_transfer_in_amount”:0,”split_pay_times”:1,”pay_agency”:303,”business_pay_agency”:0,”payinfo_id”:”1820103701415236”,”transaction_id”:””,”pos_device_id”:”8F79351370B3360F”,”coupon_snapshot”:null,”privilege_snapshot”:null,”split_payment_snapshot”:null,”experience_snapshot”:null,”course_packages”:null,”remark”:””,”user_remark”:””,”activity”:””,”source”:””,”third_party_service”:””,”keywords”:”1820103691417724#18819464136#智能POS全日制课程#智能POS课程#张小#110101200001028333#DHJ132799#”,”way”:3,”expired_at”:1572605114,”paid_at”:1572603414,”business_full_settled_at”:0,”close_at”:0,”update_time”:1610615695,”create_time”:1572603314,”is_deleted”:0,”coupon_reduce_amount”:0,”benefit_reduce_amount”:0,”benefit_snapshot”:null,”cal_commission”:1,”reason_not_call_commission”:null,”contract_id”:””,”contract_snapshot”:null,”transfer_out_fee”:0,”origin_transfer_out_fee”:0,”agency_settle_amount”:0,”balance_settle_amount”:0,”settlement_status”:1,”reward_introducer”:0,”flash_sale_activity_id”:””,”flash_sale_reduce_amount”:0,”merchant_id”:”e150aa75386543ff”,”is_attend_group”:0,”group_reduce_amount”:0,”general_coupon_snapshot”:””,”general_coupon_reduce_amount”:0,”auto_launch_group”:0}],”database”:”meisha_order”,”destination”:”user_order”,”es”:1610953788000,”groupId”:null,”isDdl”:false,”old”:[{“channel_user_id”:”00fb425ba4b6433e”}],”pkNames”:[“id”],”sql”:””,”table”:”tb_order”,”ts”:1610953788975,”type”:”UPDATE”} </p>
 <hr>
-<p><img src="https://cdn.meishakeji.com/md/lexiang/20210118%E4%BF%AE%E6%94%B9%E5%90%8Ees.jpg" alt></p>
+</li>
+</ol>
+<p><img src="https://cdn.meishakeji.com/md/lexiang/20210118%E4%BF%AE%E6%94%B9%E5%90%8Ees.jpg"></p>
 
           
       
@@ -579,11 +567,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">HTTP/2 HTTP/1.1 HTTP/3.0</a>
+                <a href="javascript:void(0)" class="js-tag color3">Go</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Go</a>
+                <a href="javascript:void(0)" class="js-tag color5">HTTP/2 HTTP/1.1 HTTP/3.0</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -599,10 +587,6 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Latex 文件转换 docx</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">lumen</a>
               </li>
              
@@ -612,6 +596,10 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">thrift</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Latex 文件转换 docx</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -628,6 +616,30 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Linux</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">反射</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">reflection</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">底层</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">变量</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">引用</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">优化</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -655,15 +667,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">反射</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">reflection</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">底层</a>
+                <a href="javascript:void(0)" class="js-tag color3">Reactor</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -679,23 +683,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">变量</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">引用</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">优化</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">跳跃表</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Reactor</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -704,6 +692,34 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">性能优化</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">阿里云</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">sts</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">推荐系统</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">NLP</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">CF-IDF</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">canal</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">ES</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -743,11 +759,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">canal</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">ES</a>
+                <a href="javascript:void(0)" class="js-tag color4">线段树</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -755,7 +767,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">线段树</a>
+                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -772,66 +784,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">world</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">阿里云</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">sts</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">推荐系统</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">NLP</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">CF-IDF</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">acm</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">树</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">字典树</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">前缀树</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">二进制</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">位运算</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">macro</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">model</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">数据库</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -867,6 +819,46 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">macro</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">model</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">数据库</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">acm</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">树</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">字典树</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">前缀树</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">二进制</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">位运算</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">底层分析</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">事务</a>
               </li>
              
@@ -876,10 +868,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Python</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">底层分析</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -899,15 +887,15 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">ACID</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">sysbench</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">压力测试</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">ACID</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -919,6 +907,14 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">UUID</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">MySQL</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">架构</a>
               </li>
              
@@ -927,11 +923,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">UUID</a>
+                <a href="javascript:void(0)" class="js-tag color5">日志服务</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">MySQL</a>
+                <a href="javascript:void(0)" class="js-tag color4">SLS</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -971,14 +967,6 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">日志服务</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">SLS</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">大数据</a>
               </li>
              
@@ -1003,6 +991,10 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">熔断</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">容器</a>
               </li>
              
@@ -1012,10 +1004,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">基本计算器</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">熔断</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1079,7 +1067,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">边框识别 答题卡 试卷 考试</a>
+                <a href="javascript:void(0)" class="js-tag color5">机器学习</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1099,11 +1087,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">缓存</a>
+                <a href="javascript:void(0)" class="js-tag color5">边框识别 答题卡 试卷 考试</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">机器学习</a>
+                <a href="javascript:void(0)" class="js-tag color3">缓存</a>
               </li>
              
               <li class="article-tag-list-item">

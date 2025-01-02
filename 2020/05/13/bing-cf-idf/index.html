@@ -181,9 +181,9 @@
       
           
           
-            <p>本文由 <a href="https://blog.csdn.net/qq_23937195" target="_blank" rel="noopener">林鸿钊@funco</a> 翻译，仅作为交流学习之用，诚向各方大佬请教。<br>翻译不易，感谢支持，转载也请注明出处，不胜感激。</p>
+            <p>本文由 <a href="https://blog.csdn.net/qq_23937195">林鸿钊@funco</a> 翻译，仅作为交流学习之用，诚向各方大佬请教。<br>翻译不易，感谢支持，转载也请注明出处，不胜感激。</p>
 <p><strong>翻译</strong>：Bing-CF-IDF+：语义驱动的新闻推荐系统</p>
-<p><strong>原文</strong>：<a href="https://personal.eur.nl/frasincar/papers/CAISE2019/caise2019.pdf" target="_blank" rel="noopener">Bing-CF-IDF+: A Semantics-Driven News Recommender System</a></p>
+<p><strong>原文</strong>：<a href="https://personal.eur.nl/frasincar/papers/CAISE2019/caise2019.pdf">Bing-CF-IDF+: A Semantics-Driven News Recommender System</a></p>
 <p><strong>摘要：</strong> 随着网络中，新闻数量的不断增长，查找关联内容的需求也在增强。语义驱动的推荐系统通过用户的阅读记录生成用户画像，并与新闻相匹配，从而向用户推荐未读新闻项。本论文提出先进的语义驱动的 CF-IDF+ 新闻推荐系统。该新闻推荐系统通过识别新闻项的概念及其相关概念，从而构建用户画像，并对用户未未读的新闻信息进行分析处理。由于该领域的特性，且其依赖领域知识，使基于概念的推荐系统会忽略新闻项中许多高频，却包含新闻项相关信息的命名实体。因此，我们通过 Bing 距离，找到命名实体的隐含信息，并补充至 CF-IDF+ 推荐方法中。这使得我们的 Bing-CF-IDF+ 推荐方法在 F1 值和 Kappa 统计方面优于传统 TF-IDF；基于概念的 CF-IDF 和 CF-IDF+ 推荐方法。</p>
 <p><strong>译者注</strong></p>
 <p>这里的 Kappa 统计，我理解指的是卡帕系数（Kappa Coefficient），也称为科恩卡帕系数。是一种衡量分类精度的方法。</p>
@@ -213,8 +213,8 @@
 <p><strong>译者注</strong></p>
 <ol>
 <li>截至翻译日期，原『论文-参考文献』中所列的Bing API网页已经不可被访问，相关功能转移至Azure中，可以申请一定时间内免费试用</li>
-<li>Bing基本服务: <a href="https://cn.bing.com/partners/developers#LocalBusinessSearch" target="_blank" rel="noopener">https://cn.bing.com/partners/developers#LocalBusinessSearch</a></li>
-<li>微软Azure-Bing Entity Search: <a href="https://azure.microsoft.com/en-us/services/cognitive-services/bing-entity-search-api/" target="_blank" rel="noopener">https://azure.microsoft.com/en-us/services/cognitive-services/bing-entity-search-api/</a></li>
+<li>Bing基本服务: <a href="https://cn.bing.com/partners/developers#LocalBusinessSearch">https://cn.bing.com/partners/developers#LocalBusinessSearch</a></li>
+<li>微软Azure-Bing Entity Search: <a href="https://azure.microsoft.com/en-us/services/cognitive-services/bing-entity-search-api/">https://azure.microsoft.com/en-us/services/cognitive-services/bing-entity-search-api/</a></li>
 </ol>
 <p>本论文所属推荐方法将在 CF-IDF+ 方法的基础上，考虑新闻中所含命名实体的信息。即，结合 CF-IDF+ 方法和通过 Bing 搜索引擎提供的免费 API 计算的相似度。我们将实现的Bing-CF-IDF+ 推荐系统，由两个部分独立加权组成：CF-IDF+ 推荐系统基于概念计算相似度；Bing推荐系统基于命名实体计算相似度。Bing-CF-IDF+ 推荐系统仅考虑未在概念集中出现的命名实体。这项工作的主要作用是，新闻推荐系统中，领域知识的概念和相关概念(CF-IDF+)与基于搜索引擎的距离度量的综合利用。</p>
 <blockquote>
@@ -236,18 +236,18 @@
 <blockquote>
 <p>  The term frequency of term t ∈ T in document d ∈ D, tf(t, d), and its associated inverse document frequency idf(t, d) are computed as follows:</p>
 </blockquote>
-<p>$$<br>tf(t, d) = \frac{n_{t,d}}{\Sigma_k{n_{t, d}}}<br>$$</p>
-<p>$$<br>idf(t, d) = \log{\frac{|D|}{|d \in D : t \in d|}}<br>$$</p>
+<p>$$<br>tf(t, d) &#x3D; \frac{n_{t,d}}{\Sigma_k{n_{t, d}}}<br>$$</p>
+<p>$$<br>idf(t, d) &#x3D; \log{\frac{|D|}{|d \in D : t \in d|}}<br>$$</p>
 <p>词频是新闻内容中，总词数与该词出现次数的比值。逆文档频率是总新闻数$|D|$与包含该词 $t$ 的新闻数。则，TF-IDF由TF与IDF乘积运算求得。TF-IDF值越大，说明该词越常在当前新闻中出现，而在其他新闻内容中少见。</p>
 <blockquote>
 <p>  where term frequencies are calculated by dividing the frequency that term $t$ occurs in news item $d (nt,d)$ by the total number of all terms in news item $d$. The inverse document frequency is computed as a division of the total number of news items $|D|$ by the amount of news items in which term $t$ can be found. Subsequently, TF-IDF is computed as a multiplication of TF and IDF,</p>
 </blockquote>
-<p>$$<br>tf\verb|-|idf(t, d) = tf(t, d) \times idf(t, d)<br>$$</p>
+<p>$$<br>tf\verb|-|idf(t, d) &#x3D; tf(t, d) \times idf(t, d)<br>$$</p>
 <p>最后，通过余弦相似度函数计算用户喜好与其未读文章之间的相似度：</p>
 <blockquote>
 <p>  Subsequently, TF-IDF is computed as a multiplication of TF and IDF:</p>
 </blockquote>
-<p>$$<br>sim_{tf\verb|-|idf(d_u, d_r)} = \frac{d_r \cdot d_u}{||d_r|| \times ||d_u||}<br>$$</p>
+<p>$$<br>sim_{tf\verb|-|idf(d_u, d_r)} &#x3D; \frac{d_r \cdot d_u}{||d_r|| \times ||d_u||}<br>$$</p>
 <p>其中，$d_r$ 表示用户喜好向量，$d_u$ 表示未读新闻向量。$sim_{tf\verb|-|idf(d_u, d_r)}$越大，表示该未读新闻与用户喜好越接近。在所有未读新闻中，将与用户画像相似度高于一定值的新闻推荐给相应用户。</p>
 <blockquote>
 <p>  where $d_r$ is the vector representation of the user’s interest and $d_u$ is the vector representation of an unread news item. The larger simTF-IDF is, the more similar the unread news item and user’s interest are. All unread news items that have a higher similarity value with a user profile than a certain cut-off value are recommended to the corresponding user.</p>
@@ -258,11 +258,11 @@
 </blockquote>
 <p><strong>译者注</strong></p>
 <p>WordNet 是英文语义词典，可以以在线的方式获取同义词、近义词信息等。中文方面，也有类似网站，可自行从开源社区或某些高校、研究院网站获取。</p>
-<p>SF-IDF值及其余弦相似度的计算与前文介绍的TF-IDF值几乎一样，只是将词项 $t$ 替换为同义词 s，即 $sf(s, d) = {n_{s, d}}/{\Sigma_k{n_{k,d}}}$ 并且 $idf(s, d) = log{|D|/|d \in D : s \in d|}$，则</p>
+<p>SF-IDF值及其余弦相似度的计算与前文介绍的TF-IDF值几乎一样，只是将词项 $t$ 替换为同义词 s，即 $sf(s, d) &#x3D; {n_{s, d}}&#x2F;{\Sigma_k{n_{k,d}}}$ 并且 $idf(s, d) &#x3D; log{|D|&#x2F;|d \in D : s \in d|}$，则</p>
 <blockquote>
-<p>  The SF-IDF measure and its corresponding cosine similarity scores are computed using the same equations as introduced for TF-IDF, only by replacing term $t$ by synset $s$, so that $sf(s, d) = n_{s,d}/\Sigma_k{n_{k,d}}$ and $idf(s, d) = log |D| / |d ∈ D : s ∈ d|$, and hence</p>
+<p>  The SF-IDF measure and its corresponding cosine similarity scores are computed using the same equations as introduced for TF-IDF, only by replacing term $t$ by synset $s$, so that $sf(s, d) &#x3D; n_{s,d}&#x2F;\Sigma_k{n_{k,d}}$ and $idf(s, d) &#x3D; log |D| &#x2F; |d ∈ D : s ∈ d|$, and hence</p>
 </blockquote>
-<p>$$<br>sf\verb|-|idf(s, d) = sf(s, d) \times idf(s, d)<br>$$</p>
+<p>$$<br>sf\verb|-|idf(s, d) &#x3D; sf(s, d) \times idf(s, d)<br>$$</p>
 <p>之后，用前文定义的余弦相似度计算 $sim_{SF\verb|-|IDF}$ 即可。</p>
 <blockquote>
 <p>  Then, the previously defined cosine similarity is used for computing  $sim_{SF\verb|-|IDF}$.</p>
@@ -271,10 +271,10 @@
 <blockquote>
 <p>  The Concept Frequency - Inverse Document Frequency (CF-IDF) method [12] calculates similarity measures using concepts from a domain ontology rather than terms or synsets. The concepts of an article are obtained using a Natural Language Processing (NLP) engine. For every document, the resulting concepts are then stored in a vector and these vectors can be used to calculate the CF-IDF measure. Similar to TF-IDF and SF-IDF, scores for concept $c$ are computed as follows:</p>
 </blockquote>
-<p>$$<br>cf\verb|-|idf(c, d) = cf(c, d) \times idf(c, d)<br>$$</p>
-<p>此时，概念频率与逆文档频率定义分别为 $cf(c, d) = n_{c,d} / \Sigma_k{n_{k,d}}$ 和 $idf(c,d) = log|D| / |d \in D : c \in d|$。$sim_{CF-IDF}$ 余弦相似度计算保持不变。</p>
+<p>$$<br>cf\verb|-|idf(c, d) &#x3D; cf(c, d) \times idf(c, d)<br>$$</p>
+<p>此时，概念频率与逆文档频率定义分别为 $cf(c, d) &#x3D; n_{c,d} &#x2F; \Sigma_k{n_{k,d}}$ 和 $idf(c,d) &#x3D; log|D| &#x2F; |d \in D : c \in d|$。$sim_{CF-IDF}$ 余弦相似度计算保持不变。</p>
 <blockquote>
-<p>  where frequencies and inverse document frequencies are defined as $cf(c, d) = n_{c,d} / \Sigma_k{n_{k,d}}$ and $idf(c,d) = log|D| / |d \in D : c \in d|$, respectively. Cosine similarity computations remain unchanged for $sim_{CF-IDF}$.</p>
+<p>  where frequencies and inverse document frequencies are defined as $cf(c, d) &#x3D; n_{c,d} &#x2F; \Sigma_k{n_{k,d}}$ and $idf(c,d) &#x3D; log|D| &#x2F; |d \in D : c \in d|$, respectively. Cosine similarity computations remain unchanged for $sim_{CF-IDF}$.</p>
 </blockquote>
 <h3 id="2-4-基于关系的推荐系统"><a href="#2-4-基于关系的推荐系统" class="headerlink" title="2.4 基于关系的推荐系统"></a>2.4 基于关系的推荐系统</h3><p>可以用相关同义词或概念扩展 SF-IDF 和 CF-IDF。为此，可以从语义词典和词项本身出发，找出其他相关元素。</p>
 <blockquote>
@@ -284,18 +284,18 @@
 <blockquote>
 <p>  In SF-IDF+ [17], related synsets are considered to be synsets that are connected through a relation (27 unique semantic relationships, e.g., hyponymy, antonymy, synonymy, etc., exist in WordNet), and are added to the vector representation from SF-IDF. For each synset, scores are computed by multiplying the original SF-IDF score with a predefined weight. Weights always range between 0 and 1, as related synsets should never be more important that the synset itself. In Eq. 7, it is shown how the related synsets are added to the vector:</p>
 </blockquote>
-<p>$$<br>sf\verb|-|idf\verb|+|(s, d, r) = sf(s, d) \times idf(s, d) \times \omega_r<br>$$</p>
+<p>$$<br>sf\verb|-|idf\verb|+|(s, d, r) &#x3D; sf(s, d) \times idf(s, d) \times \omega_r<br>$$</p>
 <p>用同样的方式扩展CF-IDF(CF-IDF+ [9])。通过三种关联关系，从内容本身的概念获取相关概念。</p>
 <blockquote>
 <p>  The same rules apply also for CF-IDF in its extended form (CF-IDF+ [9]). Related concepts are retrieved by taking into account related ontology concepts by three possible relationships, as a concept can have superclasses, subclasses, and domain-specific related concepts. Similarly, the CF-IDF+ value for a concept $c$ and its related concept $r$ in document d is computed as follows:</p>
 </blockquote>
-<p>$$<br>cf\verb|-|idf\verb|+|(c, d, r) = cf(c, d) \times idf(c, d) \times \omega_r<br>$$</p>
+<p>$$<br>cf\verb|-|idf\verb|+|(c, d, r) &#x3D; cf(c, d) \times idf(c, d) \times \omega_r<br>$$</p>
 <p>此时，用前文所述 $c$ 与 $r$ 的三种关系之一来表示权重 $w_r$。在扩展向量表示中，如果同一关联概念（或同义词）存在多个不同的权重，仅保留最大值。所得向量用于计算用户画像与其未读新闻的余弦相似度。</p>
 <blockquote>
 <p>  where $w_r$ represents the weight assigned to one of the three previously mentioned relationships present between $c$ and $r$. If multiple weights are computed for the same concept (or synset), only the highest value is retained in the extended vector representation. The extended vector representation is used for computing the similarity between the user profile and the unread news items using the cosine similarity measure.</p>
 </blockquote>
 <p><strong>译者注</strong></p>
-<p>同一个关联概念/同义词可能被多个过个本体概念或内容词项关联，即会在关联概念/同义词集中出现多次，并存在多个不同的关联内容。</p>
+<p>同一个关联概念&#x2F;同义词可能被多个过个本体概念或内容词项关联，即会在关联概念&#x2F;同义词集中出现多次，并存在多个不同的关联内容。</p>
 <h3 id="2-5-基于命名实体的推荐系统"><a href="#2-5-基于命名实体的推荐系统" class="headerlink" title="2.5 基于命名实体的推荐系统"></a>2.5 基于命名实体的推荐系统</h3><p>近期，我们又另外尝试在 Bing-SF-IDF+ [7] 算法中，将 SF-IDF+ 与 来自 Bing 的命名实体信息结合，从而获取符合预期的结果。在这里，通过查询 Bing 搜索引擎，并基于包含相应词项的页面数计算相似度，即使是语义词典未收录的命名实体也将被考虑在内。</p>
 <blockquote>
 <p>  In recent endeavours, we additionally tried combining SF-IDF+ with named entities from Bing in Bing-SF-IDF+ [7], which showed promising results. Here, named entities that are not covered by the synsets from a semantic lexicon were still taken into account by consulting the Bing search engine and computing similarities based on page counts.</p>
@@ -317,8 +317,7 @@
 <th></th>
 </tr>
 </thead>
-<tbody>
-<tr>
+<tbody><tr>
 <td>TF-IDF</td>
 <td>0.449</td>
 <td>[7]</td>
@@ -348,8 +347,7 @@
 <td>0.579</td>
 <td>[7]</td>
 </tr>
-</tbody>
-</table>
+</tbody></table>
 <p><strong>译者注</strong></p>
 <p>表格中的 $\mu$ 表示的是 F1 值，是一种综合考虑 Precision 和 Recall 的度量。</p>
 <h2 id="3-框架"><a href="#3-框架" class="headerlink" title="3 框架"></a>3 框架</h2><p>我们引入下述两个步骤以改进现有方法：用 Bing 命名实体的点互(point-wise)信息相似度计算 Bing 相似度；用基于概念和关联概念的余弦相似度计算 CF-IDF+ 值。Bing-CF-IDF+ 值即为 Bing 值与 CF-IDF+ 值的加权平均值。用户可以自己选择感兴趣的概念或新闻内容来构建用户画像，我们的方法可以从用户自己构建的画像中提取概念和命名实体。新增的新闻用类似的方式处理，同时，消除领域知识已涵盖的命名实体。</p>
@@ -366,30 +364,30 @@
 <blockquote>
 <p>  Let $U$ and $R$ be sets of named entities in an unread news item and the user profile:</p>
 </blockquote>
-<p>$$<br>U = {u_1, u_2, … , u_k}<br>$$</p>
-<p>$$<br>R = {r_1, r_2, … , r_k}<br>$$</p>
+<p>$$<br>U &#x3D; {u_1, u_2, … , u_k}<br>$$</p>
+<p>$$<br>R &#x3D; {r_1, r_2, … , r_k}<br>$$</p>
 <p>未读新闻 $U$ 中的命名实体为 $u_i$，用户画像 $R$ 中的命名实体为$r_j$，U的数量为 $k$，R的数量为 $l$ 。则我们定义 $U$ 与 $R$ 的笛卡尔积如下：</p>
 <blockquote>
 <p>  where $u_i$ is a named entity in unread item $U$, $r_j$ a named entity in user profile $R$, and $k$ and $l$ are the number of named entities in the unread item and the user profile, respectively. Now let us define the set of possible named entity pairs from the unread news item and the user profile by taking their cartesian product:</p>
 </blockquote>
-<p>$$<br>V = U \times R = (&lt;u_1, r_1&gt;, … ,&lt;u_k, r_l&gt;)<br>$$</p>
+<p>$$<br>V &#x3D; U \times R &#x3D; (&lt;u_1, r_1&gt;, … ,&lt;u_k, r_l&gt;)<br>$$</p>
 <p>随后，用 《Normalized (pointwise) mutual information in collocation extraction》[4] 所述方法计算点互信息共现相似度。用 Bing 分别计算各命名实体单独出现的页面数和命名实体对共现页面数。计算方式是通过 Bing 找到的 Web 页面数。对每个命名实体对而言，相似度即为实际联合概率与期望联合概率之差。命名实体对相似度如下：</p>
 <blockquote>
 <p>  Subsequently, we compute the point-wise mutual information co-occurrence similarity measure as proposed by [4]. We search the named entities in a pair both separately and together in Bing to construct page counts. A page count is defined as the number of Web pages that are found by Bing. For every pair the similarity is computed as the difference between the actual and the expected joint probability. The similarity measure for a pair is defined as:</p>
 </blockquote>
-<p>$$<br>sim_{PMI}(u, r) = log{\frac{\frac{c(u, r)}{N}}{\frac{c(u)}{N} \times \frac{c(r)}{N}}}<br>$$</p>
+<p>$$<br>sim_{PMI}(u, r) &#x3D; log{\frac{\frac{c(u, r)}{N}}{\frac{c(u)}{N} \times \frac{c(r)}{N}}}<br>$$</p>
 <p><strong>译者注</strong></p>
-<p>以防万一这里提醒一下，$logA - logB = log{A/B}$ 。</p>
+<p>以防万一这里提醒一下，$logA - logB &#x3D; log{A&#x2F;B}$ 。</p>
 <p>其中，$c(u, r)$ 表示命名实体对 $(u, r)$ 的 （由 Bing 所得）共现页面数。$c(u)$ 和 $c(r)$ 分别为出现命名实体 $u$ 和命名实体 $r$ 页面数，$N$ 是能通过 Bing 获取的 Web 页面总数。N 估计在150左右。 Bing 相似度 $sim_{Bing}$ 定义如下所示：</p>
 <blockquote>
 <p>  where $c(u, r)$ is the Bing page count for pair $(u, r)$, $c(u)$ and $c(r)$ the page counts for named entities $u$ and $r$, and $N$ the total number of Web pages that can be found by Bing. $N$ is estimated to be around 15 billion. The Bing similarity measure $sim_{Bing}$ is then defined as:</p>
 </blockquote>
-<p>$$<br>sim_{Bing}(d_u, d_r) = \frac{\Sigma_{(u, r) \in V}{sim_{PMI}(u, r)}}{|V|}<br>$$</p>
+<p>$$<br>sim_{Bing}(d_u, d_r) &#x3D; \frac{\Sigma_{(u, r) \in V}{sim_{PMI}(u, r)}}{|V|}<br>$$</p>
 <h3 id="3-2-CF-IDF"><a href="#3-2-CF-IDF" class="headerlink" title="3.2 CF-IDF+"></a>3.2 CF-IDF+</h3><p>CF-IDF+ 方法用概念和关联概念计算。概念可以是一个类，关联概念则为其子类或超类；它也可以是一个实例，通过领域关系找到其他概念。概念之间的关系包含新闻文章中有价值的信息，并能提高推荐准确率。与 CF-IDF 类似，CF-IDF+方法将新闻项的概念和关系向量化存储。对于 $c$，包含其所有关联概念的新的概念集合定义如下：</p>
 <blockquote>
 <p>  The CF-IDF+ method makes use of concepts and related concepts. A concept can be a class, which can have superclasses and subclasses. It can also be an instance and refer to other concepts using domain relationships. The relations between concepts contain valuable information about a news article and can therefore increase recommendation accuracy. Similar to the CF-IDF method, the CF-IDF+ method stores the concepts and related concepts of a news item into a vector. For every concept $c$, a new set of concepts is defined which contains all related concepts:</p>
 </blockquote>
-<p>$$<br>C(c) = {c} \cup_{r \in R(c)} r(c)<br>$$</p>
+<p>$$<br>C(c) &#x3D; {c} \cup_{r \in R(c)} r(c)<br>$$</p>
 <p>其中，$c$ 是新闻项中的概念，$r(c)$ 是通过关系 $r$ 找到的 概念 $c$ 的关联概念，$R(c)$ 为概念 $c$ 的关系集合。</p>
 <blockquote>
 <p>  where $c$ is a concept in the news item, $r(c)$ are concepts related to concept $c$ by relation $r$, and $R(c)$ is the set of relationships of concept $c$.</p>
@@ -398,7 +396,7 @@
 <blockquote>
 <p>  The extended sets of concepts for all news items are now unified to one large set $U$:</p>
 </blockquote>
-<p>$$<br>U = {C(u_1), C(u_2), … ,C(u_m)}<br>$$</p>
+<p>$$<br>U &#x3D; {C(u_1), C(u_2), … ,C(u_m)}<br>$$</p>
 <p>其中，$C(u_m)$ 是新闻项的扩展概念集合 $m^{th}$ 扩展概念</p>
 <blockquote>
 <p>  where $C(u_m)$ is the $m^{th}$ extended concept in the set of extended concepts of the news item. CF-IDF+ scores and their cosine similarities can be computed as introduced earlier using Eqs. 8 and 4. If these scores exceed a predetermined cut-off value, the news item is recommended to the user.</p>
@@ -407,15 +405,15 @@
 <blockquote>
 <p>  We can now calculate the Bing and the CF-IDF+ similarity measures between every unread news item and the user profile. Bing-CF-IDF+ is a weighed combination of the Bing and the CF-IDF+ similarity measures. For inter-comparability of the similarities, $sim_{CF-IDF+}$ and $sim_{Bing}(d_u, d_r)$ are normalized using a min-max scaling between 0 and 1:</p>
 </blockquote>
-<p>$$<br>sim_{CF-IDF+}(d_u,d_r) = \frac{sim_{CF-IDF+}(d_u, d_r) - min_usim_{CF-IDF+}(d_u, d_r)}{max_u sim_{CF-IDF+}(d_u, d_r) - min_usim_{CF-IDF+}(d_u, d_r)}<br>$$</p>
-<p>$$<br>sim_{Bing}(d_u,d_r) = \frac{sim_{Bing}(d_u, d_r) - min_usim_{Bing}(d_u, d_r)}{max_u sim_{Bing}(d_u, d_r) - min_usim_{Bing}(d_u, d_r)}<br>$$</p>
+<p>$$<br>sim_{CF-IDF+}(d_u,d_r) &#x3D; \frac{sim_{CF-IDF+}(d_u, d_r) - min_usim_{CF-IDF+}(d_u, d_r)}{max_u sim_{CF-IDF+}(d_u, d_r) - min_usim_{CF-IDF+}(d_u, d_r)}<br>$$</p>
+<p>$$<br>sim_{Bing}(d_u,d_r) &#x3D; \frac{sim_{Bing}(d_u, d_r) - min_usim_{Bing}(d_u, d_r)}{max_u sim_{Bing}(d_u, d_r) - min_usim_{Bing}(d_u, d_r)}<br>$$</p>
 <p><strong>译者注</strong></p>
 <p>这里提及『 … normalized using a min-max scaling between 0 and 1 …』，直译是『将…用最小最大缩放至0 到 1 之间』。这个过程其实描述的就是 min-max normalization，有的文献翻译为『最小最大归一化』，有的翻译为『最小最大缩放（Min-max scaling）』。是一种特征缩放方法。通常的范围是 [0， 1] 或 [-1， 1]。</p>
 <p> $d_u$ 和 $d_r$ 分别表示未读新闻项和用户画像。两者加权平均值即为 Bing-CF-IDF+ 相似度 $sim_{Bing-CF-IDF+}(d_u, d_r)$ ：</p>
 <blockquote>
 <p>  where $d_u$ and $d_r$ are an unread news item and the user profile, respectively. The Bing-CF-IDF+ similarity measure $sim_{Bing-CF-IDF+}(d_u, d_r)$ is computed by taking a weighted average over both similarities:</p>
 </blockquote>
-<p>$$<br>sim_{Bing-CF-IDF+}(d_u, d_r) = \alpha \times sim_{Bing} + (1 - \alpha) \times sim_{CF-IDF+}<br>$$</p>
+<p>$$<br>sim_{Bing-CF-IDF+}(d_u, d_r) &#x3D; \alpha \times sim_{Bing} + (1 - \alpha) \times sim_{CF-IDF+}<br>$$</p>
 <p>其中，在训练集上进行网格搜索对 $\alpha$ 优化。当相似度超出预定义阈值 $t$ 时，推荐新闻项。请注意，这里只考虑找不到的表示概念的命名实体。</p>
 <blockquote>
 <p>  where $\alpha$ is optimized using a grid search optimization on the training set. Again a news item is recommended when the similarity measures exceeds the predefined threshold value $t$. Please note that only named entities that are not found as denoting concepts are considered here.</p>
@@ -446,8 +444,7 @@
 <th>IAA</th>
 </tr>
 </thead>
-<tbody>
-<tr>
+<tbody><tr>
 <td>Asia or its countries</td>
 <td>21</td>
 <td>79</td>
@@ -495,8 +492,7 @@
 <td>55</td>
 <td>85%</td>
 </tr>
-</tbody>
-</table>
+</tbody></table>
 <p><strong>Table 3.</strong> Mean and variance for the parameters of the Bing-CF-IDF+ recommender</p>
 <table>
 <thead>
@@ -508,8 +504,7 @@
 <th>$\alpha$</th>
 </tr>
 </thead>
-<tbody>
-<tr>
+<tbody><tr>
 <td>$ \mu $</td>
 <td>0.426</td>
 <td>0.384</td>
@@ -523,8 +518,7 @@
 <td>0.103</td>
 <td>0.020</td>
 </tr>
-</tbody>
-</table>
+</tbody></table>
 <h3 id="4-2-参数优化"><a href="#4-2-参数优化" class="headerlink" title="4.2 参数优化"></a>4.2 参数优化</h3><p>对于每个临界值， 以 0.01 为步进值（增量），以此优化超类、子类、领域关系的权重参数，同时，平衡两个相似性度量的 $\alpha$。结果如 Table 3 所示，计算了这些参数的均值和方差。</p>
 <blockquote>
 <p>  For each cut-off value, with an increment of 0.01, we optimize the weight parameters for superclass, subclass, and domain relationships, and the $α$ that balances the two similarity measures. The results are displayed in Table 3, where the mean and variance of each of these parameters are computed.</p>
@@ -562,7 +556,7 @@
 <p><strong>Fig. 2.</strong> ROC curve for the recommenders</p>
 <p><img src="https://img-blog.csdnimg.cn/20200513132218267.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzIzOTM3MTk1,size_16,color_FFFFFF,t_70" alt="&lt;img src=&quot;image-20200512184524594.png&quot; alt=&quot;image-20200512184524594&quot;  style=&quot;zoom:33%;&quot; /&gt;"></p>
 <p><strong>Fig. 3.</strong> Kappa statistics for the recommenders</p>
-<p><img src="https://img-blog.csdnimg.cn/20200513132200715.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzIzOTM3MTk1,size_16,color_FFFFFF,t_70" alt="\[外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-lk51CqRz-1589347021601)(image-20200513103222972.png)\]"></p>
+<p><img src="https://img-blog.csdnimg.cn/20200513132200715.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzIzOTM3MTk1,size_16,color_FFFFFF,t_70" alt="[外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-lk51CqRz-1589347021601)(image-20200513103222972.png)]"></p>
 <h2 id="5-总结"><a href="#5-总结" class="headerlink" title="5 总结"></a>5 总结</h2><p>在之前的工作中，已经出现了一些新的推荐算法。传统的基于词的 TF-IDF 改进为类似考虑语义词典中同义词集的 SF-IDF 和 考虑领域知识的概念的 CF-IDF 的方法。CF-IDF+ 还基于类似子类与超类的相关概念匹配新闻项内容。但是，当某个命名实体被领域知识忽略，则其也不会出现在推荐结果中。因此，我们引入 Bing-CF-IDF+ 相似度，它在 CF-IDF+ 相似性度量的基础上，增加命名实体的Bing Web 搜索相似度值，从而增加了两个步骤。</p>
 <blockquote>
 <p>  In previous work, several new recommendation methods have been proposed. The traditional term-based TF-IDF was improved by methods like SF-IDF and CF-IDF, which take into account synsets from a semantic lexicon and concepts from a domain ontology, respectively. The CF-IDF+ similarity measure also matches news items based on related concepts like sub- and superclasses. However, named entities are not fully covered in recommendations whenever they are omitted in the domain ontology. Therefore, we have introduced the BingCF-IDF+ similarity measure, which is a two-step procedure that extends the CF-IDF+ similarity measure with Bing Web search similarity scores for named entities.</p>
@@ -576,11 +570,11 @@
 <p>  We envision various directions for future work. Parameter optimization has been performed using an incremental grid search. This could improved by applying more advanced optimization strategies, such as genetic algorithms. Moreover, we would like to investigate a larger collection of relationships. Now, we have considered the direct super- and subclasses, but hypothetically, non-direct superand subclasses of concepts could be valuable as well. Last, a more thorough and powerful evaluation based on a larger set of news items would further underline the strong performance of Bing-CF-IDF+.</p>
 </blockquote>
 <p><strong>译者注</strong></p>
-<p>网格搜索(grid-search)是一种调参手段。是枚举搜索的一种。<strong>比如</strong>，一个模型有两个参数，分别为 A 和 B，列出A的所有可能和B的所有可能，各自代表一个维度，则可以得到一个二维表，表中每一个元素都是一种可能性。此时，<strong>网格搜索的方法是</strong>，遍历这个表，将所有参数组合情况依次代入模型中，以计算各个组合情况的的性能，可以得到至少一种性能最高的参数组合情况。推荐参考：<a href="https://www.jiqizhixin.com/graph/technologies/0b250c7d-d9ad-4c03-8503-c0b9e82685a3。" target="_blank" rel="noopener">https://www.jiqizhixin.com/graph/technologies/0b250c7d-d9ad-4c03-8503-c0b9e82685a3。</a></p>
+<p>网格搜索(grid-search)是一种调参手段。是枚举搜索的一种。<strong>比如</strong>，一个模型有两个参数，分别为 A 和 B，列出A的所有可能和B的所有可能，各自代表一个维度，则可以得到一个二维表，表中每一个元素都是一种可能性。此时，<strong>网格搜索的方法是</strong>，遍历这个表，将所有参数组合情况依次代入模型中，以计算各个组合情况的的性能，可以得到至少一种性能最高的参数组合情况。推荐参考：<a href="https://www.jiqizhixin.com/graph/technologies/0b250c7d-d9ad-4c03-8503-c0b9e82685a3%E3%80%82">https://www.jiqizhixin.com/graph/technologies/0b250c7d-d9ad-4c03-8503-c0b9e82685a3。</a></p>
 <h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><ol>
 <li>Adomavicius, G., Tuzhilin, A.: Toward the next generation of recommender systems: A survey of the state-of-the-art and possible extensions. IEEE Transactions on Knowledge and Data Engineering 17(6), 734–749 (2005)</li>
 <li>Banerjee, S., Pedersen, T.: An adapted Lesk algorithm for word sense disambiguation using WordNet. In: Gelbukh, A.F. (ed.) 4th International Conference on Computational Linguistics and Intelligent Text Processing (CICLING 2002). Lecture Notes in Computer Science, vol. 2276, pp. 136–145. Springer (2002)</li>
-<li>Bing: Bing API 2.0. Whitepaper. From: <a href="http://www.bing.com/developers/s/APIBasics.html" target="_blank" rel="noopener">http://www.bing.com/developers/s/APIBasics.html</a> (2018)</li>
+<li>Bing: Bing API 2.0. Whitepaper. From: <a href="http://www.bing.com/developers/s/APIBasics.html">http://www.bing.com/developers/s/APIBasics.html</a> (2018)</li>
 <li>Bouma, G.: Normalized (pointwise) mutual information in collocation extraction. In: Chiarcos, C., de Castilho, R.E., Stede, M. (eds.) Biennial GSCL Conference 2009 (GSCL 2009). pp. 31–40. Gunter Narr Verlag T¨ubingen (2009)</li>
 <li>Burke, R.: Hybrid recommender systems: Survey and experiments. User Modeling and User-Adapted Interaction 12(4), 331–370 (2002)</li>
 <li>Capelle, M., Moerland, M., Frasincar, F., Hogenboom, F.: Semantics-based news recommendation. In: Akerkar, R., B˘adic˘a, C., Dan Burdescu, D. (eds.) 2nd International Conference on Web Intelligence, Mining and Semantics (WIMS 2012). ACM (2012)</li>
@@ -590,7 +584,7 @@
 <li>Fellbaum, C.: WordNet: An Electronic Lexical Database. MIT Press (1998)</li>
 <li>Frasincar, F., Borsje, J., Levering, L.: A Semantic Web-based approach for building personalized news services. International Journal of E-Business Research 5(3), 35–53 (2009)</li>
 <li>Goossen, F., IJntema, W., Frasincar, F., Hogenboom, F., Kaymak, U.: News personalization using the CF-IDF semantic recommender. In: Akerkar, R. (ed.) International Conference on Web Intelligence, Mining and Semantics (WIMS 2011). ACM (2011)</li>
-<li>IJntema, W., Goossen, F., Frasincar, F., Hogenboom, F.: Ontology-based news recommendation. In: Daniel, F., Delcambre, L.M.L., Fotouhi, F., Garrig´os, I., Guerrini, G., Maz´on, J.N., Mesiti, M., M¨uller-Feuerstein, S., Trujillo, J., Truta, T.M., Volz, B., Waller, E., Xiong, L., Zim´anyi, E. (eds.) International Workshop on Business intelligencE and the WEB (BEWEB 2010) at 13th International Conference on Extending Database Technology and Thirteenth International Conference on Database Theory (EDBT/ICDT 2010). ACM (2010)</li>
+<li>IJntema, W., Goossen, F., Frasincar, F., Hogenboom, F.: Ontology-based news recommendation. In: Daniel, F., Delcambre, L.M.L., Fotouhi, F., Garrig´os, I., Guerrini, G., Maz´on, J.N., Mesiti, M., M¨uller-Feuerstein, S., Trujillo, J., Truta, T.M., Volz, B., Waller, E., Xiong, L., Zim´anyi, E. (eds.) International Workshop on Business intelligencE and the WEB (BEWEB 2010) at 13th International Conference on Extending Database Technology and Thirteenth International Conference on Database Theory (EDBT&#x2F;ICDT 2010). ACM (2010)</li>
 <li>Jannach, D., Resnick, P., Tuzhilin, A., Zanker, M.: Recommender systems - beyond matrix completion. Communications of the ACM 59(11), 94–102 (2016)</li>
 <li>Jensen, A.S., Boss, N.S.: Textual Similarity: Comparing Texts in Order to Discover How Closely They Discuss the Same Topics. Bachelor’s Thesis, Technical University of Denmark (2008)</li>
 <li>Jones, K.S.: A statistical interpretation of term specificity and its application in<br>retrieval. Journal of Documentation 28(1), 11–21 (1972)</li>
@@ -881,11 +875,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">HTTP/2 HTTP/1.1 HTTP/3.0</a>
+                <a href="javascript:void(0)" class="js-tag color3">Go</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Go</a>
+                <a href="javascript:void(0)" class="js-tag color5">HTTP/2 HTTP/1.1 HTTP/3.0</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -901,10 +895,6 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Latex 文件转换 docx</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">lumen</a>
               </li>
              
@@ -914,6 +904,10 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">thrift</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Latex 文件转换 docx</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -930,6 +924,30 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Linux</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">反射</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">reflection</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">底层</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">变量</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">引用</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">优化</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -957,15 +975,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">反射</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">reflection</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">底层</a>
+                <a href="javascript:void(0)" class="js-tag color3">Reactor</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -981,23 +991,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">变量</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">引用</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">优化</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">跳跃表</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Reactor</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1006,6 +1000,34 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">性能优化</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">阿里云</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">sts</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">推荐系统</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">NLP</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">CF-IDF</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">canal</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">ES</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1045,11 +1067,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">canal</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">ES</a>
+                <a href="javascript:void(0)" class="js-tag color4">线段树</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1057,7 +1075,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">线段树</a>
+                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1074,66 +1092,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">world</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">阿里云</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">sts</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">推荐系统</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">NLP</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">CF-IDF</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">acm</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">树</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">字典树</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">前缀树</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">二进制</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">位运算</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">macro</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">model</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">数据库</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1169,6 +1127,46 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">macro</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">model</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">数据库</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">acm</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">树</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">字典树</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">前缀树</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">二进制</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">位运算</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">底层分析</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">事务</a>
               </li>
              
@@ -1178,10 +1176,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Python</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">底层分析</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1201,15 +1195,15 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">ACID</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">sysbench</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">压力测试</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">ACID</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1221,6 +1215,14 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">UUID</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">MySQL</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">架构</a>
               </li>
              
@@ -1229,11 +1231,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">UUID</a>
+                <a href="javascript:void(0)" class="js-tag color5">日志服务</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">MySQL</a>
+                <a href="javascript:void(0)" class="js-tag color4">SLS</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1273,14 +1275,6 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">日志服务</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">SLS</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">大数据</a>
               </li>
              
@@ -1305,6 +1299,10 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">熔断</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">容器</a>
               </li>
              
@@ -1314,10 +1312,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">基本计算器</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">熔断</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1381,7 +1375,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">边框识别 答题卡 试卷 考试</a>
+                <a href="javascript:void(0)" class="js-tag color5">机器学习</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1401,11 +1395,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">缓存</a>
+                <a href="javascript:void(0)" class="js-tag color5">边框识别 答题卡 试卷 考试</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">机器学习</a>
+                <a href="javascript:void(0)" class="js-tag color3">缓存</a>
               </li>
              
               <li class="article-tag-list-item">

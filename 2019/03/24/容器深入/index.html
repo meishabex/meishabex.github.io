@@ -178,80 +178,83 @@
           
             <p>高级语言中的容器实在是个很神奇的东西，有必要深入了解下。感觉Java虚拟机有必要找时间仔细看看。</p>
 <h2 id="容器的填充"><a href="#容器的填充" class="headerlink" title="容器的填充"></a>容器的填充</h2><p>容器的填充仍然像java.util.Arrays一样面临同样的不足。Collections类的fill()方法也只是复制同一个对象引用来填充整个容器的。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">StringAddress</span></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> String s;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">StringAddress</span><span class="params">(String s)</span></span>&#123;<span class="keyword">this</span>.s=s;&#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">super</span>.toString()+<span class="string">" "</span>+s;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">FillingLists</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(Stringp[] args)</span></span>&#123;</span><br><span class="line">        List&lt;StringAddress&gt; list=<span class="keyword">new</span> ArrayList&lt;StringAddress&gt;(Collections.nCopies(<span class="number">4</span>,<span class="keyword">new</span> StringAddress(<span class="string">"Hello"</span>)));</span><br><span class="line">        System.out.println(list);</span><br><span class="line">        Collections.fill(list,<span class="keyword">new</span> StringAddress(<span class="string">"World!"</span>));</span><br><span class="line">        System.out.println(list);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">StringAddress</span>&#123;</span><br><span class="line">    <span class="keyword">private</span> String s;</span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">StringAddress</span><span class="params">(String s)</span>&#123;<span class="built_in">this</span>.s=s;&#125;</span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">toString</span><span class="params">()</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">super</span>.toString()+<span class="string">&quot; &quot;</span>+s;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">FillingLists</span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(Stringp[] args)</span>&#123;</span><br><span class="line">        List&lt;StringAddress&gt; list=<span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;StringAddress&gt;(Collections.nCopies(<span class="number">4</span>,<span class="keyword">new</span> <span class="title class_">StringAddress</span>(<span class="string">&quot;Hello&quot;</span>)));</span><br><span class="line">        System.out.println(list);</span><br><span class="line">        Collections.fill(list,<span class="keyword">new</span> <span class="title class_">StringAddress</span>(<span class="string">&quot;World!&quot;</span>));</span><br><span class="line">        System.out.println(list);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>这个示例展示了两种用对单个对象的引用来填充Collection的方式，第一种是使用Collections.nCopies()创建传递给构造器的List,这里填充的是ArrayList。fill()方法的用处更有限，因为它只能替换已经在List中存在的元素，而不能添加新的元素。</p>
 <p>事实上，所有的Collection子类型都有接收另一个Collection对象的构造器，用所接收的Collection对象中的元素来填充新的容器。构建接收Generator和quantity数值并将它们作为构造器参数的类:</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CollectionData</span>&lt;<span class="title">T</span>&gt;<span class="keyword">extends</span> <span class="title">ArrayList</span>&lt;<span class="title">T</span>&gt;</span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">CollectionData</span><span class="params">(Generator&lt;T&gt; gen,<span class="keyword">int</span> quantity)</span></span>&#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;quantity;i++)</span><br><span class="line">            add(gen.next());</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> &lt;T&gt; <span class="function">CollectionsData&lt;T&gt; <span class="title">list</span><span class="params">(Generator&lt;T&gt; gen,<span class="keyword">int</span> quantity)</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span>  <span class="keyword">new</span> CollectionData&lt;T&gt;(gen,quantity);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">CollectionData</span>&lt;T&gt;<span class="keyword">extends</span> <span class="title class_">ArrayList</span>&lt;T&gt;&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">CollectionData</span><span class="params">(Generator&lt;T&gt; gen,<span class="type">int</span> quantity)</span>&#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;quantity;i++)</span><br><span class="line">            add(gen.next());</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> &lt;T&gt; CollectionsData&lt;T&gt; <span class="title function_">list</span><span class="params">(Generator&lt;T&gt; gen,<span class="type">int</span> quantity)</span>&#123;</span><br><span class="line">        <span class="keyword">return</span>  <span class="keyword">new</span> <span class="title class_">CollectionData</span>&lt;T&gt;(gen,quantity);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <h2 id="Map生成器"><a href="#Map生成器" class="headerlink" title="Map生成器"></a>Map生成器</h2><p>我们可以对Map也使用Generator的解决方法。但是这需要有一个Pari类，因为为了组装Map，每次调用Generator。</p>
 <h2 id="Collection的功能方法"><a href="#Collection的功能方法" class="headerlink" title="Collection的功能方法"></a>Collection的功能方法</h2><table>
 <thead>
 <tr>
 <th>项目</th>
-<th style="text-align:center">数量</th>
+<th align="center">数量</th>
 </tr>
 </thead>
-<tbody>
-<tr>
+<tbody><tr>
 <td>boolean add(T)</td>
-<td style="text-align:center">确保容器持有具有泛型类型T的参数，如果没有将此参数添加进容器，则返回false</td>
+<td align="center">确保容器持有具有泛型类型T的参数，如果没有将此参数添加进容器，则返回false</td>
 </tr>
 <tr>
 <td>boolean adAll(Collection&lt;?extends T&gt;)</td>
-<td style="text-align:center">添加参数中的所有元素。只要添加了任意元素就返回true</td>
+<td align="center">添加参数中的所有元素。只要添加了任意元素就返回true</td>
 </tr>
 <tr>
 <td>void clear()</td>
-<td style="text-align:center">移除容器中所有的元素</td>
+<td align="center">移除容器中所有的元素</td>
 </tr>
 <tr>
 <td>boolean contains(T)</td>
-<td style="text-align:center">如果容器已经持有具体泛型类型T此参数，则返回true</td>
+<td align="center">如果容器已经持有具体泛型类型T此参数，则返回true</td>
 </tr>
 <tr>
 <td>Boolean containsAll(Collection&lt;?&gt;)</td>
-<td style="text-align:center">如果容器持有此参数中的所有元素,则返回true</td>
+<td align="center">如果容器持有此参数中的所有元素,则返回true</td>
 </tr>
 <tr>
 <td>boolean isEmpty()</td>
-<td style="text-align:center">容器中没有元素时返回true</td>
+<td align="center">容器中没有元素时返回true</td>
 </tr>
 <tr>
-<td>Iterator<t> iterator()</t></td>
-<td style="text-align:center">返回一个Iterator<t>,可以用来遍历容器中的元素</t></td>
+<td>Iterator<T> iterator()</T></td>
+<td align="center">返回一个Iterator<T>,可以用来遍历容器中的元素</T></td>
 </tr>
 <tr>
 <td>Boolean remove(Object)</td>
-<td style="text-align:center">如果参数在容器中，则移除此元素的一个实例。如果做了移除动作，则返回true</td>
+<td align="center">如果参数在容器中，则移除此元素的一个实例。如果做了移除动作，则返回true</td>
 </tr>
 <tr>
 <td>boolean removeAll(Collection&lt;?&gt;)</td>
-<td style="text-align:center">移除参数中的所有元素。只要有移除动作发生就返回true</td>
+<td align="center">移除参数中的所有元素。只要有移除动作发生就返回true</td>
 </tr>
 <tr>
 <td>boolean retainAll(Collection&lt;?&gt;)</td>
-<td style="text-align:center">只保存参数中的元素(应用集合类交集概念)。只要Collection发生了改变就返回true</td>
+<td align="center">只保存参数中的元素(应用集合类交集概念)。只要Collection发生了改变就返回true</td>
 </tr>
 <tr>
 <td>int size()</td>
-<td style="text-align:center">返回容器中元素的数目</td>
+<td align="center">返回容器中元素的数目</td>
 </tr>
 <tr>
 <td>Object[] toArray()</td>
-<td style="text-align:center">返回一个数组，该数组包含容器中的所有元素</td>
+<td align="center">返回一个数组，该数组包含容器中的所有元素</td>
 </tr>
 <tr>
-<td><t>T[] toArray(T[]a)</t></td>
-<td style="text-align:center">返回一个数组，该数组包含容器中的所有元素</td>
+<td><T>T[] toArray(T[]a)</T></td>
+<td align="center">返回一个数组，该数组包含容器中的所有元素</td>
 </tr>
-</tbody>
-</table>
+</tbody></table>
 <h2 id="Set和存储顺序"><a href="#Set和存储顺序" class="headerlink" title="Set和存储顺序"></a>Set和存储顺序</h2><p>Set需要一种方式来维护存储顺序，而存储顺序如何维护，则是在Set的不同实现之间会有所变化。因此，不同的Set实现不仅具有不同的行为,而且它们对于可以在特定的Set中放置的元素的类型也有不同的要求:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Set(interface) 存入Set的每个元素都必须是唯一的,因为Set不保存重复元素。加入Set的元素必须定义equals()方法以确保对象的唯一性。Set与Collection有完全一样的接口。Set接口不保护维护元素的次序</span><br><span class="line">HashSet* 为快速查找而设计的Set。存入HashSet的元素必须定义hashCode()</span><br><span class="line">TreeSet 保持次序的Set,底层为树结构。使用它可以从Set中提取有序的序列。元素必须实现Comparable接口</span><br><span class="line">LinkedHashSet 具有HashSet的查询速度，且内部使用链表维护元素的顺序(插入的次序)。于是在使用迭代器遍历Set时，结果会按元素插入的次序显示。元素也必须定义hashCode()方法</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Set(interface) 存入Set的每个元素都必须是唯一的,因为Set不保存重复元素。加入Set的元素必须定义equals()方法以确保对象的唯一性。Set与Collection有完全一样的接口。Set接口不保护维护元素的次序</span><br><span class="line">HashSet* 为快速查找而设计的Set。存入HashSet的元素必须定义hashCode()</span><br><span class="line">TreeSet 保持次序的Set,底层为树结构。使用它可以从Set中提取有序的序列。元素必须实现Comparable接口</span><br><span class="line">LinkedHashSet 具有HashSet的查询速度，且内部使用链表维护元素的顺序(插入的次序)。于是在使用迭代器遍历Set时，结果会按元素插入的次序显示。元素也必须定义hashCode()方法</span><br></pre></td></tr></table></figure>
+
 <p>使用特定的Set实现类型必须定义的方法:</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SetType</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">SetType</span><span class="params">(<span class="keyword">int</span> n)</span></span>&#123;i=n;&#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">equals</span><span class="params">(Object o)</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> o <span class="keyword">instanceof</span> SetType&amp;&amp;(i==((SetType)o).i);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span></span>&#123;<span class="keyword">return</span> Integer.toString(i);&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">HashType</span> <span class="keyword">extends</span> <span class="title">SetType</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">HashType</span><span class="params">(<span class="keyword">int</span> n)</span></span>&#123;<span class="keyword">super</span>(n);&#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">hashCode</span><span class="params">()</span></span>&#123;<span class="keyword">return</span> i;&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">TreeType</span> <span class="keyword">extends</span> <span class="title">SetType</span> <span class="keyword">implements</span> <span class="title">Comparable</span>&lt;<span class="title">TreeType</span>&gt;</span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">TreeType</span><span class="params">(<span class="keyword">int</span> n)</span></span>&#123;<span class="keyword">super</span>(n);&#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">compareTo</span><span class="params">(TreeType arg)</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> (arg.i&lt;i?-<span class="number">1</span>:(arg.i==i?<span class="number">0</span>:<span class="number">1</span>));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TypeForSets</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">static</span>&lt;T&gt; Set&lt;T&gt; <span class="title">fill</span><span class="params">(Set&lt;T&gt; set,Class&lt;T&gt; type)</span></span>&#123;</span><br><span class="line">        <span class="keyword">try</span>&#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;<span class="number">10</span>;i++)&#123;</span><br><span class="line">                set.add(type.getConstructor(<span class="keyword">int</span><span class="class">.<span class="keyword">class</span>).<span class="title">newInstance</span>(<span class="title">i</span>))</span>;</span><br><span class="line">                &#125;</span><br><span class="line">        &#125;<span class="keyword">catch</span>(Exception e)&#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(e);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> set;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">static</span> &lt;T&gt; <span class="function"><span class="keyword">void</span> <span class="title">test</span><span class="params">(Set&lt;T&gt; set,Class&lt;T&gt; type)</span></span>&#123;</span><br><span class="line">        fill(set,type);</span><br><span class="line">        fill(set,type);</span><br><span class="line">        fill(set,type);</span><br><span class="line">        System.out.println(set);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">        test(<span class="keyword">new</span> HashSet&lt;HashType&gt;(),HashType<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">        test(<span class="keyword">new</span> LinkedHashSet&lt;HashType&gt;(),HashType<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">        test(<span class="keyword">new</span> TreeSet&lt;TreeType&gt;(),TreeType<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">        test(<span class="keyword">new</span> HashSet&lt;SetType&gt;(),SetType<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">        test(<span class="keyword">new</span> HashSet&lt;TreeType&gt;(),TreeType<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">        test(<span class="keyword">new</span> LinkedHashSet&lt;SetType&gt;(),SetType<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">        test(<span class="keyword">new</span> LinkedHashSet&lt;TreeType&gt;(),TreeType<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">        <span class="keyword">try</span>&#123;</span><br><span class="line">            test(<span class="keyword">new</span> TreeSet&lt;SetType&gt;(),SetType<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">        &#125;<span class="keyword">catch</span>(Exception e)&#123;</span><br><span class="line">            System.out.println(e.getMessage());</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">try</span>&#123;</span><br><span class="line">            test(<span class="keyword">new</span> TreeSet&lt;HashType&gt;(),HashType<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">        &#125;<span class="keyword">catch</span>(Exception e)&#123;</span><br><span class="line">            System.out.println(e.getMessage());</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">SetType</span>&#123;</span><br><span class="line">    <span class="type">int</span> i;</span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">SetType</span><span class="params">(<span class="type">int</span> n)</span>&#123;i=n;&#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">equals</span><span class="params">(Object o)</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> o <span class="keyword">instanceof</span> SetType&amp;&amp;(i==((SetType)o).i);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">toString</span><span class="params">()</span>&#123;<span class="keyword">return</span> Integer.toString(i);&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">HashType</span> <span class="keyword">extends</span> <span class="title class_">SetType</span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">HashType</span><span class="params">(<span class="type">int</span> n)</span>&#123;<span class="built_in">super</span>(n);&#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">hashCode</span><span class="params">()</span>&#123;<span class="keyword">return</span> i;&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">TreeType</span> <span class="keyword">extends</span> <span class="title class_">SetType</span> <span class="keyword">implements</span> <span class="title class_">Comparable</span>&lt;TreeType&gt;&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">TreeType</span><span class="params">(<span class="type">int</span> n)</span>&#123;<span class="built_in">super</span>(n);&#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">compareTo</span><span class="params">(TreeType arg)</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> (arg.i&lt;i?-<span class="number">1</span>:(arg.i==i?<span class="number">0</span>:<span class="number">1</span>));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">TypeForSets</span>&#123;</span><br><span class="line">    <span class="keyword">static</span>&lt;T&gt; Set&lt;T&gt; <span class="title function_">fill</span><span class="params">(Set&lt;T&gt; set,Class&lt;T&gt; type)</span>&#123;</span><br><span class="line">        <span class="keyword">try</span>&#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;<span class="number">10</span>;i++)&#123;</span><br><span class="line">                set.add(type.getConstructor(<span class="type">int</span>.class).newInstance(i));</span><br><span class="line">                &#125;</span><br><span class="line">        &#125;<span class="keyword">catch</span>(Exception e)&#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">RuntimeException</span>(e);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> set;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">static</span> &lt;T&gt; <span class="keyword">void</span> <span class="title function_">test</span><span class="params">(Set&lt;T&gt; set,Class&lt;T&gt; type)</span>&#123;</span><br><span class="line">        fill(set,type);</span><br><span class="line">        fill(set,type);</span><br><span class="line">        fill(set,type);</span><br><span class="line">        System.out.println(set);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span>&#123;</span><br><span class="line">        test(<span class="keyword">new</span> <span class="title class_">HashSet</span>&lt;HashType&gt;(),HashType.class);</span><br><span class="line">        test(<span class="keyword">new</span> <span class="title class_">LinkedHashSet</span>&lt;HashType&gt;(),HashType.class);</span><br><span class="line">        test(<span class="keyword">new</span> <span class="title class_">TreeSet</span>&lt;TreeType&gt;(),TreeType.class);</span><br><span class="line">        test(<span class="keyword">new</span> <span class="title class_">HashSet</span>&lt;SetType&gt;(),SetType.class);</span><br><span class="line">        test(<span class="keyword">new</span> <span class="title class_">HashSet</span>&lt;TreeType&gt;(),TreeType.class);</span><br><span class="line">        test(<span class="keyword">new</span> <span class="title class_">LinkedHashSet</span>&lt;SetType&gt;(),SetType.class);</span><br><span class="line">        test(<span class="keyword">new</span> <span class="title class_">LinkedHashSet</span>&lt;TreeType&gt;(),TreeType.class);</span><br><span class="line">        <span class="keyword">try</span>&#123;</span><br><span class="line">            test(<span class="keyword">new</span> <span class="title class_">TreeSet</span>&lt;SetType&gt;(),SetType.class);</span><br><span class="line">        &#125;<span class="keyword">catch</span>(Exception e)&#123;</span><br><span class="line">            System.out.println(e.getMessage());</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">try</span>&#123;</span><br><span class="line">            test(<span class="keyword">new</span> <span class="title class_">TreeSet</span>&lt;HashType&gt;(),HashType.class);</span><br><span class="line">        &#125;<span class="keyword">catch</span>(Exception e)&#123;</span><br><span class="line">            System.out.println(e.getMessage());</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>基类SetType只存储一个int,并且通过toString()方法产生它的值。因为所有在Set中存储的类都必须具有equals()方法，因此在基类中也有该方法。其等价性是基于这个int类型的i的值确定。<br>HashType继承自SetType,并且添加了hashCode()方法，该方法对于放置到Set的散列实现中的对象来说是必需的。</p>
 <h2 id="理解Map"><a href="#理解Map" class="headerlink" title="理解Map"></a>理解Map</h2><p>映射表的基本思想是它维护的是键-值(对)关联。Map的几种实现:HashMap,TreeMap,LinkedHashMap,WeakHashMap,ConcurrentHashMap,IdentityHashMap。它们拥有同样的基本接口，但是行为特性各不相同，这表现在效率，键值对的保存及呈现次序，对象的保存周期，映射表如何在多线程中工作和判定”键”等价的策略等方面。<br>Map的简单实现:</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AssociativeArray</span>&lt;<span class="title">K</span>,<span class="title">V</span>&gt;</span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Object[][] pairs;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> index;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">AssociativeArray</span><span class="params">(<span class="keyword">int</span> length)</span></span>&#123;</span><br><span class="line">        pairs=<span class="keyword">new</span> Object[length][<span class="number">2</span>];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">put</span><span class="params">(K key,V value)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(index&gt;=pairs.length)</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> ArrayIndexOutOfBoundException();</span><br><span class="line">        pairs[index++]=<span class="keyword">new</span> Object[]&#123;key,value&#125;;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@SuppressWarnings</span>(<span class="string">"unchecked"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> V <span class="title">get</span><span class="params">(K key)</span></span>&#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;index;i++)</span><br><span class="line">            <span class="keyword">if</span>(key.equals(pairs[i][<span class="number">0</span>]))</span><br><span class="line">                <span class="keyword">return</span> (V)pairs[i][<span class="number">1</span>];</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span></span>&#123;</span><br><span class="line">        StringBuilder result=<span class="keyword">new</span> StringBuilder();</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;index;i++)&#123;</span><br><span class="line">            result.append(pairs[i][<span class="number">0</span>].toString());</span><br><span class="line">            result.append(<span class="string">"　:　"</span>);</span><br><span class="line">            result.append(pairs[i][<span class="number">1</span>].toString());</span><br><span class="line">            <span class="keyword">if</span>(i&lt;index-<span class="number">1</span>)</span><br><span class="line">                result.append(<span class="string">"\n"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> result.toString();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">        AssociativeArray&lt;String,String&gt; map=<span class="keyword">new</span> AssociativeArray&lt;String,String&gt;(<span class="number">6</span>);</span><br><span class="line">        map.put(<span class="string">"sky"</span>,<span class="string">"blue"</span>);</span><br><span class="line">        map.put(<span class="string">"grass"</span>,<span class="string">"blue"</span>);</span><br><span class="line">        <span class="keyword">try</span>&#123;</span><br><span class="line">            map.put(<span class="string">"extra"</span>,<span class="string">"object"</span>);</span><br><span class="line">        &#125;<span class="keyword">catch</span>(ArrayIndexOutOfBoundException e)&#123;</span><br><span class="line">            print(<span class="string">"Too many objects!"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        print(map);</span><br><span class="line">        print(map.get(<span class="string">"ocean"</span>));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">AssociativeArray</span>&lt;K,V&gt;&#123;</span><br><span class="line">    <span class="keyword">private</span> Object[][] pairs;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> index;</span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">AssociativeArray</span><span class="params">(<span class="type">int</span> length)</span>&#123;</span><br><span class="line">        pairs=<span class="keyword">new</span> <span class="title class_">Object</span>[length][<span class="number">2</span>];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">put</span><span class="params">(K key,V value)</span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(index&gt;=pairs.length)</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">ArrayIndexOutOfBoundException</span>();</span><br><span class="line">        pairs[index++]=<span class="keyword">new</span> <span class="title class_">Object</span>[]&#123;key,value&#125;;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@SuppressWarnings(&quot;unchecked&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> V <span class="title function_">get</span><span class="params">(K key)</span>&#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;index;i++)</span><br><span class="line">            <span class="keyword">if</span>(key.equals(pairs[i][<span class="number">0</span>]))</span><br><span class="line">                <span class="keyword">return</span> (V)pairs[i][<span class="number">1</span>];</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">toString</span><span class="params">()</span>&#123;</span><br><span class="line">        StringBuilder result=<span class="keyword">new</span> <span class="title class_">StringBuilder</span>();</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;index;i++)&#123;</span><br><span class="line">            result.append(pairs[i][<span class="number">0</span>].toString());</span><br><span class="line">            result.append(<span class="string">&quot;　:　&quot;</span>);</span><br><span class="line">            result.append(pairs[i][<span class="number">1</span>].toString());</span><br><span class="line">            <span class="keyword">if</span>(i&lt;index-<span class="number">1</span>)</span><br><span class="line">                result.append(<span class="string">&quot;\n&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> result.toString();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span>&#123;</span><br><span class="line">        AssociativeArray&lt;String,String&gt; map=<span class="keyword">new</span> <span class="title class_">AssociativeArray</span>&lt;String,String&gt;(<span class="number">6</span>);</span><br><span class="line">        map.put(<span class="string">&quot;sky&quot;</span>,<span class="string">&quot;blue&quot;</span>);</span><br><span class="line">        map.put(<span class="string">&quot;grass&quot;</span>,<span class="string">&quot;blue&quot;</span>);</span><br><span class="line">        <span class="keyword">try</span>&#123;</span><br><span class="line">            map.put(<span class="string">&quot;extra&quot;</span>,<span class="string">&quot;object&quot;</span>);</span><br><span class="line">        &#125;<span class="keyword">catch</span>(ArrayIndexOutOfBoundException e)&#123;</span><br><span class="line">            print(<span class="string">&quot;Too many objects!&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        print(map);</span><br><span class="line">        print(map.get(<span class="string">&quot;ocean&quot;</span>));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <h2 id="性能"><a href="#性能" class="headerlink" title="性能"></a>性能</h2><p>性能是映射表中的一个重要问题，当在get()中使用线性搜索时，执行速度会相当的慢，而这正是HashMap提高速度的地方。HashMap使用了特殊的值，称作散列码，来取代对键的缓慢搜索。散列码是”相对唯一”的，用以代表对象的int值，它是通过将该对象的某些信息进行转换而生成的。</p>
 <h2 id="SortedMap"><a href="#SortedMap" class="headerlink" title="SortedMap"></a>SortedMap</h2><p>使用SortedMap,可以确保键处于排序状态。这使得它具有额外的功能。键值对是按键的次序排列的。TreeMap中的次序是有意义的，因此”位置”的概念才有意义，所以才能取得第一个和最后一个元素，并且可以提取Map的子集。</p>
 <h2 id="LinkedHashMap"><a href="#LinkedHashMap" class="headerlink" title="LinkedHashMap"></a>LinkedHashMap</h2><p>为了提高速度,LinkedHashMap散列化所有的元素，但是在遍历键值对时，却又以元素的插入顺序返回键值对。此外，可以在构造器中设定LinkedHashMap,使之采用基于访问的最近最少使用(LRU)算法,于是没有被访问过的元素就会出现在队列的前面。对于需要定期清理元素以节省空间的程序来说，此功能使得程序很容易得以实现。</p>
@@ -541,11 +544,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">HTTP/2 HTTP/1.1 HTTP/3.0</a>
+                <a href="javascript:void(0)" class="js-tag color3">Go</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Go</a>
+                <a href="javascript:void(0)" class="js-tag color5">HTTP/2 HTTP/1.1 HTTP/3.0</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -561,10 +564,6 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Latex 文件转换 docx</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">lumen</a>
               </li>
              
@@ -574,6 +573,10 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">thrift</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Latex 文件转换 docx</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -590,6 +593,30 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Linux</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">反射</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">reflection</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">底层</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">变量</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">引用</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">优化</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -617,15 +644,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">反射</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">reflection</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">底层</a>
+                <a href="javascript:void(0)" class="js-tag color3">Reactor</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -641,23 +660,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">变量</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">引用</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">优化</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">跳跃表</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Reactor</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -666,6 +669,34 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">性能优化</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">阿里云</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">sts</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">推荐系统</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">NLP</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">CF-IDF</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">canal</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">ES</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -705,11 +736,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">canal</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">ES</a>
+                <a href="javascript:void(0)" class="js-tag color4">线段树</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -717,7 +744,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">线段树</a>
+                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -734,66 +761,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">world</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">阿里云</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">sts</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">推荐系统</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">NLP</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">CF-IDF</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">acm</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">树</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">字典树</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">前缀树</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">二进制</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">位运算</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">macro</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">model</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">数据库</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -829,6 +796,46 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">macro</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">model</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">数据库</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">acm</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">树</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">字典树</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">前缀树</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">二进制</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">位运算</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">底层分析</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">事务</a>
               </li>
              
@@ -838,10 +845,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Python</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">底层分析</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -861,15 +864,15 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">ACID</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">sysbench</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">压力测试</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">ACID</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -881,6 +884,14 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">UUID</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">MySQL</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">架构</a>
               </li>
              
@@ -889,11 +900,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">UUID</a>
+                <a href="javascript:void(0)" class="js-tag color5">日志服务</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">MySQL</a>
+                <a href="javascript:void(0)" class="js-tag color4">SLS</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -933,14 +944,6 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">日志服务</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">SLS</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">大数据</a>
               </li>
              
@@ -965,6 +968,10 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">熔断</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">容器</a>
               </li>
              
@@ -974,10 +981,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">基本计算器</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">熔断</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1041,7 +1044,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">边框识别 答题卡 试卷 考试</a>
+                <a href="javascript:void(0)" class="js-tag color5">机器学习</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1061,11 +1064,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">缓存</a>
+                <a href="javascript:void(0)" class="js-tag color5">边框识别 答题卡 试卷 考试</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">机器学习</a>
+                <a href="javascript:void(0)" class="js-tag color3">缓存</a>
               </li>
              
               <li class="article-tag-list-item">
